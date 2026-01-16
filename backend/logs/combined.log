@@ -1,0 +1,320 @@
+2026-01-16 16:42:12 [32minfo[39m: [32mIncoming Request[39m
+{
+  "requestId": "0c5075d6-58a6-41fd-b009-6d3828e284c0",
+  "method": "GET",
+  "url": "/health",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+}
+2026-01-16 16:42:12 [32minfo[39m: [32mOutgoing Response[39m
+{
+  "requestId": "0c5075d6-58a6-41fd-b009-6d3828e284c0",
+  "method": "GET",
+  "url": "/health",
+  "statusCode": 200,
+  "duration": "6ms"
+}
+2026-01-16 16:42:12 [32minfo[39m: [32mIncoming Request[39m
+{
+  "requestId": "9c04d935-d195-460f-b339-a9fdc782dbce",
+  "method": "GET",
+  "url": "/favicon.ico",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+}
+2026-01-16 16:42:12 [32minfo[39m: [32mOutgoing Response[39m
+{
+  "requestId": "9c04d935-d195-460f-b339-a9fdc782dbce",
+  "method": "GET",
+  "url": "/favicon.ico",
+  "statusCode": 404,
+  "duration": "2ms"
+}
+2026-01-16 16:42:13 [32minfo[39m: [32mIncoming Request[39m
+{
+  "requestId": "f3079139-c681-4846-9d66-cc08b4ae5b45",
+  "method": "GET",
+  "url": "/health",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+}
+2026-01-16 16:42:13 [32minfo[39m: [32mOutgoing Response[39m
+{
+  "requestId": "f3079139-c681-4846-9d66-cc08b4ae5b45",
+  "method": "GET",
+  "url": "/health",
+  "statusCode": 200,
+  "duration": "1ms"
+}
+2026-01-16 16:42:14 [32minfo[39m: [32mIncoming Request[39m
+{
+  "requestId": "e0e6a2e0-2fd5-4ab2-85e4-4bff1589fa82",
+  "method": "GET",
+  "url": "/health",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+}
+2026-01-16 16:42:14 [32minfo[39m: [32mOutgoing Response[39m
+{
+  "requestId": "e0e6a2e0-2fd5-4ab2-85e4-4bff1589fa82",
+  "method": "GET",
+  "url": "/health",
+  "statusCode": 200,
+  "duration": "1ms"
+}
+2026-01-16 16:42:14 [32minfo[39m: [32mIncoming Request[39m
+{
+  "requestId": "a64891ba-4fa0-43e3-b75b-7fef92636573",
+  "method": "GET",
+  "url": "/health",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+}
+2026-01-16 16:42:14 [32minfo[39m: [32mOutgoing Response[39m
+{
+  "requestId": "a64891ba-4fa0-43e3-b75b-7fef92636573",
+  "method": "GET",
+  "url": "/health",
+  "statusCode": 200,
+  "duration": "1ms"
+}
+2026-01-16 16:42:14 [32minfo[39m: [32mIncoming Request[39m
+{
+  "requestId": "084f12a2-5ccb-45c9-8960-d0c299b2183d",
+  "method": "GET",
+  "url": "/health",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+}
+2026-01-16 16:42:14 [32minfo[39m: [32mOutgoing Response[39m
+{
+  "requestId": "084f12a2-5ccb-45c9-8960-d0c299b2183d",
+  "method": "GET",
+  "url": "/health",
+  "statusCode": 200,
+  "duration": "1ms"
+}
+2026-01-16 16:42:14 [32minfo[39m: [32mIncoming Request[39m
+{
+  "requestId": "b2cd5fb1-176e-498a-bcde-e29d958edaa0",
+  "method": "GET",
+  "url": "/health",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+}
+2026-01-16 16:42:14 [32minfo[39m: [32mOutgoing Response[39m
+{
+  "requestId": "b2cd5fb1-176e-498a-bcde-e29d958edaa0",
+  "method": "GET",
+  "url": "/health",
+  "statusCode": 200,
+  "duration": "2ms"
+}
+2026-01-16 16:42:14 [32minfo[39m: [32mIncoming Request[39m
+{
+  "requestId": "86d58725-d6d6-4da2-866f-ccc5694d99be",
+  "method": "GET",
+  "url": "/health",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+}
+2026-01-16 16:42:14 [32minfo[39m: [32mOutgoing Response[39m
+{
+  "requestId": "86d58725-d6d6-4da2-866f-ccc5694d99be",
+  "method": "GET",
+  "url": "/health",
+  "statusCode": 200,
+  "duration": "2ms"
+}
+2026-01-16 16:42:15 [32minfo[39m: [32mIncoming Request[39m
+{
+  "requestId": "1cd6728f-623b-4992-91de-d433ca4d006d",
+  "method": "GET",
+  "url": "/health",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+}
+2026-01-16 16:42:15 [32minfo[39m: [32mOutgoing Response[39m
+{
+  "requestId": "1cd6728f-623b-4992-91de-d433ca4d006d",
+  "method": "GET",
+  "url": "/health",
+  "statusCode": 200,
+  "duration": "1ms"
+}
+2026-01-16 16:42:15 [32minfo[39m: [32mIncoming Request[39m
+{
+  "requestId": "33c1a89a-2595-4a84-aaca-2481c673b269",
+  "method": "GET",
+  "url": "/health",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+}
+2026-01-16 16:42:15 [32minfo[39m: [32mOutgoing Response[39m
+{
+  "requestId": "33c1a89a-2595-4a84-aaca-2481c673b269",
+  "method": "GET",
+  "url": "/health",
+  "statusCode": 200,
+  "duration": "1ms"
+}
+2026-01-16 16:42:15 [32minfo[39m: [32mIncoming Request[39m
+{
+  "requestId": "8100290f-0411-45c1-8928-9b6cab7b72b9",
+  "method": "GET",
+  "url": "/health",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+}
+2026-01-16 16:42:15 [32minfo[39m: [32mOutgoing Response[39m
+{
+  "requestId": "8100290f-0411-45c1-8928-9b6cab7b72b9",
+  "method": "GET",
+  "url": "/health",
+  "statusCode": 200,
+  "duration": "2ms"
+}
+2026-01-16 16:42:15 [32minfo[39m: [32mIncoming Request[39m
+{
+  "requestId": "ff8a7d5b-65c4-4be2-b7ba-8ae4f5aeb7e7",
+  "method": "GET",
+  "url": "/health",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+}
+2026-01-16 16:42:15 [32minfo[39m: [32mOutgoing Response[39m
+{
+  "requestId": "ff8a7d5b-65c4-4be2-b7ba-8ae4f5aeb7e7",
+  "method": "GET",
+  "url": "/health",
+  "statusCode": 200,
+  "duration": "2ms"
+}
+2026-01-16 16:42:15 [32minfo[39m: [32mIncoming Request[39m
+{
+  "requestId": "b277860f-2037-4b5f-9d48-ac78d3ddbabc",
+  "method": "GET",
+  "url": "/health",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+}
+2026-01-16 16:42:15 [32minfo[39m: [32mOutgoing Response[39m
+{
+  "requestId": "b277860f-2037-4b5f-9d48-ac78d3ddbabc",
+  "method": "GET",
+  "url": "/health",
+  "statusCode": 200,
+  "duration": "2ms"
+}
+2026-01-16 16:42:15 [32minfo[39m: [32mIncoming Request[39m
+{
+  "requestId": "7a5b4555-925e-47fe-b0f1-d4e8eddfbf24",
+  "method": "GET",
+  "url": "/health",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+}
+2026-01-16 16:42:15 [32minfo[39m: [32mOutgoing Response[39m
+{
+  "requestId": "7a5b4555-925e-47fe-b0f1-d4e8eddfbf24",
+  "method": "GET",
+  "url": "/health",
+  "statusCode": 200,
+  "duration": "1ms"
+}
+2026-01-16 16:42:16 [32minfo[39m: [32mIncoming Request[39m
+{
+  "requestId": "eea89425-e587-4f1b-b824-72cf3f4a2ad8",
+  "method": "GET",
+  "url": "/health",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+}
+2026-01-16 16:42:16 [32minfo[39m: [32mOutgoing Response[39m
+{
+  "requestId": "eea89425-e587-4f1b-b824-72cf3f4a2ad8",
+  "method": "GET",
+  "url": "/health",
+  "statusCode": 200,
+  "duration": "1ms"
+}
+2026-01-16 16:42:16 [32minfo[39m: [32mIncoming Request[39m
+{
+  "requestId": "1176e453-7e37-461d-a491-f9d39622a7e6",
+  "method": "GET",
+  "url": "/health",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+}
+2026-01-16 16:42:16 [32minfo[39m: [32mOutgoing Response[39m
+{
+  "requestId": "1176e453-7e37-461d-a491-f9d39622a7e6",
+  "method": "GET",
+  "url": "/health",
+  "statusCode": 200,
+  "duration": "1ms"
+}
+2026-01-16 16:42:30 [32minfo[39m: [32mIncoming Request[39m
+{
+  "requestId": "0c1f413f-1de5-42a3-9ca8-931deccd7467",
+  "method": "GET",
+  "url": "/health",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+}
+2026-01-16 16:42:30 [32minfo[39m: [32mOutgoing Response[39m
+{
+  "requestId": "0c1f413f-1de5-42a3-9ca8-931deccd7467",
+  "method": "GET",
+  "url": "/health",
+  "statusCode": 200,
+  "duration": "7ms"
+}
+2026-01-16 16:43:44 [32minfo[39m: [32mIncoming Request[39m
+{
+  "requestId": "e9115608-900f-436d-9a00-f3bf13e62dc2",
+  "method": "GET",
+  "url": "/health",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+}
+2026-01-16 16:43:44 [32minfo[39m: [32mOutgoing Response[39m
+{
+  "requestId": "e9115608-900f-436d-9a00-f3bf13e62dc2",
+  "method": "GET",
+  "url": "/health",
+  "statusCode": 200,
+  "duration": "1ms"
+}
+2026-01-16 16:43:53 [32minfo[39m: [32mIncoming Request[39m
+{
+  "requestId": "519d4d7c-0ef8-4728-bc01-0777579aaab8",
+  "method": "GET",
+  "url": "/health",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+}
+2026-01-16 16:43:53 [32minfo[39m: [32mOutgoing Response[39m
+{
+  "requestId": "519d4d7c-0ef8-4728-bc01-0777579aaab8",
+  "method": "GET",
+  "url": "/health",
+  "statusCode": 200,
+  "duration": "1ms"
+}
+2026-01-16 16:44:04 [32minfo[39m: [32mIncoming Request[39m
+{
+  "requestId": "bfe20773-410f-4ec0-9833-e74fdc61458e",
+  "method": "GET",
+  "url": "/health",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+}
+2026-01-16 16:44:04 [32minfo[39m: [32mOutgoing Response[39m
+{
+  "requestId": "bfe20773-410f-4ec0-9833-e74fdc61458e",
+  "method": "GET",
+  "url": "/health",
+  "statusCode": 200,
+  "duration": "1ms"
+}

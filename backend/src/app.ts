@@ -3,14 +3,15 @@ import helmet from 'helmet';
 import cors from 'cors';
 import compression from 'compression';
 
-import { requestLogger } from './middleware/logger.middleware.js';
+import { errorLogger, requestLogger } from './middleware/logger.middleware.js';
+import { errorMiddleware } from './middleware/error.middleware.js';
 
 const app: Application = express();
 
 app.use(helmet());
 app.use(
 	cors({
-		origin: 'http://localhost:5173',
+		origin: process.env.ALLOWED_ORIGINS?.split(',') || '*',
 	})
 );
 
@@ -30,8 +31,8 @@ app.get('/health', (req, res) => {
 
 // api routes
 
-// error logging
+app.use(errorLogger);
 
-// error handling
+app.use(errorMiddleware);
 
 export default app;

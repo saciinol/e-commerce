@@ -15,10 +15,4 @@ export const authMiddleware = asyncHandler(async (req: Request, res: Response, n
 	}
 
 	const token = authHeader.split(' ')[1];
-
-  try {
-    const decoded = 
-  } catch (error) {
-
-  }
 });

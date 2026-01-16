@@ -318,3 +318,35 @@
   "statusCode": 200,
   "duration": "1ms"
 }
+2026-01-16 18:35:09 [32minfo[39m: [32mIncoming Request[39m
+{
+  "requestId": "b1880be0-300f-4693-8057-86f9975e863b",
+  "method": "GET",
+  "url": "/health",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+}
+2026-01-16 18:35:09 [32minfo[39m: [32mOutgoing Response[39m
+{
+  "requestId": "b1880be0-300f-4693-8057-86f9975e863b",
+  "method": "GET",
+  "url": "/health",
+  "statusCode": 200,
+  "duration": "4ms"
+}
+2026-01-16 18:35:09 [32minfo[39m: [32mIncoming Request[39m
+{
+  "requestId": "4ec46016-04d9-498f-a245-3d1b6acb886e",
+  "method": "GET",
+  "url": "/favicon.ico",
+  "ip": "::1",
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36"
+}
+2026-01-16 18:35:09 [32minfo[39m: [32mOutgoing Response[39m
+{
+  "requestId": "4ec46016-04d9-498f-a245-3d1b6acb886e",
+  "method": "GET",
+  "url": "/favicon.ico",
+  "statusCode": 404,
+  "duration": "7ms"
+}

@@ -7,9 +7,9 @@ dotenv.config();
 const envSchema = z.object({
 	NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
 	PORT: z.coerce.number().default(3000),
-	// db
-	// jwt secret
-	// jwt expires in
+	DATABASE_URL: z.string(),
+	JWT_SECRET: z.string().min(32),
+	JWT_EXPIRES_IN: z.string().default('7d'),
 	LOG_LEVEL: z.enum(['error', 'warn', 'info', 'debug']).default('info'),
 	ALLOWED_ORIGINS: z.string().optional(),
 });
@@ -30,7 +30,12 @@ if (!parsed.success) {
 export const config = {
 	nodeEnv: parsed.data.NODE_ENV,
 	port: parsed.data.PORT,
-	// db
-	// jwt
+	database: {
+		url: parsed.data.DATABASE_URL,
+	},
+	jwt: {
+		secret: parsed.data.JWT_SECRET,
+		expiresIn: parsed.data.JWT_EXPIRES_IN,
+	},
 	logLevel: parsed.data.LOG_LEVEL,
 } as const;

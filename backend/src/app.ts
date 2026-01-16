@@ -3,6 +3,8 @@ import helmet from 'helmet';
 import cors from 'cors';
 import compression from 'compression';
 
+import { requestLogger } from './middleware/logger.middleware.js';
+
 const app: Application = express();
 
 app.use(helmet());
@@ -17,7 +19,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 app.use(compression());
 
-// requestLogger
+app.use(requestLogger);
 
 app.get('/health', (req, res) => {
 	res.status(200).json({

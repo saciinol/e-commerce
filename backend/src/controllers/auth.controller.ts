@@ -6,23 +6,23 @@ import * as authService from '../services/auth.service.js';
 export const register = asyncHandler(async (req: Request, res: Response) => {
 	const userData: RegisterDto = (req.validated as RegisterSchema).body;
 
-	const user = await authService.register(userData);
+	const {accessToken, user} = await authService.register(userData);
 
 	res.status(201).json({
 		status: 'success',
-		token: user.accessToken,
-		data: user.user,
+		accessToken,
+		data: user,
 	});
 });
 
 export const login = asyncHandler(async (req: Request, res: Response) => {
 	const userData: LoginDto = (req.validated as LoginSchema).body;
 
-	const user = await authService.login(userData);
+	const {accessToken, newUser: user} = await authService.login(userData);
 
 	res.status(200).json({
 		status: 'success',
-		token: user.accessToken,
-		data: user.newUser,
+		accessToken,
+		data: user,
 	});
 });

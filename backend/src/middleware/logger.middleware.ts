@@ -50,7 +50,7 @@ export const errorLogger = (err: Error, req: Request, res: Response, next: NextF
 		url: req.url,
 		error: {
 			message: err.message,
-			sstack: err.stack,
+			stack: err.stack,
 			name: err.name,
 		},
 	});

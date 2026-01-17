@@ -9,6 +9,7 @@ const envSchema = z.object({
 	PORT: z.coerce.number().default(3000),
 	DATABASE_URL: z.string(),
 	JWT_SECRET: z.string().min(32),
+	JWT_REFRESH_SECRET: z.string().min(32),
 	JWT_EXPIRES_IN: z.string().default('7d'),
 	LOG_LEVEL: z.enum(['error', 'warn', 'info', 'debug']).default('info'),
 	ALLOWED_ORIGINS: z.string().optional(),
@@ -35,6 +36,7 @@ export const config = {
 	},
 	jwt: {
 		secret: parsed.data.JWT_SECRET,
+    refresh_secret: parsed.data.JWT_REFRESH_SECRET,
 		expiresIn: parsed.data.JWT_EXPIRES_IN,
 	},
 	logLevel: parsed.data.LOG_LEVEL,

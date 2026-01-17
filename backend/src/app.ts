@@ -5,6 +5,7 @@ import compression from 'compression';
 
 import { errorLogger, requestLogger } from './middleware/logger.middleware.js';
 import { errorMiddleware } from './middleware/error.middleware.js';
+import routes from './routes/index.js';
 
 const app: Application = express();
 
@@ -12,7 +13,7 @@ app.use(helmet());
 app.use(
 	cors({
 		origin: process.env.ALLOWED_ORIGINS?.split(',') || '*',
-	})
+	}),
 );
 
 app.use(express.json({ limit: '10mb' }));
@@ -29,7 +30,7 @@ app.get('/health', (req, res) => {
 	});
 });
 
-// api routes
+app.use('/api', routes);
 
 app.use(errorLogger);
 

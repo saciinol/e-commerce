@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { asyncHandler } from '../utils/asyncHandler.js';
-import { AppError, ForbiddenError, UnauthorizedError } from '../utils/errors.js';
+import { ForbiddenError, UnauthorizedError } from '../utils/errors.js';
 import { config } from '../config/environment.js';
 import { prisma } from '../prisma.js';
 import { logger } from '../utils/logger.js';
-import { TokenPayload } from '../services/token.service.js';
+import { TokenPayload } from '../types/custom.types.js';
 
 export const authenticate = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
 	const authHeader = req.headers.authorization;
@@ -17,7 +17,7 @@ export const authenticate = asyncHandler(async (req: Request, res: Response, nex
 	const token = authHeader.split(' ')[1];
 
 	try {
-		const decoded = jwt.verify(token, config.jwt.secret) as TokenPayload;
+		const decoded = jwt.verify(token, config.jwtSecret) as TokenPayload;
 
 		const user = await prisma.user.findUnique({
 			where: { id: decoded.userId },
@@ -62,7 +62,7 @@ export const optionalAuth = asyncHandler(async (req: Request, res: Response, nex
 	const token = authHeader.split(' ')[1];
 
 	try {
-		const decoded = jwt.verify(token, config.jwt.secret) as TokenPayload;
+		const decoded = jwt.verify(token, config.jwtSecret) as TokenPayload;
 
 		const user = await prisma.user.findUnique({
 			where: { id: decoded.userId },
@@ -101,37 +101,3 @@ export const authorize = (allowedRoles: string[]) => {
 		next();
 	});
 };
-
-export const validateRefreshToken = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-	// get from cookie first (more secure), then fallback to boody
-	const refreshToken = req.cookies.refreshToken || req.body.refreshToken;
-
-	if (!refreshToken) {
-		throw new AppError(400, 'Refresh token required');
-	}
-
-	const storedToken = await prisma.refreshToken.findUnique({
-		where: { token: refreshToken },
-		include: { user: true },
-	});
-
-	if (!storedToken || storedToken.isRevoked) {
-		throw new UnauthorizedError('Invalid refresh token');
-	}
-
-	if (storedToken.expiresAt < new Date()) {
-		throw new UnauthorizedError('Refresh token expired');
-	}
-
-	if (!storedToken.user.isActive) {
-		throw new UnauthorizedError('User is inactive');
-	}
-
-	req.user = {
-		id: storedToken.user.id,
-		email: storedToken.user.email,
-		role: storedToken.user.role,
-	};
-
-	next();
-});

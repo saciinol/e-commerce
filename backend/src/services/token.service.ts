@@ -3,31 +3,14 @@ import crypto from 'crypto';
 import { prisma } from '../prisma.js';
 import { logger } from '../utils/logger.js';
 import { config } from '../config/environment.js';
-
-export interface TokenPair {
-	accessToken: string;
-	refreshToken: string;
-}
-
-export interface TokenPayload {
-	userId: number;
-	email: string;
-	role: string;
-}
-
-interface RefreshTokenData {
-	userId: number;
-	deviceInfo?: string;
-	ipAddress?: string;
-}
+import { RefreshTokenData, TokenPair, TokenPayload } from '../types/custom.types.js';
 
 const ACCESS_TOKEN_EXPIRY = '15m';
-// const REFRESH_TOKEN_EXPIRY = '7d';
 const MAX_REFRESH_TOKENS_PER_USER = 5;
 
 export class TokenService {
 	static generateAccessToken(payload: TokenPayload): string {
-		return jwt.sign(payload, config.jwt.secret, { expiresIn: ACCESS_TOKEN_EXPIRY });
+		return jwt.sign(payload, config.jwtSecret, { expiresIn: ACCESS_TOKEN_EXPIRY });
 	}
 
 	static generateRefreshToken(): string {

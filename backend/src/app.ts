@@ -2,6 +2,7 @@ import express, { Application } from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import compression from 'compression';
+import cookieParser from 'cookie-parser';
 
 import { errorLogger, requestLogger } from './middleware/logger.middleware.js';
 import { errorMiddleware } from './middleware/error.middleware.js';
@@ -22,6 +23,8 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(compression());
 
 app.use(requestLogger);
+
+app.use(cookieParser());
 
 app.get('/health', (req, res) => {
 	res.status(200).json({

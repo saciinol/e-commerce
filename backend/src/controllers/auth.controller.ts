@@ -5,6 +5,7 @@ import { AuthService } from '../services/auth.service.js';
 import { config } from '../config/environment.js';
 import { UnauthorizedError } from '../utils/errors.js';
 import { TokenService } from '../services/token.service.js';
+import { prisma } from '../prisma.js';
 
 export class AuthController {
 	static register = asyncHandler(async (req: Request, res: Response): Promise<void> => {
@@ -87,6 +88,12 @@ export class AuthController {
 			success: true,
 			data: {
 				accessToken: tokens.accessToken,
+				user: {
+					id: tokens.userId,
+					email: tokens.email,
+					name: tokens.name,
+					role: tokens.role,
+				},
 			},
 		});
 	});

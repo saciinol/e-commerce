@@ -3,7 +3,7 @@ import crypto from 'crypto';
 import { prisma } from '../prisma.js';
 import { logger } from '../utils/logger.js';
 import { config } from '../config/environment.js';
-import { RefreshTokenData, TokenPair, TokenPayload } from '../types/custom.types.js';
+import { refreshPayload, RefreshTokenData, TokenPair, TokenPayload } from '../types/custom.types.js';
 
 const ACCESS_TOKEN_EXPIRY = '15m';
 const MAX_REFRESH_TOKENS_PER_USER = 5;
@@ -72,7 +72,7 @@ export class TokenService {
 		oldToken: string,
 		deviceInfo?: string,
 		ipAddress?: string,
-	): Promise<TokenPair | null> {
+	): Promise<(TokenPair & refreshPayload) | null> {
 		const storedToken = await prisma.refreshToken.findUnique({
 			where: { token: oldToken },
 			include: { user: true },
@@ -134,7 +134,13 @@ export class TokenService {
 			},
 		});
 
-		return newTokenPair;
+		return {
+			...newTokenPair,
+			userId: storedToken.user.id,
+			email: storedToken.user.email,
+			name: storedToken.user.name,
+			role: storedToken.user.role,
+		};
 	}
 
 	// revoke a specific refresh token (logout from one device)

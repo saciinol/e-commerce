@@ -21,4 +21,10 @@ export class AuthRepository {
 			where: { email },
 		});
 	};
+
+	static findById = (id: number) => {
+		return prisma.user.findUnique({
+			where: { id },
+		});
+	};
 }

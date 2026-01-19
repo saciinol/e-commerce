@@ -9,6 +9,10 @@ export interface TokenPayload {
   role: string;
 }
 
+export interface refreshPayload extends TokenPayload {
+  name: string | null;
+}
+
 export interface RefreshTokenData {
   userId: number;
   deviceInfo?: string;

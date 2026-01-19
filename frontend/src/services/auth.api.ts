@@ -7,4 +7,5 @@ export const authAPI = {
 	logout: () => api.post<LogoutResponse>('/auth/logout'),
 	logoutAll: () => api.post<LogoutResponse>('/auth/logout-all'),
 	sessions: () => api.get<SessionsResponse>('/auth/sessions'),
+	checkAuth: () => api.post<AuthResponse>('/auth/refresh'),
 };

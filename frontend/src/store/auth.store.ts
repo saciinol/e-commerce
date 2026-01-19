@@ -1,11 +1,12 @@
 import { create } from 'zustand';
-import type { LoginCredentials, RegisterCredentials, User } from '../types';
+import type { LoginCredentials, RegisterCredentials, User } from '../types/auth.types';
 import { clearAccessToken, setAccessToken } from '../services/api';
 import { authAPI } from '../services/auth.api';
 
 interface useAuthStoreTypes {
 	user: User | null;
 	isLoading: boolean;
+	isInitialized: boolean;
 	actions: {
 		checkAuth: () => Promise<void>;
 		register: (credentials: RegisterCredentials) => Promise<void>;
@@ -14,13 +15,12 @@ interface useAuthStoreTypes {
 	};
 }
 
-const useAuthStore = create<useAuthStoreTypes>((set, get) => ({
+const useAuthStore = create<useAuthStoreTypes>((set) => ({
 	user: null,
 	isLoading: false,
+	isInitialized: false,
 	actions: {
 		checkAuth: async () => {
-			set({ isLoading: true });
-
 			try {
 				const response = await authAPI.checkAuth();
 				setAccessToken(response.data.data.accessToken);
@@ -28,9 +28,12 @@ const useAuthStore = create<useAuthStoreTypes>((set, get) => ({
 					user: response.data.data.user,
 				});
 			} catch {
-				get().actions.logout();
+				clearAccessToken();
+				set({
+					user: null,
+				});
 			} finally {
-				set({ isLoading: false });
+				set({ isInitialized: true });
 			}
 		},
 
@@ -42,9 +45,12 @@ const useAuthStore = create<useAuthStoreTypes>((set, get) => ({
 				const { accessToken, user } = response.data.data;
 
 				setAccessToken(accessToken);
-				set({ user });
+				set({
+					user,
+				});
 			} catch (error) {
-				console.error(error);
+				console.error('Register failed', error);
+				throw error;
 			} finally {
 				set({ isLoading: false });
 			}
@@ -58,9 +64,12 @@ const useAuthStore = create<useAuthStoreTypes>((set, get) => ({
 				const { accessToken, user } = response.data.data;
 
 				setAccessToken(accessToken);
-				set({ user });
+				set({
+					user,
+				});
 			} catch (error) {
-				console.error(error);
+				console.error('Login failed', error);
+				throw error;
 			} finally {
 				set({ isLoading: false });
 			}
@@ -72,9 +81,12 @@ const useAuthStore = create<useAuthStoreTypes>((set, get) => ({
 			try {
 				await authAPI.logout();
 				clearAccessToken();
-				set({ user: null });
+				set({
+					user: null,
+				});
 			} catch (error) {
-				console.error(error);
+				console.error('Logout failed', error);
+				throw error;
 			} finally {
 				set({ isLoading: false });
 			}
@@ -83,3 +95,7 @@ const useAuthStore = create<useAuthStoreTypes>((set, get) => ({
 }));
 
 export const useUser = () => useAuthStore((state) => state.user);
+export const useLoading = () => useAuthStore((state) => state.isLoading);
+export const useInitialized = () => useAuthStore((state) => state.isInitialized);
+export const useAuthenticated = () => useAuthStore((state) => !!state.user);
+export const useAuthActions = () => useAuthStore((state) => state.actions);

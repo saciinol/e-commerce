@@ -1,4 +1,10 @@
-import type { AuthResponse, LoginCredentials, LogoutResponse, RegisterCredentials, SessionsResponse } from '../types';
+import type {
+	AuthResponse,
+	LoginCredentials,
+	LogoutResponse,
+	RegisterCredentials,
+	SessionsResponse,
+} from '../types/auth.types';
 import api from './api';
 
 export const authAPI = {

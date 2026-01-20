@@ -4,6 +4,8 @@ import { useAuthActions, useAuthenticated, useInitialized } from './store/auth.s
 import { PageLoader } from './components/ui/LoadingSpinner';
 import ScrollToTop from './components/ui/ScrollToTop';
 import { ToastContainer } from './components/ui/Toast';
+import { useApplyTheme } from './components/hooks/useApplyTheme';
+import ThemeToggle from './components/ui/ThemeToggle';
 
 const Login = lazy(() => import('./pages/Login'));
 const Home = lazy(() => import('./pages/Home'));
@@ -34,6 +36,8 @@ const Home = lazy(() => import('./pages/Home'));
 // };
 
 const App = () => {
+  useApplyTheme();
+
 	const { restoreSession } = useAuthActions();
 	const isInitialized = useInitialized();
 
@@ -51,6 +55,8 @@ const App = () => {
 			<ScrollToTop />
 
 			<ToastContainer />
+
+      <ThemeToggle />
 
 			<Routes>
 				<Route

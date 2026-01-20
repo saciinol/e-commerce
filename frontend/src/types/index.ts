@@ -32,7 +32,7 @@ export interface SessionsResponse {
 }
 
 export interface ApiError {
-  success: false;
+  status: string;
   message: string;
   errors?: Record<string, string[]>;
   code?: string;

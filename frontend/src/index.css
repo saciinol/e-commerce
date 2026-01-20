@@ -1,6 +1,35 @@
 @import 'tailwindcss';
 
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+@layer base {
+	body {
+		background-color: var(--color-bg-primary);
+		color: var(--color-text-primary);
+	}
+}
+
+@theme {
+	--color-bg-primary: #f3f4f6;
+	--color-bg-secondary: #ffffff;
+	--color-text-primary: #000000;
+	--color-text-secondary: #364153;
+	--color-border-primary: #d1d5dc;
+}
+
+[data-theme='dark'] {
+	--color-bg-primary: #1d232a;
+	--color-bg-secondary: #191e24;
+	--color-text-primary: #ffffff;
+	--color-text-secondary: #d1d5dc;
+	--color-border-primary: #364153;
+}
+
 @layer utilities {
+	.loading-spinner {
+		@apply size-6 animate-spin rounded-full border-2 border-text-primary border-t-transparent;
+	}
+
 	@keyframes slide-in {
 		0% {
 			transform: translateY(50%);

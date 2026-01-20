@@ -44,9 +44,9 @@ const LoginForm = () => {
 	};
 
 	return (
-		<div className="min-h-screen flex items-center justify-center bg-gray-100">
-			<div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-				<h1 className="text-2xl font-bold mb-6 text-center">Login</h1>
+		<div className="min-h-screen flex items-center justify-center bg-bg-primary">
+			<div className="bg-bg-secondary p-8 rounded-lg shadow-md w-full max-w-md">
+				<h1 className="text-2xl font-bold mb-6 text-center text-text-primary">Login</h1>
 
 				<form onSubmit={handleSubmit(onSubmit)}>
 					<FormInput label="Email" type="email" error={errors.email?.message} {...register('email')} />

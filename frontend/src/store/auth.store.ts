@@ -1,7 +1,8 @@
 import { create } from 'zustand';
-import type { LoginCredentials, RegisterCredentials, User } from '../types/auth.types';
+import type { User } from '../types/auth.types';
 import { clearAccessToken, setAccessToken } from '../services/api';
 import { authAPI } from '../services/auth.api';
+import type { LoginInput, RegisterInput } from '../schemas/auth.schema';
 
 interface useAuthStoreTypes {
 	user: User | null;
@@ -9,8 +10,8 @@ interface useAuthStoreTypes {
 	isInitialized: boolean;
 	actions: {
 		checkAuth: () => Promise<void>;
-		register: (credentials: RegisterCredentials) => Promise<void>;
-		login: (credentials: LoginCredentials) => Promise<void>;
+		register: (credentials: RegisterInput) => Promise<void>;
+		login: (credentials: LoginInput) => Promise<void>;
 		logout: () => Promise<void>;
 	};
 }
@@ -37,7 +38,7 @@ const useAuthStore = create<useAuthStoreTypes>((set) => ({
 			}
 		},
 
-		register: async (credentials: RegisterCredentials) => {
+		register: async (credentials: RegisterInput) => {
 			set({ isLoading: true });
 
 			try {
@@ -56,7 +57,7 @@ const useAuthStore = create<useAuthStoreTypes>((set) => ({
 			}
 		},
 
-		login: async (credentials: LoginCredentials) => {
+		login: async (credentials: LoginInput) => {
 			set({ isLoading: true });
 
 			try {

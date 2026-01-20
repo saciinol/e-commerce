@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react';
-import { Navigate, useLocation, BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { lazy, Suspense, useEffect } from 'react';
+import { Navigate, useLocation, Routes, Route } from 'react-router-dom';
 import { useAuthActions, useAuthenticated, useInitialized } from './store/auth.store';
-import LoadingSpinner from './components/ui/LoadingSpinner';
-import Login from './pages/Login';
-import Home from './pages/Home';
+import { PageLoader } from './components/ui/LoadingSpinner';
+import ScrollToTop from './components/ui/ScrollToTop';
+
+const Login = lazy(() => import('./pages/Login'));
+const Home = lazy(() => import('./pages/Home'));
 
 interface ProviderProps {
 	children: React.ReactNode;
@@ -40,15 +42,13 @@ const App = () => {
 	}, []);
 
 	if (!isInitialized) {
-		return (
-			<div className="min-h-screen flex justify-center items-center">
-				<LoadingSpinner />
-			</div>
-		);
+		return <PageLoader />;
 	}
 
 	return (
-		<Router>
+		<Suspense fallback={<PageLoader />}>
+			<ScrollToTop />
+
 			<Routes>
 				<Route
 					path="/login"
@@ -68,7 +68,7 @@ const App = () => {
 					}
 				/>
 			</Routes>
-		</Router>
+		</Suspense>
 	);
 };
 

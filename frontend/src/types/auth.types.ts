@@ -5,18 +5,6 @@ export interface User {
 	role: string;
 }
 
-export interface RegisterCredentials {
-	email: string;
-	name?: string;
-	password: string;
-	password_confirmation: string;
-}
-
-export interface LoginCredentials {
-	email: string;
-	password: string;
-}
-
 export interface AuthResponse {
 	success: boolean;
 	data: {
@@ -41,4 +29,11 @@ export interface SessionsResponse {
 			lastUsedAt: Date;
 		}[];
 	};
+}
+
+export interface ApiError {
+  success: false;
+  message: string;
+  errors?: Record<string, string[]>;
+  code?: string;
 }

@@ -1,8 +1,8 @@
 import { AxiosError } from 'axios';
 import { ZodError } from 'zod';
-import type { ApiError } from '../types/auth.types';
+import type { ApiError } from '../types';
 
-export const getErrorMessages = (error: unknown): string => {
+export const getErrorMessage = (error: unknown): string => {
 	if (error instanceof ZodError) {
 		return error.issues[0]?.message || 'Validation failed';
 	}
@@ -45,17 +45,6 @@ export const getErrorMessages = (error: unknown): string => {
 };
 
 export const getValidationErrors = (error: unknown): Record<string, string> => {
-	if (error instanceof ZodError) {
-		return error.issues.reduce(
-			(acc, err) => {
-				const path = err.path.join('.');
-				acc[path] = err.message;
-				return acc;
-			},
-			{} as Record<string, string>,
-		);
-	}
-
 	if (error && typeof error === 'object' && 'response' in error) {
 		const axiosError = error as AxiosError<ApiError>;
 		const errors = axiosError.response?.data?.errors;

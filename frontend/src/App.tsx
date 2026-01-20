@@ -19,7 +19,7 @@ const ProtectedRoute = ({ children }: ProviderProps) => {
 		return <Navigate to="/login" state={{ from: location }} replace />;
 	}
 
-	return children;
+	return <>{children}</>;
 };
 
 const PublicRoute = ({ children }: ProviderProps) => {
@@ -29,15 +29,15 @@ const PublicRoute = ({ children }: ProviderProps) => {
 		return <Navigate to="/" replace />;
 	}
 
-	return children;
+	return <>{children}</>;
 };
 
 const App = () => {
-	const { checkAuth } = useAuthActions();
+	const { restoreSession } = useAuthActions();
 	const isInitialized = useInitialized();
 
 	useEffect(() => {
-		checkAuth();
+		restoreSession();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 

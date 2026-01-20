@@ -1,59 +1,39 @@
 import { create } from 'zustand';
-import type { User } from '../types/auth.types';
+import type { User } from '../types';
 import { clearAccessToken, setAccessToken } from '../services/api';
 import { authAPI } from '../services/auth.api';
 import type { LoginInput, RegisterInput } from '../schemas/auth.schema';
 
-interface useAuthStoreTypes {
+interface AuthStore {
 	user: User | null;
 	isLoading: boolean;
 	isInitialized: boolean;
 	actions: {
-		checkAuth: () => Promise<void>;
-		register: (credentials: RegisterInput) => Promise<void>;
+		restoreSession: () => Promise<void>;
 		login: (credentials: LoginInput) => Promise<void>;
+		register: (credentials: RegisterInput) => Promise<void>;
 		logout: () => Promise<void>;
 	};
 }
 
-const useAuthStore = create<useAuthStoreTypes>((set) => ({
+const useAuthStore = create<AuthStore>((set) => ({
 	user: null,
 	isLoading: false,
 	isInitialized: false,
+
 	actions: {
-		checkAuth: async () => {
+		restoreSession: async () => {
 			try {
-				const response = await authAPI.checkAuth();
-				setAccessToken(response.data.data.accessToken);
-				set({
-					user: response.data.data.user,
-				});
-			} catch {
-				clearAccessToken();
-				set({
-					user: null,
-				});
-			} finally {
-				set({ isInitialized: true });
-			}
-		},
-
-		register: async (credentials: RegisterInput) => {
-			set({ isLoading: true });
-
-			try {
-				const response = await authAPI.register(credentials);
+				const response = await authAPI.refresh();
 				const { accessToken, user } = response.data.data;
 
 				setAccessToken(accessToken);
-				set({
-					user,
-				});
-			} catch (error) {
-				console.error('Register failed', error);
-				throw error;
+				set({ user });
+			} catch {
+				clearAccessToken();
+				set({ user: null });
 			} finally {
-				set({ isLoading: false });
+				set({ isInitialized: true });
 			}
 		},
 
@@ -65,31 +45,32 @@ const useAuthStore = create<useAuthStoreTypes>((set) => ({
 				const { accessToken, user } = response.data.data;
 
 				setAccessToken(accessToken);
-				set({
-					user,
-				});
-			} catch (error) {
-				console.error('Login failed', error);
-				throw error;
+				set({ user });
+			} finally {
+				set({ isLoading: false });
+			}
+		},
+
+		register: async (credentials: RegisterInput) => {
+			set({ isLoading: true });
+
+			try {
+				const response = await authAPI.register(credentials);
+				const { accessToken, user } = response.data.data;
+
+				setAccessToken(accessToken);
+				set({ user });
 			} finally {
 				set({ isLoading: false });
 			}
 		},
 
 		logout: async () => {
-			set({ isLoading: true });
-
 			try {
 				await authAPI.logout();
-				clearAccessToken();
-				set({
-					user: null,
-				});
-			} catch (error) {
-				console.error('Logout failed', error);
-				throw error;
 			} finally {
-				set({ isLoading: false });
+				clearAccessToken();
+				set({ user: null });
 			}
 		},
 	},

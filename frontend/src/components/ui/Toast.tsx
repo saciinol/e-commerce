@@ -12,7 +12,7 @@ export const ToastContainer = () => {
 				<div
 					key={toast.id}
 					className={`
-          px-4 py-3 rounded-lg shadow-lg min-w-120 max-w-md
+          px-4 py-3 rounded-lg shadow-lg min-w-60 max-w-md
         flex items-center justify-between animate-slide-in
         ${toast.type === 'success' && 'bg-green-500 text-white'}
         ${toast.type === 'error' && 'bg-red-500 text-white'}

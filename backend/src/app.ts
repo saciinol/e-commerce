@@ -13,7 +13,7 @@ const app: Application = express();
 app.use(helmet());
 app.use(
 	cors({
-		origin: process.env.ALLOWED_ORIGINS?.split(',') || '*',
+		origin: process.env.ALLOWED_ORIGINS?.split(','),
 		credentials: true,
 	}),
 );

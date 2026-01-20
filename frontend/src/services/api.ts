@@ -50,20 +50,18 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
 	(response) => response,
-	async (error: AxiosError<unknown, InternalAxiosRequestConfig>) => {
-		const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
+	async (error: AxiosError) => {
+		const originalRequest = error.config as InternalAxiosRequestConfig;
 
-		// don't retry if it's the refresh endpoint itself
-		if (originalRequest?.url === 'auth/refresh') {
-			clearAccessToken();
-			if (window.location.href !== '/login') {
-				window.location.href = '/login';
-			}
-			return Promise.reject(error);
-		}
+    if (originalRequest?._skipAuthRefresh) {
+      return Promise.reject(error);
+    }
 
-		// only try refresh once
-		if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {
+    if (!originalRequest || originalRequest._retry) {
+      return Promise.reject(error);
+    }
+
+		if (error.response?.status === 401) {
 			if (isRefreshing) {
 				// already refreshing - queue this request
 				return new Promise((resolve, reject) => {

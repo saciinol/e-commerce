@@ -1,15 +1,14 @@
 import { forwardRef, type InputHTMLAttributes } from 'react';
 
 interface FormInputProps extends InputHTMLAttributes<HTMLInputElement> {
-	label: string;
 	error?: string;
 }
 
 export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
-	({ label, error, className = '', ...props }, ref) => {
+	({ error, className = '', ...props }, ref) => {
 		return (
 			<div className="mb-4">
-				<label className="block text-sm font-medium text-text-secondary mb-1">{label}</label>
+				{/* <label className="block text-sm font-medium text-text-secondary mb-1">{label}</label> */}
 
 				<input
 					ref={ref}

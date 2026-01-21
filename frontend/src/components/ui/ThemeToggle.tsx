@@ -5,7 +5,7 @@ const ThemeToggle = () => {
 	const setTheme = useSetTheme();
 
 	return (
-		<div className="absolute top-5 right-5 z-50 border-text-primary">
+		<div className="absolute top-5 right-5 z-40 border-text-primary">
 			<select
 				className="bg-bg-primary text-text-primary border"
 				value={theme}

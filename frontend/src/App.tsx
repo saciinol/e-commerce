@@ -8,6 +8,7 @@ import { useApplyTheme } from './components/hooks/useApplyTheme';
 import ThemeToggle from './components/ui/ThemeToggle';
 
 const Login = lazy(() => import('./pages/Login'));
+const Register = lazy(() => import('./pages/Register'));
 const Home = lazy(() => import('./pages/Home'));
 
 // interface ProviderProps {
@@ -64,6 +65,15 @@ const App = () => {
 					element={
 						// <PublicRoute>
 						<Login />
+						// </PublicRoute>
+					}
+				/>
+
+				<Route
+					path="/register"
+					element={
+						// <PublicRoute>
+						<Register />
 						// </PublicRoute>
 					}
 				/>

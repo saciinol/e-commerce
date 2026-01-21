@@ -1,5 +1,5 @@
 import React, { lazy, Suspense, useEffect } from 'react';
-import { Navigate, useLocation, Routes, Route } from 'react-router-dom';
+import { Navigate, Routes, Route } from 'react-router-dom';
 import { useAuthActions, useAuthenticated, useInitialized } from './store/auth.store';
 import { PageLoader } from './components/ui/LoadingSpinner';
 import ScrollToTop from './components/ui/ScrollToTop';
@@ -11,33 +11,22 @@ const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
 const Home = lazy(() => import('./pages/Home'));
 
-// interface ProviderProps {
-// 	children: React.ReactNode;
-// }
+interface ProviderProps {
+	children: React.ReactNode;
+}
 
-// const ProtectedRoute = ({ children }: ProviderProps) => {
-// 	const isAuthenticated = useAuthenticated();
-// 	const location = useLocation();
+const PublicRoute = ({ children }: ProviderProps) => {
+	const isAuthenticated = useAuthenticated();
 
-// 	if (!isAuthenticated) {
-// 		return <Navigate to="/login" state={{ from: location }} replace />;
-// 	}
+	if (isAuthenticated) {
+		return <Navigate to="/" replace />;
+	}
 
-// 	return <>{children}</>;
-// };
-
-// const PublicRoute = ({ children }: ProviderProps) => {
-// 	const isAuthenticated = useAuthenticated();
-
-// 	if (isAuthenticated) {
-// 		return <Navigate to="/" replace />;
-// 	}
-
-// 	return <>{children}</>;
-// };
+	return <>{children}</>;
+};
 
 const App = () => {
-  useApplyTheme();
+	useApplyTheme();
 
 	const { restoreSession } = useAuthActions();
 	const isInitialized = useInitialized();
@@ -57,35 +46,28 @@ const App = () => {
 
 			<ToastContainer />
 
-      <ThemeToggle />
+			<ThemeToggle />
 
 			<Routes>
 				<Route
 					path="/login"
 					element={
-						// <PublicRoute>
-						<Login />
-						// </PublicRoute>
+						<PublicRoute>
+							<Login />
+						</PublicRoute>
 					}
 				/>
 
 				<Route
 					path="/register"
 					element={
-						// <PublicRoute>
-						<Register />
-						// </PublicRoute>
+						<PublicRoute>
+							<Register />
+						</PublicRoute>
 					}
 				/>
 
-				<Route
-					path="/"
-					element={
-						// <ProtectedRoute>
-						<Home />
-						// </ProtectedRoute>
-					}
-				/>
+				<Route path="/" element={<Home />} />
 			</Routes>
 		</Suspense>
 	);

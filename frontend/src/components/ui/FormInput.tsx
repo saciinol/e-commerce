@@ -8,8 +8,6 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
 	({ error, className = '', ...props }, ref) => {
 		return (
 			<div className="mb-4">
-				{/* <label className="block text-sm font-medium text-text-secondary mb-1">{label}</label> */}
-
 				<input
 					ref={ref}
 					className={`

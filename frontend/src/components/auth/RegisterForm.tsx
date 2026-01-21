@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuthActions } from '../../store/auth.store';
-import { useToastActions } from '../../store/toast.store';
+import { useToastStore } from '../../store/toast.store';
 import { useForm } from 'react-hook-form';
 import { registerSchema, type RegisterInput } from '../../schemas/auth.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -10,7 +10,7 @@ import { FormInput } from '../ui/FormInput';
 const RegisterForm = () => {
 	const navigate = useNavigate();
 	const { register } = useAuthActions();
-	const { showSuccess, showError } = useToastActions();
+	const { showSuccess, showError } = useToastStore();
 
 	const {
 		register: registerField,

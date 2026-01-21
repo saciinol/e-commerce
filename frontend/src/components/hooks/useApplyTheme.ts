@@ -7,7 +7,6 @@ export const useApplyTheme = () => {
 		const root = document.documentElement;
 
 		const apply = (isDark: boolean) => {
-			// root.classList.toggle('dark', isDark);
 			root.dataset.theme = isDark ? 'dark' : 'light';
 		};
 

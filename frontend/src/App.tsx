@@ -3,7 +3,7 @@ import { Navigate, Routes, Route } from 'react-router-dom';
 import { useAuthActions, useAuthenticated, useInitialized } from './store/auth.store';
 import { PageLoader } from './components/ui/LoadingSpinner';
 import ScrollToTop from './components/ui/ScrollToTop';
-import { ToastContainer } from './components/ui/Toast';
+import { Toast } from './components/ui/Toast';
 import { useApplyTheme } from './components/hooks/useApplyTheme';
 import ThemeToggle from './components/ui/ThemeToggle';
 
@@ -44,7 +44,7 @@ const App = () => {
 		<Suspense fallback={<PageLoader />}>
 			<ScrollToTop />
 
-			<ToastContainer />
+      <Toast />
 
 			<ThemeToggle />
 
@@ -68,6 +68,8 @@ const App = () => {
 				/>
 
 				<Route path="/" element={<Home />} />
+
+				<Route path="*" element={<Navigate to="/" replace />} />
 			</Routes>
 		</Suspense>
 	);

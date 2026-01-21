@@ -1,31 +1,44 @@
-import { useToastActions, useToasts } from '../../store/toast.store';
+import toast, { Toaster } from 'react-hot-toast';
 
-export const ToastContainer = () => {
-	const toasts = useToasts();
-	const { hideToast } = useToastActions();
+export const Clickable = ({
+	id,
+	children,
+	dismissOnClick = true,
+}: {
+	id: string;
+	children: React.ReactNode;
+	dismissOnClick?: boolean;
+}) => (
+	<div onClick={() => dismissOnClick && toast.dismiss(id)} style={{ cursor: dismissOnClick ? 'pointer' : 'default' }}>
+		{children}
+	</div>
+);
 
-	if (toasts.length === 0) return null;
-
+export const Toast = () => {
 	return (
-		<div className="fixed top-4 right-4 z-50 space-y-2">
-			{toasts.map((toast) => (
-				<div
-					key={toast.id}
-					className={`
-          px-4 py-3 rounded-lg shadow-lg min-w-60 max-w-md
-        flex items-center justify-between animate-slide-in
-        ${toast.type === 'success' && 'bg-green-500 text-white'}
-        ${toast.type === 'error' && 'bg-red-500 text-white'}
-        ${toast.type === 'warning' && 'bg-yellow-500 text-white'}
-        ${toast.type === 'info' && 'bg-blue-500 text-white'}
-        `}
-				>
-					<span>{toast.message}</span>
-					<button onClick={() => hideToast(toast.id)} className="ml-4 hover:opacity-80">
-						✕
-					</button>
-				</div>
-			))}
-		</div>
+		<Toaster
+			position="top-right"
+			toastOptions={{
+				duration: 4000,
+				style: {
+					background: 'var(--color-bg-secondary)',
+					color: 'var(--color-text-primary)',
+				},
+				success: {
+					duration: 3000,
+					iconTheme: {
+						primary: '#10b981',
+						secondary: '#fff',
+					},
+				},
+				error: {
+					duration: 4000,
+					iconTheme: {
+						primary: '#ef4444',
+						secondary: '#fff',
+					},
+				},
+			}}
+		/>
 	);
 };

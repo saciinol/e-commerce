@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from 'react-router-dom';
 import { useAuthActions } from '../../store/auth.store';
-import { useToastActions } from '../../store/toast.store';
+import { useToastStore } from '../../store/toast.store';
 import { loginSchema, type LoginInput } from '../../schemas/auth.schema';
 import { getValidationErrors } from '../../utils/errorHandler';
 import { FormInput } from '../ui/FormInput';
@@ -10,7 +10,7 @@ import { FormInput } from '../ui/FormInput';
 const LoginForm = () => {
 	const navigate = useNavigate();
 	const { login } = useAuthActions();
-	const { showSuccess, showError } = useToastActions();
+	const { showSuccess, showError } = useToastStore();
 
 	const {
 		register,

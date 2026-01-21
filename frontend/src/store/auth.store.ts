@@ -6,7 +6,6 @@ import type { LoginInput, RegisterInput } from '../schemas/auth.schema';
 
 interface AuthStore {
 	user: User | null;
-	isLoading: boolean;
 	isInitialized: boolean;
 	actions: {
 		restoreSession: () => Promise<void>;
@@ -18,7 +17,6 @@ interface AuthStore {
 
 const useAuthStore = create<AuthStore>((set) => ({
 	user: null,
-	isLoading: false,
 	isInitialized: false,
 
 	actions: {
@@ -38,31 +36,19 @@ const useAuthStore = create<AuthStore>((set) => ({
 		},
 
 		login: async (credentials: LoginInput) => {
-			set({ isLoading: true });
+			const response = await authAPI.login(credentials);
+			const { accessToken, user } = response.data.data;
 
-			try {
-				const response = await authAPI.login(credentials);
-				const { accessToken, user } = response.data.data;
-
-				setAccessToken(accessToken);
-				set({ user });
-			} finally {
-				set({ isLoading: false });
-			}
+			setAccessToken(accessToken);
+			set({ user });
 		},
 
 		register: async (credentials: RegisterInput) => {
-			set({ isLoading: true });
+			const response = await authAPI.register(credentials);
+			const { accessToken, user } = response.data.data;
 
-			try {
-				const response = await authAPI.register(credentials);
-				const { accessToken, user } = response.data.data;
-
-				setAccessToken(accessToken);
-				set({ user });
-			} finally {
-				set({ isLoading: false });
-			}
+			setAccessToken(accessToken);
+			set({ user });
 		},
 
 		logout: async () => {
@@ -77,7 +63,6 @@ const useAuthStore = create<AuthStore>((set) => ({
 }));
 
 export const useUser = () => useAuthStore((state) => state.user);
-export const useLoading = () => useAuthStore((state) => state.isLoading);
 export const useInitialized = () => useAuthStore((state) => state.isInitialized);
 export const useAuthenticated = () => useAuthStore((state) => !!state.user);
 export const useAuthActions = () => useAuthStore((state) => state.actions);

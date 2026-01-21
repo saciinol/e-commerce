@@ -11,15 +11,11 @@ export const authAPI = {
 		api.post<AuthResponse>('/auth/register', data, {
 			_skipAuthRefresh: true,
 		}),
+	refresh: () =>
+		api.post<AuthResponse>('/auth/refresh', {}, {
+      _skipAuthRefresh: true, //
+    }),
 	logout: () => api.post<LogoutResponse>('/auth/logout'),
 	logoutAll: () => api.post<LogoutResponse>('/auth/logout-all'),
 	sessions: () => api.get<SessionsResponse>('/auth/sessions'),
-	refresh: () =>
-		api.post<AuthResponse>(
-			'/auth/refresh',
-			{},
-			{
-				_skipAuthRefresh: true, //
-			},
-		),
 };

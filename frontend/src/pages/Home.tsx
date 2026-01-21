@@ -1,13 +1,13 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthActions, useAuthenticated, useUser } from '../store/auth.store';
-import { useToastActions } from '../store/toast.store';
+import { useToastStore } from '../store/toast.store';
 
 const Home = () => {
 	const navigate = useNavigate();
 	const isAuthenticated = useAuthenticated();
 	const user = useUser();
 	const { logout } = useAuthActions();
-	const { showSuccess, showError } = useToastActions();
+	const { showSuccess, showError } = useToastStore();
 
 	const handleLogout = async () => {
 		try {

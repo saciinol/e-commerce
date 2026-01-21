@@ -15,7 +15,7 @@ const useThemeStore = create<ThemeStore>()(
 			setTheme: (theme) => set({ theme }),
 		}),
 		{
-			name: 'theme', // localStorage key
+			name: 'theme',
 		},
 	),
 );

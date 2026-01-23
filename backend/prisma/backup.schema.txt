@@ -1,0 +1,232 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int            @id @default(autoincrement())
+  email         String         @unique
+  password      String
+  firstName     String?
+  lastName      String?
+  phone         String?
+  isActive      Boolean        @default(true)
+  role          Role           @default(CUSTOMER)
+  emailVerified Boolean        @default(false)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  // relations
+  addresses     Address[]
+  orders        Order[]
+  cart          Cart?
+  reviews       Review[]
+  wishlist      Wishlist?
+  refreshTokens RefreshToken[]
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+  SUPER_ADMIN
+}
+
+
+// address management
+model Address {
+  id                Int              @id @default(autoincrement())
+  userId            Int
+  user              User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  fullName          String
+  phone             String
+  addressLine1      String
+  addressLine2      String?
+  city              String
+  province          String
+  postalCode        String
+  country           String           @default("Philippines")
+  isDefault         Boolean          @default(false)
+
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+
+  // relations
+  ordersShipping    Order[]          @relation("ShippingAddress")
+  ordersBilling     Order[]          @relation("BillingAddress")
+
+  @@index([userId])
+}
+
+model Category {
+  id                Int              @id @default(autoincrement())
+  name              String           @unique
+  slug              String           @unique
+  description       String?
+  image             String?
+  parentId          Int?
+  parent            Category?        @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children          Category[]       @relation("CategoryHierarchy")
+  isActive          Boolean          @default(true)
+  displayOrder      Int              @default(0)
+
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+
+  // relations
+  products          Product[]
+
+  @@index([slug])
+  @@index([parentId])
+}
+
+model Product {
+  id                Int               @id @default(autoincrement())
+  name              String
+  slug              String            @unique
+  description       String?
+  shortDescription  String?
+  sku               String            @unique
+  price             Decimal           @db.Decimal(10, 2)
+  comparePrice      Decimal?          @db.Decimal(10, 2) // original price for discounts
+  cost              Decimal?          @db.Decimal(10, 2) // cost price admin only
+
+  // inventory
+  stock             Int               @default(0)
+  lowStockThreshold  Int               @default(10)
+  trackInventory    Boolean           @default(true)
+
+  // status
+  isActive          Boolean           @default(true)
+  isFeatured        Boolean           @default(false)
+
+  // seo
+  metaTitle         String?
+  metaDescription   String?
+
+  // media
+  images            ProductImage[]
+
+  // categorization
+  categoryId        Int
+  category          Category          @relation(fields: [categoryId], references: [id])
+
+  // attributes
+  attributes        ProductAttribute[]
+  variants          ProductVariant[]
+
+  // stats
+  viewCount         Int               @default(0)
+  salesCount        Int               @default(0)
+  averageRating     Decimal           @db.Decimal(3, 2) @default(0.00)
+
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  // relations
+  cartItems         CartItem[]
+  orderItems        OrderItem[]
+  reviews           Review[]
+  wishlistItems     WishlistItem[]
+
+  @@index([slug])
+  @@index([categoryId])
+  @@index([sku])
+}
+
+model ProductImage {
+  id                Int               @id @default(autoincrement())
+}
+
+model ProductAttribute {
+  id                Int              @id @default(autoincrement())
+}
+
+model ProductVariant {
+  id                Int              @id @default(autoincrement())
+}
+
+model VariantOption {
+  id                Int              @id @default(autoincrement())
+}
+
+model Cart {
+  id                Int              @id @default(autoincrement())
+}
+
+model CartItem {
+  id                Int              @id @default(autoincrement())
+}
+
+model Order {
+  id                Int              @id @default(autoincrement())
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum FulfillmentStatus {
+  UNFULFILLED
+  PARTIALLY_FULFILLED
+  FULFILLED
+}
+
+model OrderItem {
+  id                Int              @id @default(autoincrement())
+}
+
+model Review {
+  id                Int              @id @default(autoincrement())
+}
+
+model Wishlist {
+  id                Int              @id @default(autoincrement())
+}
+
+model WishlistItem {
+  id                Int              @id @default(autoincrement())
+}
+
+model Coupon {
+  id                Int              @id @default(autoincrement())
+}
+
+enum DiscountType {
+  PERCENTAGE
+  FIXED
+}
+
+model RefreshToken {
+  id           Int      @id @default(autoincrement())
+  token        String   @unique
+  userId       Int
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt    DateTime
+  isRevoked    Boolean  @default(false)
+  replacedBy   String?  // For token rotation tracking
+  deviceInfo   String?  // Browser/device fingerprint
+  ipAddress    String?
+  createdAt    DateTime @default(now())
+  lastUsedAt   DateTime @default(now())
+
+  @@index([userId])
+  @@index([token])
+}

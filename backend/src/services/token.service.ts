@@ -3,7 +3,7 @@ import crypto from 'crypto';
 import { prisma } from '../prisma.js';
 import { logger } from '../utils/logger.js';
 import { config } from '../config/environment.js';
-import { refreshPayload, RefreshTokenData, TokenPair, TokenPayload } from '../types/custom.types.js';
+import { refreshPayload, RefreshTokenData, TokenPair, TokenPayload } from '../types/token.types.js';
 
 const ACCESS_TOKEN_EXPIRY = '15m';
 const MAX_REFRESH_TOKENS_PER_USER = 5;

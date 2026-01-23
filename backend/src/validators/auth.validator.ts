@@ -3,8 +3,9 @@ import { z } from 'zod';
 export const registerSchema = z.object({
 	body: z.object({
 		email: z.email({ message: 'Invalid email address' }),
-		name: z.string().min(2, { message: 'Name must be atleast 2 characters' }).optional(),
 		password: z.string().min(8, { message: 'Password must be at least 8 characters' }),
+		firstName: z.string().min(2, { message: 'First name must be atleast 2 characters' }).optional(),
+		lastName: z.string().min(2, { message: 'Last name must be atleast 2 characters' }).optional(),
 	}),
 });
 
@@ -15,8 +16,16 @@ export const loginSchema = z.object({
 	}),
 });
 
+export const resetPasswordSchema = z.object({
+	body: z.object({
+		password: z.string().min(8, { message: 'Password must be at least 8 characters' }),
+	}),
+});
+
 export type RegisterDto = z.infer<typeof registerSchema>['body'];
 export type LoginDto = z.infer<typeof loginSchema>['body'];
+export type ResetPasswordDto = z.infer<typeof resetPasswordSchema>['body'];
 
 export type RegisterSchema = z.infer<typeof registerSchema>;
 export type LoginSchema = z.infer<typeof loginSchema>;
+export type ResetPasswordSchema = z.infer<typeof resetPasswordSchema>;

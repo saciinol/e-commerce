@@ -35,3 +35,54 @@ export const prisma = global.__prisma ?? (global.__prisma = new PrismaClient());
 npx prisma migrate dev --name init
 
 npx prisma generate
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+model ProductVariant {
+  id         Int    @id @default(autoincrement())
+  sku        String @unique
+  product    Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId  Int
+  price      Int    // store cents
+  stock      Int
+  attributes Json?
+}
+
+model Image {
+
+}
+
+model Cart {
+
+}
+
+model CartItem {
+
+}
+
+model Order {
+
+}
+
+model OrderItem {
+
+}
+
+model Payment {
+
+}
+
+model Inventory {
+
+}

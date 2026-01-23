@@ -5,7 +5,7 @@ import { ForbiddenError, UnauthorizedError } from '../utils/errors.js';
 import { config } from '../config/environment.js';
 import { prisma } from '../prisma.js';
 import { logger } from '../utils/logger.js';
-import { TokenPayload } from '../types/custom.types.js';
+import { TokenPayload } from '../types/token.types.js';
 
 export const authenticate = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
 	const authHeader = req.headers.authorization;
@@ -24,7 +24,8 @@ export const authenticate = asyncHandler(async (req: Request, res: Response, nex
 			select: {
 				id: true,
 				email: true,
-				name: true,
+				firstName: true,
+				lastName: true,
 				role: true,
 			},
 		});
@@ -69,7 +70,8 @@ export const optionalAuth = asyncHandler(async (req: Request, res: Response, nex
 			select: {
 				id: true,
 				email: true,
-				name: true,
+				firstName: true,
+				lastName: true,
 			},
 		});
 
@@ -87,7 +89,7 @@ export const optionalAuth = asyncHandler(async (req: Request, res: Response, nex
 	}
 });
 
-// authorize(['user', 'admin', 'moderator'])
+// authorize(['CUSTOMER', 'ADMIN', 'SUPER_ADMIN])
 export const authorize = (allowedRoles: string[]) => {
 	return asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
 		if (!req.user) {

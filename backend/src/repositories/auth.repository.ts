@@ -2,6 +2,22 @@ import { prisma } from '../prisma.js';
 import { RegisterDto, ResetPasswordDto } from '../validators/auth.validator.js';
 
 export class AuthRepository {
+	static adminRegister = (data: RegisterDto) => {
+		return prisma.user.create({
+			data: {
+				...data,
+				role: 'ADMIN',
+			},
+			select: {
+				id: true,
+				email: true,
+				firstName: true,
+				lastName: true,
+				role: true,
+			},
+		});
+	};
+
 	static register = (data: RegisterDto) => {
 		return prisma.user.create({
 			data,

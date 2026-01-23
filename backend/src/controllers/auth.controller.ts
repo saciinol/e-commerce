@@ -1,12 +1,30 @@
 import { Request, Response } from 'express';
 import { asyncHandler } from '../utils/asyncHandler.js';
-import { LoginDto, LoginSchema, RegisterDto, RegisterSchema, ResetPasswordDto, ResetPasswordSchema } from '../validators/auth.validator.js';
+import {
+	LoginDto,
+	LoginSchema,
+	RegisterDto,
+	RegisterSchema,
+	ResetPasswordDto,
+	ResetPasswordSchema,
+} from '../validators/auth.validator.js';
 import { AuthService } from '../services/auth.service.js';
 import { config } from '../config/environment.js';
 import { UnauthorizedError } from '../utils/errors.js';
 import { TokenService } from '../services/token.service.js';
 
 export class AuthController {
+	static adminRegister = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+		const adminData = (req.validated as RegisterSchema).body;
+
+		const admin = await AuthService.adminRegister(adminData);
+
+		res.status(201).json({
+			success: true,
+			data: admin,
+		});
+	});
+
 	static register = asyncHandler(async (req: Request, res: Response): Promise<void> => {
 		const userData: RegisterDto = (req.validated as RegisterSchema).body;
 		const deviceInfo = req.headers['user-agent'];
@@ -55,9 +73,9 @@ export class AuthController {
 		});
 	});
 
-  // static resetPassword = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-  //   const password: ResetPasswordDto = (req.validated as ResetPasswordSchema).body.password;
-  // })
+	// static resetPassword = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+	//   const password: ResetPasswordDto = (req.validated as ResetPasswordSchema).body.password;
+	// })
 
 	// refresh - rotate tokens
 	static refresh = asyncHandler(async (req: Request, res: Response): Promise<void> => {

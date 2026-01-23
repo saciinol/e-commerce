@@ -7,7 +7,7 @@ import { ProductController } from '../controllers/product.controller.js';
 const router = Router();
 
 router.post(
-	'/admin/create',
+	'/admin/create-product',
 	authenticate,
 	authorize(['ADMIN', 'SUPER_ADMIN']),
 	validate(createProductSchema),

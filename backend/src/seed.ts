@@ -1,15 +1,15 @@
 import { hash } from 'bcrypt';
 import { prisma } from './prisma.js';
 
-async function createAdmin() {
+async function createSuperAdmin() {
 	const hashed = await hash('strongpassword123', 12);
 
 	await prisma.user.create({
 		data: {
-			email: 'admin@email.com',
+			email: 'superadmin@email.com',
 			password: hashed,
-			firstName: 'Admin',
-			lastName: 'Account',
+			firstName: 'Super',
+			lastName: 'Admin',
 			role: 'SUPER_ADMIN',
 		},
 	});
@@ -29,4 +29,4 @@ async function createAdmin() {
 // 	});
 // }
 
-createAdmin().finally(async () => await prisma.$disconnect());
+createSuperAdmin().finally(async () => await prisma.$disconnect());

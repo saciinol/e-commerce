@@ -20,9 +20,16 @@ const Home = () => {
 	};
 
 	return (
-		<div>
+		<div className="m-2">
 			<p>Home</p>
-			<p>Hello, {isAuthenticated ? user?.name : 'Guest'}</p>
+			<p>Hello, {isAuthenticated ? `${user?.firstName} ${user?.lastName}` : 'Guest'}</p>
+			<p>Role: {user?.role}</p>
+
+			{user?.role === 'SUPER_ADMIN' && (
+				<button className="border p-2 cursor-pointer block mb-2">
+					<Link to="/admin/register">Create Admin</Link>
+				</button>
+			)}
 
 			{isAuthenticated ? (
 				<button onClick={handleLogout} className="border p-2 cursor-pointer">

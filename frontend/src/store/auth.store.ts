@@ -9,6 +9,7 @@ interface AuthStore {
 	isInitialized: boolean;
 	actions: {
 		restoreSession: () => Promise<void>;
+		adminRegister: (credentials: RegisterInput) => void;
 		login: (credentials: LoginInput) => Promise<void>;
 		register: (credentials: RegisterInput) => Promise<void>;
 		logout: () => Promise<void>;
@@ -33,6 +34,10 @@ const useAuthStore = create<AuthStore>((set) => ({
 			} finally {
 				set({ isInitialized: true });
 			}
+		},
+
+		adminRegister: (credentials: RegisterInput) => {
+			authAPI.adminRegister(credentials);
 		},
 
 		login: async (credentials: LoginInput) => {

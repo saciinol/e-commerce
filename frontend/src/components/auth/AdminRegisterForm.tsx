@@ -1,15 +1,13 @@
-import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuthActions } from '../../store/auth.store';
 import { useToastStore } from '../../store/toast.store';
-import { useForm } from 'react-hook-form';
 import { registerSchema, type RegisterInput } from '../../schemas/auth.schema';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { getValidationErrors } from '../../utils/errorHandler';
 import { FormInput } from '../ui/FormInput';
 
-const RegisterForm = () => {
-	const navigate = useNavigate();
-	const { register } = useAuthActions();
+const AdminRegisterForm = () => {
+	const { adminRegister } = useAuthActions();
 	const { showSuccess, showError } = useToastStore();
 
 	const {
@@ -17,15 +15,16 @@ const RegisterForm = () => {
 		handleSubmit,
 		formState: { errors, isSubmitting },
 		setError,
+    reset
 	} = useForm<RegisterInput>({
 		resolver: zodResolver(registerSchema),
 	});
 
-	const onSubmit = async (data: RegisterInput) => {
+	const onSubmit = (data: RegisterInput) => {
 		try {
-			await register(data);
-			showSuccess('Register successful!');
-			navigate('/');
+			adminRegister(data);
+			showSuccess('Admin Register successful!');
+      reset();
 		} catch (error) {
 			const validationErrors = getValidationErrors(error);
 
@@ -81,4 +80,4 @@ const RegisterForm = () => {
 	);
 };
 
-export default RegisterForm;
+export default AdminRegisterForm;

@@ -1,8 +1,9 @@
 export interface User {
 	id: number;
 	email: string;
-	name: string | null;
-	role: string;
+	firstName: string | null;
+	lastName: string | null;
+	role: 'CUSTOMER' | 'ADMIN' | 'SUPER_ADMIN';
 }
 
 export interface AuthResponse {
@@ -10,6 +11,13 @@ export interface AuthResponse {
 	data: {
 		accessToken: string;
 		user: User;
+	};
+}
+
+export interface AdminAuthResponse {
+	success: boolean;
+	data: {
+		admin: User;
 	};
 }
 
@@ -32,8 +40,8 @@ export interface SessionsResponse {
 }
 
 export interface ApiError {
-  status: string;
-  message: string;
-  errors?: Record<string, string[]>;
-  code?: string;
+	status: string;
+	message: string;
+	errors?: Record<string, string[]>;
+	code?: string;
 }

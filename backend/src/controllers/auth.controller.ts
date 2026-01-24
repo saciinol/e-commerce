@@ -111,7 +111,8 @@ export class AuthController {
 				user: {
 					id: tokens.userId,
 					email: tokens.email,
-					name: tokens.name,
+					firstName: tokens.firstName,
+					lastName: tokens.lastName,
 					role: tokens.role,
 				},
 			},

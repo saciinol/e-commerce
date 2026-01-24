@@ -6,11 +6,12 @@ export interface TokenPair {
 export interface TokenPayload {
   userId: number;
   email: string;
-  role: string;
+  role: 'CUSTOMER' | 'ADMIN' | 'SUPER_ADMIN';
 }
 
 export interface refreshPayload extends TokenPayload {
-  name: string | null;
+  firstName: string | null;
+  lastName: string | null;
 }
 
 export interface RefreshTokenData {

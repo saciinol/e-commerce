@@ -138,7 +138,8 @@ export class TokenService {
 			...newTokenPair,
 			userId: storedToken.user.id,
 			email: storedToken.user.email,
-			name: storedToken.user.name,
+			firstName: storedToken.user.firstName,
+			lastName: storedToken.user.lastName,
 			role: storedToken.user.role,
 		};
 	}

@@ -7,11 +7,22 @@ export class ProductController {
 	static getProducts = asyncHandler(async (req: Request, res: Response): Promise<void> => {
 		const { page = 1, limit = 10 } = (req.validated as GetProductsSchema).query;
 
-		const result = await ProductService.getProducts({ page, limit });
+		const result = await ProductService.getProducts(req.user, { page, limit });
 
 		res.status(200).json({
 			success: true,
 			data: result,
+		});
+	});
+
+	static getProduct = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+		const { id } = (req.validated as GetProductIdSchema).params;
+
+		const product = await ProductService.getProductById(req.user, id);
+
+		res.status(200).json({
+			success: false,
+			data: product,
 		});
 	});
 
@@ -29,7 +40,7 @@ export class ProductController {
 	static deleteProduct = asyncHandler(async (req: Request, res: Response): Promise<void> => {
 		const { id } = (req.validated as GetProductIdSchema).params;
 
-		await ProductService.deleteProduct(id);
+		await ProductService.deleteProduct(req.user, id);
 
 		res.status(204).send();
 	});

@@ -2,16 +2,26 @@ import { ProductRepository } from '../repositories/product.repository.js';
 import { CreateProductDto, GetProductsQuery } from '../validators/product.validator.js';
 import { createUniqueSlug } from '../utils/slugify.js';
 import { NotFoundError } from '../utils/errors.js';
+import { ReqUser } from '../types/token.types.js';
 
 export class ProductService {
-	static getProducts = async (params: GetProductsQuery) => {
+	static getProducts = async (user: ReqUser | undefined, params: GetProductsQuery) => {
 		const { page, limit } = params;
 		const skip = (page - 1) * limit;
 
-		const [products, total] = await Promise.all([
-			ProductRepository.findMany({ skip, take: limit }),
-			ProductRepository.count(),
-		]);
+		let products;
+		let total;
+		if (user?.role !== 'CUSTOMER') {
+			[products, total] = await Promise.all([
+				ProductRepository.findManyAdmin({ skip, take: limit }),
+				ProductRepository.count(),
+			]);
+		} else {
+			[products, total] = await Promise.all([
+				ProductRepository.findManyPublic({ skip, take: limit }),
+				ProductRepository.count(),
+			]);
+		}
 
 		return {
 			data: products,
@@ -24,8 +34,13 @@ export class ProductService {
 		};
 	};
 
-	static getProductById = async (id: number) => {
-		const product = await ProductRepository.findProductById(id);
+	static getProductById = async (user: ReqUser | undefined, id: number) => {
+		let product;
+		if (user?.role !== 'CUSTOMER') {
+			product = await ProductRepository.findProductByIdAdmin(id);
+		} else {
+			product = await ProductRepository.findProductByIdPublic(id);
+		}
 
 		if (!product) {
 			throw new NotFoundError(`User with id ${id} not found`);
@@ -41,8 +56,8 @@ export class ProductService {
 		});
 	};
 
-	static deleteProduct = async (id: number) => {
-		await this.getProductById(id);
+	static deleteProduct = async (user: ReqUser | undefined, id: number) => {
+		await this.getProductById(user, id);
 		await ProductRepository.deleteProduct(id);
 	};
 }

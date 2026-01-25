@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthActions, useAuthenticated, useUser } from '../../store/auth.store';
 import { useToastStore } from '../../store/toast.store';
-import { ChevronDown, LogOut, ShoppingCart, UserStar } from 'lucide-react';
+import { ChevronDown, LogIn, LogOut, ShoppingCart, UserStar } from 'lucide-react';
 import Dropdown, { DropdownItem } from './Dropdown';
 import ThemeToggle from './ThemeToggle';
 
@@ -61,6 +61,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 									</DropdownItem>
 								) : (
 									<DropdownItem>
+										<LogIn className="size-4" />
 										<Link to="/login">Login</Link>
 									</DropdownItem>
 								)}

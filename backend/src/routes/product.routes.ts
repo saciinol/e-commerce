@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { authenticate, authorize } from '../middleware/auth.middleware.js';
+import { authenticate, authorize, optionalAuth } from '../middleware/auth.middleware.js';
 import { validate } from '../middleware/validation.middleware.js';
 import { createProductSchema } from '../validators/product.validator.js';
 import { ProductController } from '../controllers/product.controller.js';
@@ -17,6 +17,7 @@ router.post(
 router.delete('/admin/:id', authenticate, authorize(['ADMIN', 'SUPER_ADMIN']), ProductController.deleteProduct);
 
 // all roles route
-// router.get('/');
+router.get('/', optionalAuth, ProductController.getProducts);
+router.get('/:id', optionalAuth, ProductController.getProduct);
 
 export default router;

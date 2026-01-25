@@ -5,8 +5,8 @@ import { PageLoader } from './components/ui/LoadingSpinner';
 import ScrollToTop from './components/ui/ScrollToTop';
 import { Toast } from './components/ui/Toast';
 import { useApplyTheme } from './components/hooks/useApplyTheme';
-import ThemeToggle from './components/ui/ThemeToggle';
 import AdminRegister from './pages/AdminRegister';
+import Layout from './components/ui/Layout';
 
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
@@ -62,8 +62,6 @@ const App = () => {
 
 			<Toast />
 
-			<ThemeToggle />
-
 			<Routes>
 				<Route
 					path="/login"
@@ -92,7 +90,14 @@ const App = () => {
 					}
 				/>
 
-				<Route path="/" element={<Home />} />
+				<Route
+					path="/"
+					element={
+						<Layout>
+							<Home />
+						</Layout>
+					}
+				/>
 
 				<Route path="*" element={<Navigate to="/" replace />} />
 			</Routes>

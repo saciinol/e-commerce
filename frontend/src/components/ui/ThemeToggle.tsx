@@ -1,21 +1,38 @@
-import { useSetTheme, useTheme, type Theme } from '../../store/theme.store';
+import { Laptop, Moon, Sun } from 'lucide-react';
+import { useSetTheme, useTheme } from '../../store/theme.store';
+import Dropdown, { DropdownItem } from './Dropdown';
 
 const ThemeToggle = () => {
 	const theme = useTheme();
 	const setTheme = useSetTheme();
-
 	return (
-		<div className="absolute top-5 right-5 z-40 border-text-primary">
-			<select
-				className="bg-bg-primary text-text-primary border"
-				value={theme}
-				onChange={(e) => setTheme(e.target.value as Theme)}
-			>
-				<option value="light">Light</option>
-				<option value="dark">Dark</option>
-				<option value="system">System</option>
-			</select>
-		</div>
+		<Dropdown
+			className="min-w-20! border border-text-primary/10"
+			trigger={
+				<div className="border-text-primary">
+					{theme === 'light' ? (
+						<Sun className="size-6" />
+					) : theme === 'dark' ? (
+						<Moon className="size-6" />
+					) : (
+						theme === 'system' && <Laptop className="size-6" />
+					)}
+				</div>
+			}
+		>
+			<DropdownItem onClick={() => setTheme('light')}>
+				<Sun className="size-4" />
+				Light
+			</DropdownItem>
+			<DropdownItem onClick={() => setTheme('dark')}>
+				<Moon className="size-4" />
+				Dark
+			</DropdownItem>
+			<DropdownItem onClick={() => setTheme('system')}>
+				<Laptop className="size-4" />
+				System
+			</DropdownItem>
+		</Dropdown>
 	);
 };
 

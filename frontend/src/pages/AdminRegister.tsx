@@ -7,7 +7,7 @@ const AdminRegister = () => {
 
 	return (
 		<section className="min-h-screen bg-bg-primary flex items-center justify-center">
-			<div className="relative bg-bg-secondary px-6 py-12 rounded-lg shadow-md w-full max-w-sm mx-3 space-y-6">
+			<div className="bg-bg-secondary px-6 py-12 rounded-lg shadow-md w-full max-w-sm mx-3 space-y-6">
 				<div className="absolute top-3 left-3">
 					<ArrowLeft className="cursor-pointer" onClick={() => navigate(-1)} />
 				</div>

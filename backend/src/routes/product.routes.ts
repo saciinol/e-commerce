@@ -17,6 +17,6 @@ router.post(
 router.delete('/admin/:id', authenticate, authorize(['ADMIN', 'SUPER_ADMIN']), ProductController.deleteProduct);
 
 // all roles route
-router.get('/')
+// router.get('/');
 
 export default router;

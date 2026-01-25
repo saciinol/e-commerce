@@ -41,8 +41,17 @@ export const getProductIdSchema = z.object({
 	}),
 });
 
+export const getProductsSchema = z.object({
+	query: z.object({
+		page: z.string().transform(Number).pipe(z.number().int().positive()).default(1),
+		limit: z.string().transform(Number).pipe(z.number().int().positive().max(100)).default(10),
+	}),
+});
+
 export type CreateProductDto = z.infer<typeof createProductSchema>['body'];
 export type GetProductIdParams = z.infer<typeof getProductIdSchema>['params'];
+export type GetProductsQuery = z.infer<typeof getProductsSchema>['query'];
 
 export type CreateProductSchema = z.infer<typeof createProductSchema>;
 export type GetProductIdSchema = z.infer<typeof getProductIdSchema>;
+export type GetProductsSchema = z.infer<typeof getProductsSchema>;

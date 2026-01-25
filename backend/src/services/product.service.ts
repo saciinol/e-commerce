@@ -1,9 +1,29 @@
 import { ProductRepository } from '../repositories/product.repository.js';
-import { CreateProductDto } from '../validators/product.validator.js';
+import { CreateProductDto, GetProductsQuery } from '../validators/product.validator.js';
 import { createUniqueSlug } from '../utils/slugify.js';
 import { NotFoundError } from '../utils/errors.js';
 
 export class ProductService {
+	static getProducts = async (params: GetProductsQuery) => {
+		const { page, limit } = params;
+		const skip = (page - 1) * limit;
+
+		const [products, total] = await Promise.all([
+			ProductRepository.findMany({ skip, take: limit }),
+			ProductRepository.count(),
+		]);
+
+		return {
+			data: products,
+			pagination: {
+				page: page,
+				limit: limit,
+				total: total,
+				totalPages: Math.ceil(total / limit),
+			},
+		};
+	};
+
 	static getProductById = async (id: number) => {
 		const product = await ProductRepository.findProductById(id);
 

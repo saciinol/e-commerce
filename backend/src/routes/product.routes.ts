@@ -6,6 +6,7 @@ import { ProductController } from '../controllers/product.controller.js';
 
 const router = Router();
 
+// admin route
 router.post(
 	'/admin/create-product',
 	authenticate,
@@ -13,5 +14,9 @@ router.post(
 	validate(createProductSchema),
 	ProductController.createProduct,
 );
+router.delete('/admin/:id', authenticate, authorize(['ADMIN', 'SUPER_ADMIN']), ProductController.deleteProduct);
+
+// all roles route
+router.get('/')
 
 export default router;

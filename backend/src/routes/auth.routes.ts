@@ -6,6 +6,7 @@ import { authenticate, authorize } from '../middleware/auth.middleware.js';
 
 const router = Router();
 
+// admin route
 router.post(
 	'/admin/register',
 	authenticate,
@@ -14,9 +15,9 @@ router.post(
 	AuthController.adminRegister,
 );
 
+// all roles route
 router.post('/register', validate(registerSchema), AuthController.register);
 router.post('/login', validate(loginSchema), AuthController.login);
-// router.post('/reset-passsword', AuthController.resetPassword);
 router.post('/refresh', AuthController.refresh);
 router.post('/logout', AuthController.logout);
 router.post('/logout-all', authenticate, AuthController.logoutAll);

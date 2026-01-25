@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { LoginDto, RegisterDto, ResetPasswordDto } from '../validators/auth.validator.js';
+import { LoginDto, RegisterDto } from '../validators/auth.validator.js';
 import { AuthRepository } from '../repositories/auth.repository.js';
 import { UnauthorizedError, ValidationError } from '../utils/errors.js';
 import { TokenService } from './token.service.js';
@@ -86,9 +86,4 @@ export class AuthService {
 			},
 		};
 	};
-
-	// static resetPassword = async (id: number, password: ResetPasswordDto) => {
-	//   const user = await AuthRepository.findById(id);
-
-	// }
 }

@@ -1,5 +1,5 @@
 import { prisma } from '../prisma.js';
-import { RegisterDto, ResetPasswordDto } from '../validators/auth.validator.js';
+import { RegisterDto } from '../validators/auth.validator.js';
 
 export class AuthRepository {
 	static adminRegister = (data: RegisterDto) => {
@@ -44,11 +44,4 @@ export class AuthRepository {
 			where: { id },
 		});
 	};
-
-	// static resetPassword = (email: string, password: ResetPasswordDto) => {
-	// 	return prisma.user.update({
-	// 		data: { password },
-	// 		where: { email },
-	// 	});
-	// };
 }

@@ -35,6 +35,14 @@ export const createProductSchema = z.object({
 		}),
 });
 
+export const getProductIdSchema = z.object({
+	params: z.object({
+		id: z.coerce.number().int().positive('Invalid Product ID'),
+	}),
+});
+
 export type CreateProductDto = z.infer<typeof createProductSchema>['body'];
+export type GetProductIdParams = z.infer<typeof getProductIdSchema>['params'];
 
 export type CreateProductSchema = z.infer<typeof createProductSchema>;
+export type GetProductIdSchema = z.infer<typeof getProductIdSchema>;

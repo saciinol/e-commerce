@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import type {
 	ProductAdmin,
 	ProductPublic,
+	ProductResponse,
 	ProductResponseAdmin,
 	ProductResponsePublic,
 	ProductsResponseAdmin,
@@ -12,7 +13,7 @@ import { productAPI } from '../services/product.api';
 import type { Role } from '../types';
 
 interface ProductStore {
-	products: ProductPublic[] | ProductAdmin[] | null;
+	products: ProductResponse | null;
 	product: ProductPublic | ProductAdmin | null;
 
 	actions: {
@@ -23,27 +24,71 @@ interface ProductStore {
 	};
 }
 
-const useProductStore = create<ProductStore>((set) => ({
+const useProductStore = create<ProductStore>((set, get) => ({
 	products: null,
 	product: null,
 
 	actions: {
-		adminCreateProduct: async (data: AdminCreateProductInput) => {},
+		adminCreateProduct: async (data: AdminCreateProductInput) => {
+			const { products } = get();
+			const response = await productAPI.adminCreateProduct(data);
+			const { data: product } = response.data;
 
-		adminDeleteProduct: async (id: number) => {},
+			if (products?.kind === 'admin') {
+				set({
+					products: {
+						kind: 'admin',
+						products: [product, ...products.products],
+					},
+				});
+			}
+		},
+
+		adminDeleteProduct: async (id: number) => {
+			const { products } = get();
+
+			try {
+				await productAPI.adminDeleteProduct(id);
+
+				if (products?.kind === 'admin') {
+					set({
+						products: {
+							kind: 'admin',
+							products: products.products.filter((p) => p.id !== id),
+						},
+					});
+				}
+			} catch (error) {
+				console.log('Failed to delete product', error);
+			}
+		},
 
 		getProducts: async (role: Role) => {
-			if (role === 'ADMIN' || role === 'SUPER_ADMIN') {
-				const response = await productAPI.getProducts<ProductsResponseAdmin>();
-				const { products, pagination } = response.data.data;
+			try {
+				if (role === 'ADMIN' || role === 'SUPER_ADMIN') {
+					const response = await productAPI.getProducts<ProductsResponseAdmin>();
+					const { products, pagination } = response.data.data;
 
-				set({ products });
-			} else {
-				const response = await productAPI.getProducts<ProductsResponsePublic>();
+					set({
+						products: {
+							kind: 'admin',
+							products,
+						},
+					});
+				} else {
+					const response = await productAPI.getProducts<ProductsResponsePublic>();
 
-				const { products, pagination } = response.data.data;
+					const { products, pagination } = response.data.data;
 
-				set({ products });
+					set({
+						products: {
+							kind: 'public',
+							products,
+						},
+					});
+				}
+			} catch (error) {
+				console.error('Failed to load products', error);
 			}
 		},
 

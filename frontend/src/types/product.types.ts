@@ -57,6 +57,16 @@ export interface ProductAdmin {
 	updatedAt: string;
 }
 
+export type ProductResponse =
+	| {
+			kind: 'public';
+			products: ProductPublic[];
+	  }
+	| {
+			kind: 'admin';
+			products: ProductAdmin[];
+	  };
+
 export interface Pagination {
 	page: number;
 	limit: number;

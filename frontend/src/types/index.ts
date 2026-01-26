@@ -1,9 +1,11 @@
+export type Role = 'CUSTOMER' | 'ADMIN' | 'SUPER_ADMIN';
+
 export interface User {
 	id: number;
 	email: string;
 	firstName: string | null;
 	lastName: string | null;
-	role: 'CUSTOMER' | 'ADMIN' | 'SUPER_ADMIN';
+	role: Role;
 }
 
 export interface AuthResponse {

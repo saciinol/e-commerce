@@ -7,11 +7,11 @@ export class ProductController {
 	static getProducts = asyncHandler(async (req: Request, res: Response): Promise<void> => {
 		const { page = 1, limit = 10 } = (req.validated as GetProductsSchema).query;
 
-		const result = await ProductService.getProducts(req.user, { page, limit });
+		const products = await ProductService.getProducts(req.user, { page, limit });
 
 		res.status(200).json({
 			success: true,
-			data: result,
+			data: products,
 		});
 	});
 

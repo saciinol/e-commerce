@@ -135,6 +135,41 @@ export class ProductRepository {
 	static createProduct = (data: CreateProductDto, slug: string) => {
 		return prisma.product.create({
 			data: { ...data, slug },
+			select: {
+				id: true,
+				name: true,
+				slug: true,
+				sku: true,
+
+				price: true,
+				comparePrice: true,
+				cost: true,
+
+				stock: true,
+				lowStockThreshold: true,
+				trackInventory: true,
+
+				isActive: true,
+				isFeatured: true,
+
+				metaTitle: true,
+				metaDescription: true,
+
+				viewCount: true,
+				salesCount: true,
+				averageRating: true,
+
+				category: {
+					select: {
+						id: true,
+						name: true,
+						slug: true,
+					},
+				},
+
+				createdAt: true,
+				updatedAt: true,
+			},
 		});
 	};
 

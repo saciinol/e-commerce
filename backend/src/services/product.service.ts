@@ -3,6 +3,7 @@ import { CreateProductDto, GetProductsQuery } from '../validators/product.valida
 import { createUniqueSlug } from '../utils/slugify.js';
 import { NotFoundError } from '../utils/errors.js';
 import { ReqUser } from '../types/token.types.js';
+import { Role } from '@prisma/client';
 
 export class ProductService {
 	static getProducts = async (user: ReqUser | undefined, params: GetProductsQuery) => {
@@ -11,7 +12,7 @@ export class ProductService {
 
 		let products;
 		let total;
-		if (user?.role !== 'CUSTOMER') {
+		if (user?.role === Role.ADMIN || user?.role === Role.SUPER_ADMIN) {
 			[products, total] = await Promise.all([
 				ProductRepository.findManyAdmin({ skip, take: limit }),
 				ProductRepository.count(),
@@ -24,7 +25,7 @@ export class ProductService {
 		}
 
 		return {
-			data: products,
+			products,
 			pagination: {
 				page: page,
 				limit: limit,
@@ -36,7 +37,7 @@ export class ProductService {
 
 	static getProductById = async (user: ReqUser | undefined, id: number) => {
 		let product;
-		if (user?.role !== 'CUSTOMER') {
+		if (user?.role === Role.ADMIN || user?.role === Role.SUPER_ADMIN) {
 			product = await ProductRepository.findProductByIdAdmin(id);
 		} else {
 			product = await ProductRepository.findProductByIdPublic(id);

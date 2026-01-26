@@ -3,6 +3,7 @@ import { AuthController } from '../controllers/auth.controller.js';
 import { validate } from '../middleware/validation.middleware.js';
 import { loginSchema, registerSchema } from '../validators/auth.validator.js';
 import { authenticate, authorize } from '../middleware/auth.middleware.js';
+import { Role } from '@prisma/client';
 
 const router = Router();
 
@@ -10,7 +11,7 @@ const router = Router();
 router.post(
 	'/admin/register',
 	authenticate,
-	authorize(['SUPER_ADMIN']),
+	authorize([Role.SUPER_ADMIN]),
 	validate(registerSchema),
 	AuthController.adminRegister,
 );

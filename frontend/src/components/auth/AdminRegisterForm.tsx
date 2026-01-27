@@ -77,7 +77,7 @@ const AdminRegisterForm = () => {
 				<button
 					type="button"
 					onClick={() => setShowPW(!showPW)}
-					className={`absolute right-2 transform rounded-full text-text-primary hover:bg-gray-200 p-1.5 cursor-pointer ${errors.password?.message ? 'top-3 -translate-y-1' : 'top-1/2 -translate-y-1/2'}`}
+					className={`absolute right-2 transform rounded-full text-text-primary hover:bg-bg-thirdy p-1.5 cursor-pointer ${errors.password?.message ? 'top-3 -translate-y-1' : 'top-1/2 -translate-y-1/2'}`}
 				>
 					{showPW ? <Eye className="size-4" /> : <EyeOff className="size-4" />}
 				</button>
@@ -94,7 +94,7 @@ const AdminRegisterForm = () => {
 				<button
 					type="button"
 					onClick={() => setShowConfirmPW(!showConfirmPW)}
-					className={`absolute right-2 transform rounded-full text-text-primary hover:bg-gray-200 p-1.5 cursor-pointer ${errors.password_confirmation?.message ? 'top-3 -translate-y-1' : 'top-1/2 -translate-y-1/2'}`}
+					className={`absolute right-2 transform rounded-full text-text-primary hover:bg-bg-thirdy p-1.5 cursor-pointer ${errors.password_confirmation?.message ? 'top-3 -translate-y-1' : 'top-1/2 -translate-y-1/2'}`}
 				>
 					{showConfirmPW ? <Eye className="size-4" /> : <EyeOff className="size-4" />}
 				</button>

@@ -5,17 +5,21 @@ import { useToastStore } from '../../store/toast.store';
 import { registerSchema, type RegisterInput } from '../../schemas/auth.schema';
 import { getValidationErrors } from '../../utils/errorHandler';
 import { FormInput } from '../ui/FormInput';
+import { useState } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
 
 const AdminRegisterForm = () => {
 	const { adminRegister } = useAuthActions();
 	const { showSuccess, showError } = useToastStore();
+	const [showPW, setShowPW] = useState(false);
+	const [showConfirmPW, setShowConfirmPW] = useState(false);
 
 	const {
 		register: registerField,
 		handleSubmit,
 		formState: { errors, isSubmitting },
 		setError,
-    reset
+		reset,
 	} = useForm<RegisterInput>({
 		resolver: zodResolver(registerSchema),
 	});
@@ -24,7 +28,7 @@ const AdminRegisterForm = () => {
 		try {
 			adminRegister(data);
 			showSuccess('Admin Register successful!');
-      reset();
+			reset();
 		} catch (error) {
 			const validationErrors = getValidationErrors(error);
 
@@ -44,30 +48,57 @@ const AdminRegisterForm = () => {
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
-			<FormInput
-				type="text"
-				placeholder="First Name"
-				error={errors.firstName?.message}
-				{...registerField('firstName')}
-			/>
+			<div className="flex gap-2">
+				<FormInput
+					type="text"
+					placeholder="First Name"
+					error={errors.firstName?.message}
+					{...registerField('firstName')}
+				/>
 
-			<FormInput type="text" placeholder="Last Name" error={errors.lastName?.message} {...registerField('lastName')} />
+				<FormInput
+					type="text"
+					placeholder="Last Name"
+					error={errors.lastName?.message}
+					{...registerField('lastName')}
+				/>
+			</div>
 
 			<FormInput type="email" placeholder="Email" error={errors.email?.message} {...registerField('email')} />
 
-			<FormInput
-				type="password"
-				placeholder="Password"
-				error={errors.password?.message}
-				{...registerField('password')}
-			/>
+			<div className="relative">
+				<FormInput
+					type={showPW ? 'text' : 'password'}
+					placeholder="Password"
+					error={errors.password?.message}
+					className="pr-12!"
+					{...registerField('password')}
+				/>
+				<button
+					type="button"
+					onClick={() => setShowPW(!showPW)}
+					className={`absolute right-2 transform rounded-full text-text-primary hover:bg-gray-200 p-1.5 cursor-pointer ${errors.password?.message ? 'top-3 -translate-y-1' : 'top-1/2 -translate-y-1/2'}`}
+				>
+					{showPW ? <Eye className="size-4" /> : <EyeOff className="size-4" />}
+				</button>
+			</div>
 
-			<FormInput
-				type="password"
-				placeholder="Confirm Password"
-				error={errors.password_confirmation?.message}
-				{...registerField('password_confirmation')}
-			/>
+			<div className="relative">
+				<FormInput
+					type={showConfirmPW ? 'text' : 'password'}
+					placeholder="Confirm Password"
+					error={errors.password_confirmation?.message}
+					className="pr-12!"
+					{...registerField('password_confirmation')}
+				/>
+				<button
+					type="button"
+					onClick={() => setShowConfirmPW(!showConfirmPW)}
+					className={`absolute right-2 transform rounded-full text-text-primary hover:bg-gray-200 p-1.5 cursor-pointer ${errors.password_confirmation?.message ? 'top-3 -translate-y-1' : 'top-1/2 -translate-y-1/2'}`}
+				>
+					{showConfirmPW ? <Eye className="size-4" /> : <EyeOff className="size-4" />}
+				</button>
+			</div>
 
 			<button
 				type="submit"

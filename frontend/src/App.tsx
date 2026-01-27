@@ -26,6 +26,21 @@ const PublicRoute = ({ children }: ProviderProps) => {
 	return <>{children}</>;
 };
 
+const AdminRoute = ({ children }: ProviderProps) => {
+	const isAuthenticated = useAuthAuthenticated();
+	const user = useAuthUser();
+
+	if (!isAuthenticated) {
+		return <Navigate to="/login" replace />;
+	}
+
+	if (user?.role !== 'ADMIN' && user?.role !== 'SUPER_ADMIN') {
+		return <Navigate to="/" replace />;
+	}
+
+	return <>{children}</>;
+};
+
 const SuperAdminRoute = ({ children }: ProviderProps) => {
 	const isAuthenticated = useAuthAuthenticated();
 	const user = useAuthUser();

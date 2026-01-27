@@ -16,6 +16,7 @@
 	--color-text-secondary: #364153;
 	--color-text-third: #6a7282;
 	--color-border-primary: #d1d5dc;
+	--color-bg-thirdy: #e5e7eb;
 }
 
 [data-theme='dark'] {
@@ -25,6 +26,7 @@
 	--color-text-secondary: #d1d5dc;
 	--color-text-third: #99a1af;
 	--color-border-primary: #364153;
+	--color-bg-thirdy: #1e2939;
 }
 
 @layer utilities {

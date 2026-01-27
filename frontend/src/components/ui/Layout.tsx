@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuthActions, useAuthenticated, useUser } from '../../store/auth.store';
+import { useAuthActions, useAuthAuthenticated, useAuthUser } from '../../store/auth.store';
 import { useToastStore } from '../../store/toast.store';
 import { ChevronDown, LogIn, LogOut, ShoppingCart, UserStar } from 'lucide-react';
 import Dropdown, { DropdownItem } from './Dropdown';
@@ -8,8 +8,8 @@ import ThemeToggle from './ThemeToggle';
 const Layout = ({ children }: { children: React.ReactNode }) => {
 	const navigate = useNavigate();
 	const { logout } = useAuthActions();
-	const user = useUser();
-	const isAuthenticated = useAuthenticated();
+	const user = useAuthUser();
+	const isAuthenticated = useAuthAuthenticated();
 	const { showSuccess, showError } = useToastStore();
 
 	const handleLogout = async () => {

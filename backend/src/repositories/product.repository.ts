@@ -1,11 +1,34 @@
 import { prisma } from '../prisma.js';
-import { CreateProductDto } from '../validators/product.validator.js';
+import { CreateProductDto, UpdateProductDto } from '../validators/product.validator.js';
 
 export class ProductRepository {
 	static findManyPublic = (options: { skip: number; take: number }) => {
 		return prisma.product.findMany({
 			skip: options.skip,
 			take: options.take,
+			select: {
+				id: true,
+				name: true,
+				slug: true,
+				price: true,
+				comparePrice: true,
+				shortDescription: true,
+				isFeatured: true,
+				averageRating: true,
+				category: {
+					select: {
+						id: true,
+						name: true,
+						slug: true,
+					},
+				},
+			},
+		});
+	};
+
+	static findProductByIdPublic = (id: number) => {
+		return prisma.product.findUnique({
+			where: { id },
 			select: {
 				id: true,
 				name: true,
@@ -68,29 +91,6 @@ export class ProductRepository {
 		});
 	};
 
-	static findProductByIdPublic = (id: number) => {
-		return prisma.product.findUnique({
-			where: { id },
-			select: {
-				id: true,
-				name: true,
-				slug: true,
-				price: true,
-				comparePrice: true,
-				shortDescription: true,
-				isFeatured: true,
-				averageRating: true,
-				category: {
-					select: {
-						id: true,
-						name: true,
-						slug: true,
-					},
-				},
-			},
-		});
-	};
-
 	static findProductByIdAdmin = (id: number) => {
 		return prisma.product.findUnique({
 			where: { id },
@@ -135,6 +135,48 @@ export class ProductRepository {
 	static createProduct = (data: CreateProductDto, slug: string) => {
 		return prisma.product.create({
 			data: { ...data, slug },
+			select: {
+				id: true,
+				name: true,
+				slug: true,
+				sku: true,
+
+				price: true,
+				comparePrice: true,
+				cost: true,
+
+				stock: true,
+				lowStockThreshold: true,
+				trackInventory: true,
+
+				isActive: true,
+				isFeatured: true,
+
+				metaTitle: true,
+				metaDescription: true,
+
+				viewCount: true,
+				salesCount: true,
+				averageRating: true,
+
+				category: {
+					select: {
+						id: true,
+						name: true,
+						slug: true,
+					},
+				},
+
+				createdAt: true,
+				updatedAt: true,
+			},
+		});
+	};
+
+	static updateProduct = (data: UpdateProductDto, id: number) => {
+		return prisma.product.update({
+			where: { id },
+			data,
 			select: {
 				id: true,
 				name: true,

@@ -1,19 +1,49 @@
 import { Router } from 'express';
-import { authenticate, authorize, optionalAuth } from '../middleware/auth.middleware.js';
+import { authenticate, authorize } from '../middleware/auth.middleware.js';
 import { validate } from '../middleware/validation.middleware.js';
-import { createProductSchema, getProductIdSchema, getProductsSchema } from '../validators/product.validator.js';
+import {
+	createProductSchema,
+	getProductIdSchema,
+	getProductsSchema,
+	updateProductSchema,
+} from '../validators/product.validator.js';
 import { ProductController } from '../controllers/product.controller.js';
 import { Role } from '@prisma/client';
 
 const router = Router();
 
-// admin route
+router.get('/', validate(getProductsSchema), ProductController.getProductsPublic);
+
+router.get(
+	'/admin',
+	authenticate,
+	authorize([Role.ADMIN, Role.SUPER_ADMIN]),
+	validate(getProductsSchema),
+	ProductController.getProductsAdmin,
+);
+
+router.get('/:id', validate(getProductIdSchema), ProductController.getProductPublic);
+
+router.get(
+	'/admin/:id',
+	authenticate,
+	authorize([Role.ADMIN, Role.SUPER_ADMIN]),
+	validate(getProductIdSchema),
+	ProductController.getProductAdmin,
+);
 router.post(
-	'/admin/create-product',
+	'/admin',
 	authenticate,
 	authorize([Role.ADMIN, Role.SUPER_ADMIN]),
 	validate(createProductSchema),
 	ProductController.createProduct,
+);
+router.put(
+	'/admin/:id',
+	authenticate,
+	authorize([Role.ADMIN, Role.SUPER_ADMIN]),
+	validate(updateProductSchema),
+	ProductController.updateProduct,
 );
 router.delete(
 	'/admin/:id',
@@ -22,9 +52,5 @@ router.delete(
 	validate(getProductIdSchema),
 	ProductController.deleteProduct,
 );
-
-// all roles route
-router.get('/', optionalAuth, validate(getProductsSchema), ProductController.getProducts);
-router.get('/:id', optionalAuth, validate(getProductIdSchema), ProductController.getProduct);
 
 export default router;

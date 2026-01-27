@@ -1,6 +1,6 @@
 import React, { lazy, Suspense, useEffect } from 'react';
 import { Navigate, Routes, Route } from 'react-router-dom';
-import { useAuthActions, useAuthenticated, useInitialized, useUser } from './store/auth.store';
+import { useAuthActions, useAuthAuthenticated, useAuthInitialized, useAuthUser } from './store/auth.store';
 import { PageLoader } from './components/ui/LoadingSpinner';
 import ScrollToTop from './components/ui/ScrollToTop';
 import { Toast } from './components/ui/Toast';
@@ -17,7 +17,7 @@ interface ProviderProps {
 }
 
 const PublicRoute = ({ children }: ProviderProps) => {
-	const isAuthenticated = useAuthenticated();
+	const isAuthenticated = useAuthAuthenticated();
 
 	if (isAuthenticated) {
 		return <Navigate to="/" replace />;
@@ -27,8 +27,8 @@ const PublicRoute = ({ children }: ProviderProps) => {
 };
 
 const SuperAdminRoute = ({ children }: ProviderProps) => {
-	const isAuthenticated = useAuthenticated();
-	const user = useUser();
+	const isAuthenticated = useAuthAuthenticated();
+	const user = useAuthUser();
 
 	if (!isAuthenticated) {
 		return <Navigate to="/login" replace />;
@@ -45,7 +45,7 @@ const App = () => {
 	useApplyTheme();
 
 	const { restoreSession } = useAuthActions();
-	const isInitialized = useInitialized();
+	const isInitialized = useAuthInitialized();
 
 	useEffect(() => {
 		restoreSession();

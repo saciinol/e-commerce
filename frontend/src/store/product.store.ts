@@ -1,112 +1,211 @@
 import { create } from 'zustand';
-import type {
-	ProductAdmin,
-	ProductPublic,
-	ProductResponse,
-	ProductResponseAdmin,
-	ProductResponsePublic,
-	ProductsResponseAdmin,
-	ProductsResponsePublic,
-} from '../types/product.types';
+import { devtools } from 'zustand/middleware';
+import type { ProductPublic, ProductAdmin, Pagination } from '../types/product.types';
+import { productAPI } from '../services/product.service';
 import type { AdminCreateProductInput } from '../schemas/product.schema';
-import { productAPI } from '../services/product.api';
-import type { Role } from '../types';
 
-interface ProductStore {
-	products: ProductResponse | null;
-	product: ProductPublic | ProductAdmin | null;
+interface PublicProductStore {
+	products: ProductPublic[];
+	currentProduct: ProductPublic | null;
+	isLoading: boolean;
+	error: string | null;
 
 	actions: {
-		adminCreateProduct: (data: AdminCreateProductInput) => Promise<void>;
-		adminDeleteProduct: (id: number) => Promise<void>;
-		getProducts: (role: Role) => Promise<void>;
-		getProduct: (role: Role, id: number) => Promise<void>;
+		fetchProducts: (params?: { page?: number; limit?: number; categoryId?: number }) => Promise<void>;
+		fetchProduct: (id: number) => Promise<void>;
+		clearError: () => void;
+		reset: () => void;
 	};
 }
 
-const useProductStore = create<ProductStore>((set, get) => ({
-	products: null,
-	product: null,
+export const usePublicProductStore = create<PublicProductStore>()(
+	devtools(
+		(set) => ({
+			products: [],
+			currentProduct: null,
+			isLoading: false,
+			error: null,
+
+			actions: {
+				fetchProducts: async (params = {}) => {
+					set({ isLoading: true, error: null });
+					try {
+						const response = await productAPI.getProductsPublic(params);
+						set({
+							products: response.data.data.products,
+							isLoading: false,
+						});
+					} catch (error) {
+						set({
+							error: error instanceof Error ? error.message : 'Failed to load products',
+							isLoading: false,
+						});
+					}
+				},
+
+				fetchProduct: async (id) => {
+					set({ isLoading: true, error: null });
+					try {
+						const response = await productAPI.getProductPublic(id);
+						set({
+							currentProduct: response.data.data,
+							isLoading: false,
+						});
+					} catch (error) {
+						set({
+							error: error instanceof Error ? error.message : 'Failed to load product',
+							isLoading: false,
+						});
+					}
+				},
+
+				clearError: () => set({ error: null }),
+				reset: () => set({ products: [], currentProduct: null, error: null }),
+			},
+		}),
+		{ name: 'PublicProductStore' },
+	),
+);
+
+export const usePublicProducts = () => usePublicProductStore((state) => state.products);
+export const usePublicProduct = () => usePublicProductStore((state) => state.currentProduct);
+export const usePublicProductsLoading = () => usePublicProductStore((state) => state.isLoading);
+export const usePublicProductsError = () => usePublicProductStore((state) => state.error);
+export const usePublicProductsActions = () => usePublicProductStore((state) => state.actions);
+
+interface AdminProductStore {
+	products: ProductAdmin[];
+	currentProduct: ProductAdmin | null;
+	pagination: Pagination | null;
+	isLoading: boolean;
+	error: string | null;
 
 	actions: {
-		adminCreateProduct: async (data: AdminCreateProductInput) => {
-			const { products } = get();
-			const response = await productAPI.adminCreateProduct(data);
-			const { data: product } = response.data;
+		fetchProducts: (params?: { page?: number; limit?: number }) => Promise<void>;
+		fetchProduct: (id: number) => Promise<void>;
+		createProduct: (data: AdminCreateProductInput) => Promise<ProductAdmin>;
+		updateProduct: (id: number, data: Partial<AdminCreateProductInput>) => Promise<void>;
+		deleteProduct: (id: number) => Promise<void>;
+		clearError: () => void;
+		reset: () => void;
+	};
+}
 
-			if (products?.kind === 'admin') {
-				set({
-					products: {
-						kind: 'admin',
-						products: [product, ...products.products],
-					},
-				});
-			}
-		},
+export const useAdminProductStore = create<AdminProductStore>()(
+	devtools(
+		(set) => ({
+			products: [],
+			currentProduct: null,
+			pagination: null,
+			isLoading: false,
+			error: null,
 
-		adminDeleteProduct: async (id: number) => {
-			const { products } = get();
+			actions: {
+				fetchProducts: async (params = {}) => {
+					set({ isLoading: true, error: null });
+					try {
+						const response = await productAPI.getProductsAdmin(params);
+						const { products, pagination } = response.data.data;
 
-			try {
-				await productAPI.adminDeleteProduct(id);
-
-				if (products?.kind === 'admin') {
-					set({
-						products: {
-							kind: 'admin',
-							products: products.products.filter((p) => p.id !== id),
-						},
-					});
-				}
-			} catch (error) {
-				console.log('Failed to delete product', error);
-			}
-		},
-
-		getProducts: async (role: Role) => {
-			try {
-				if (role === 'ADMIN' || role === 'SUPER_ADMIN') {
-					const response = await productAPI.getProducts<ProductsResponseAdmin>();
-					const { products, pagination } = response.data.data;
-
-					set({
-						products: {
-							kind: 'admin',
+						set({
 							products,
-						},
-					});
-				} else {
-					const response = await productAPI.getProducts<ProductsResponsePublic>();
+							pagination,
+							isLoading: false,
+						});
+					} catch (error) {
+						set({
+							error: error instanceof Error ? error.message : 'Failed to load products',
+							isLoading: false,
+						});
+					}
+				},
 
-					const { products, pagination } = response.data.data;
+				fetchProduct: async (id) => {
+					set({ isLoading: true, error: null });
+					try {
+						const response = await productAPI.getProductAdmin(id);
+						set({
+							currentProduct: response.data.data,
+							isLoading: false,
+						});
+					} catch (error) {
+						set({
+							error: error instanceof Error ? error.message : 'Failed to load product',
+							isLoading: false,
+						});
+					}
+				},
 
-					set({
-						products: {
-							kind: 'public',
-							products,
-						},
-					});
-				}
-			} catch (error) {
-				console.error('Failed to load products', error);
-			}
-		},
+				createProduct: async (data) => {
+					set({ isLoading: true, error: null });
+					try {
+						const response = await productAPI.createProduct(data);
+						const newProduct = response.data.data;
 
-		getProduct: async (role: Role, id: number) => {
-			if (role === 'ADMIN' || role === 'SUPER_ADMIN') {
-				const response = await productAPI.getProduct<ProductResponseAdmin>(id);
-				const { data } = response.data;
+						set((state) => ({
+							products: [newProduct, ...state.products],
+							isLoading: false,
+						}));
 
-				set({ product: data });
-			} else {
-				const response = await productAPI.getProduct<ProductResponsePublic>(id);
+						return newProduct;
+					} catch (error) {
+						set({
+							error: error instanceof Error ? error.message : 'Failed to create product',
+							isLoading: false,
+						});
+						throw error;
+					}
+				},
 
-				const { data } = response.data;
+				updateProduct: async (id, data) => {
+					set({ isLoading: true, error: null });
+					try {
+						const response = await productAPI.updateProduct(id, data);
+						const updatedProduct = response.data.data;
 
-				set({ product: data });
-			}
-		},
-	},
-}));
+						set((state) => ({
+							products: state.products.map((p) => (p.id === id ? updatedProduct : p)),
+							currentProduct: state.currentProduct?.id === id ? updatedProduct : state.currentProduct,
+							isLoading: false,
+						}));
+					} catch (error) {
+						set({
+							error: error instanceof Error ? error.message : 'Failed to update product',
+							isLoading: false,
+						});
+						throw error;
+					}
+				},
 
-export const useProducts = () => useProductStore((state) => state.products);
+				deleteProduct: async (id) => {
+					set({ isLoading: true, error: null });
+					try {
+						await productAPI.deleteProduct(id);
+
+						set((state) => ({
+							products: state.products.filter((p) => p.id !== id),
+							isLoading: false,
+						}));
+					} catch (error) {
+						set({
+							error: error instanceof Error ? error.message : 'Failed to delete product',
+							isLoading: false,
+						});
+						throw error;
+					}
+				},
+
+				clearError: () => set({ error: null }),
+				reset: () => set({ products: [], currentProduct: null, pagination: null, error: null }),
+			},
+		}),
+		{ name: 'AdminProductStore' },
+	),
+);
+
+export const useAdminProducts = () => useAdminProductStore((state) => state.products);
+export const useAdminProduct = () => useAdminProductStore((state) => state.currentProduct);
+export const useAdminPagination = () => useAdminProductStore((state) => state.pagination);
+export const useAdminProductsLoading = () => useAdminProductStore((state) => state.isLoading);
+export const useAdminProductsError = () => useAdminProductStore((state) => state.error);
+export const useAdminProductsActions = () => useAdminProductStore((state) => state.actions);

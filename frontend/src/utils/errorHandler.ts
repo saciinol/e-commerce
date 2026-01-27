@@ -1,6 +1,6 @@
 import { AxiosError } from 'axios';
 import { ZodError } from 'zod';
-import type { ApiError } from '../types';
+import type { ApiError } from '../types/auth.types';
 
 export const getErrorMessage = (error: unknown): string => {
 	if (error instanceof ZodError) {

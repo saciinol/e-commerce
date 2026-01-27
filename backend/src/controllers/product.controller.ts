@@ -1,13 +1,18 @@
 import { Request, Response } from 'express';
 import { asyncHandler } from '../utils/asyncHandler.js';
-import { CreateProductSchema, GetProductIdSchema, GetProductsSchema } from '../validators/product.validator.js';
+import {
+	CreateProductSchema,
+	GetProductIdSchema,
+	GetProductsSchema,
+	UpdateProductSchema,
+} from '../validators/product.validator.js';
 import { ProductService } from '../services/product.service.js';
 
 export class ProductController {
-	static getProducts = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+	static getProductsPublic = asyncHandler(async (req: Request, res: Response): Promise<void> => {
 		const { page = 1, limit = 10 } = (req.validated as GetProductsSchema).query;
 
-		const products = await ProductService.getProducts(req.user, { page, limit });
+		const products = await ProductService.getProductsPublic({ page, limit });
 
 		res.status(200).json({
 			success: true,
@@ -15,13 +20,35 @@ export class ProductController {
 		});
 	});
 
-	static getProduct = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+	static getProductPublic = asyncHandler(async (req: Request, res: Response): Promise<void> => {
 		const { id } = (req.validated as GetProductIdSchema).params;
 
-		const product = await ProductService.getProductById(req.user, id);
+		const product = await ProductService.getProductByIdPublic(id);
 
 		res.status(200).json({
-			success: false,
+			success: true,
+			data: product,
+		});
+	});
+
+	static getProductsAdmin = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+		const { page = 1, limit = 10 } = (req.validated as GetProductsSchema).query;
+
+		const products = await ProductService.getProductsAdmin({ page, limit });
+
+		res.status(200).json({
+			success: true,
+			data: products,
+		});
+	});
+
+	static getProductAdmin = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+		const { id } = (req.validated as GetProductIdSchema).params;
+
+		const product = await ProductService.getProductByIdAdmin(id);
+
+		res.status(200).json({
+			success: true,
 			data: product,
 		});
 	});
@@ -37,10 +64,22 @@ export class ProductController {
 		});
 	});
 
+	static updateProduct = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+		const productData = (req.validated as UpdateProductSchema).body;
+		const { id } = (req.validated as GetProductIdSchema).params;
+
+		const product = await ProductService.updateProduct(productData, id);
+
+		res.status(200).json({
+			success: true,
+			data: product,
+		});
+	});
+
 	static deleteProduct = asyncHandler(async (req: Request, res: Response): Promise<void> => {
 		const { id } = (req.validated as GetProductIdSchema).params;
 
-		await ProductService.deleteProduct(req.user, id);
+		await ProductService.deleteProduct(id);
 
 		res.status(204).send();
 	});

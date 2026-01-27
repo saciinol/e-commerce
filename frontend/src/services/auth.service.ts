@@ -1,6 +1,6 @@
 import type { LoginInput, RegisterInput } from '../schemas/auth.schema';
-import type { AdminAuthResponse, AuthResponse, LogoutResponse, SessionsResponse } from '../types';
-import api from './api';
+import type { AdminAuthResponse, AuthResponse, LogoutResponse, SessionsResponse } from '../types/auth.types';
+import api from './api.service';
 
 export const authAPI = {
 	adminRegister: (data: RegisterInput) => api.post<AdminAuthResponse>('/auth/admin/register', data),

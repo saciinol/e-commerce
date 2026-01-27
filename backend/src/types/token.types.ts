@@ -19,9 +19,3 @@ export interface RefreshTokenData {
 	deviceInfo?: string;
 	ipAddress?: string;
 }
-
-export interface ReqUser {
-	id: number;
-	email: string;
-	role: string;
-}

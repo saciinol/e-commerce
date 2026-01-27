@@ -1,7 +1,7 @@
 import { create } from 'zustand';
-import type { User } from '../types';
-import { clearAccessToken, setAccessToken } from '../services/api';
-import { authAPI } from '../services/auth.api';
+import type { User } from '../types/auth.types';
+import { clearAccessToken, setAccessToken } from '../services/api.service';
+import { authAPI } from '../services/auth.service';
 import type { LoginInput, RegisterInput } from '../schemas/auth.schema';
 
 interface AuthStore {
@@ -67,7 +67,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
 	},
 }));
 
-export const useUser = () => useAuthStore((state) => state.user);
-export const useInitialized = () => useAuthStore((state) => state.isInitialized);
-export const useAuthenticated = () => useAuthStore((state) => !!state.user);
+export const useAuthUser = () => useAuthStore((state) => state.user);
+export const useAuthInitialized = () => useAuthStore((state) => state.isInitialized);
+export const useAuthAuthenticated = () => useAuthStore((state) => !!state.user);
 export const useAuthActions = () => useAuthStore((state) => state.actions);

@@ -2,19 +2,9 @@ import { Router } from 'express';
 import { AuthController } from '../controllers/auth.controller.js';
 import { validate } from '../middleware/validation.middleware.js';
 import { loginSchema, registerSchema } from '../validators/auth.validator.js';
-import { authenticate, authorize } from '../middleware/auth.middleware.js';
-import { Role } from '@prisma/client';
+import { authenticate } from '../middleware/auth.middleware.js';
 
 const router = Router();
-
-// admin route
-router.post(
-	'/admin/register',
-	authenticate,
-	authorize([Role.SUPER_ADMIN]),
-	validate(registerSchema),
-	AuthController.adminRegister,
-);
 
 // all roles route
 router.post('/register', validate(registerSchema), AuthController.register);

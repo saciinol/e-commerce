@@ -1,5 +1,9 @@
 export const LoadingSpinner = () => {
-	return <div className="loading-spinner" />;
+	return (
+		<div className="flex items-center justify-center">
+			<div className="loading-spinner" />;
+		</div>
+	);
 };
 
 export const PageLoader = () => {

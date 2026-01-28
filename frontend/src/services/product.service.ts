@@ -24,14 +24,14 @@ export const productAPI = {
 	getProductPublic: (id: number) => api.get<ProductPublicResponse>(`/products/${id}`),
 
 	// admin endpoints
-	getProductsAdmin: (params: ProductQueryParams = {}) => api.get<ProductsAdminResponse>('/products/admin', { params }),
+	getProductsAdmin: (params: ProductQueryParams = {}) => api.get<ProductsAdminResponse>('/admin/products', { params }),
 
-	getProductAdmin: (id: number) => api.get<ProductAdminResponse>(`/products/admin/${id}`),
+	getProductAdmin: (id: number) => api.get<ProductAdminResponse>(`/admin/products/${id}`),
 
-	createProduct: (data: AdminCreateProductInput) => api.post<ProductAdminResponse>('/products/admin', data),
+	createProduct: (data: AdminCreateProductInput) => api.post<ProductAdminResponse>('/admin/products', data),
 
 	updateProduct: (id: number, data: Partial<AdminCreateProductInput>) =>
-		api.put<ProductAdminResponse>(`/products/admin/${id}`, data),
+		api.put<ProductAdminResponse>(`/admin/products/${id}`, data),
 
-	deleteProduct: (id: number) => api.delete<ApiResponse<{ id: number }>>(`/products/admin/${id}`),
+	deleteProduct: (id: number) => api.delete<ApiResponse<{ id: number }>>(`/admin/products/${id}`),
 };

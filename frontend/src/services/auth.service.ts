@@ -3,7 +3,7 @@ import type { AdminAuthResponse, AuthResponse, LogoutResponse, SessionsResponse 
 import api from './api.service';
 
 export const authAPI = {
-	adminRegister: (data: RegisterInput) => api.post<AdminAuthResponse>('/auth/admin/register', data),
+	adminRegister: (data: RegisterInput) => api.post<AdminAuthResponse>('/admin/register', data),
 
 	login: (data: LoginInput) =>
 		api.post<AuthResponse>('/auth/login', data, {

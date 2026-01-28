@@ -4,7 +4,7 @@ import { useAuthActions, useAuthAuthenticated, useAuthInitialized, useAuthUser }
 import { PageLoader } from './components/ui/LoadingSpinner';
 import ScrollToTop from './components/ui/ScrollToTop';
 import { Toast } from './components/ui/Toast';
-import { useApplyTheme } from './components/hooks/useApplyTheme';
+import { useApplyTheme } from './hooks/useApplyTheme';
 import AdminRegister from './pages/AdminRegister';
 import Layout from './components/ui/Layout';
 

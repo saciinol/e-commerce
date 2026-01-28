@@ -11,11 +11,14 @@ interface PublicProductStore {
 	error: string | null;
 
 	actions: {
-		fetchProducts: (params?: { page?: number; limit?: number; categoryId?: number }) => Promise<void>;
 		fetchProduct: (id: number) => Promise<void>;
 		clearError: () => void;
 		reset: () => void;
 	};
+}
+
+interface PublicProductActions {
+	fetchProducts: (params?: { page?: number; limit?: number; categoryId?: number }) => Promise<void>;
 }
 
 export const usePublicProductStore = create<PublicProductStore>()(
@@ -27,22 +30,6 @@ export const usePublicProductStore = create<PublicProductStore>()(
 			error: null,
 
 			actions: {
-				fetchProducts: async (params = {}) => {
-					set({ isLoading: true, error: null });
-					try {
-						const response = await productAPI.getProductsPublic(params);
-						set({
-							products: response.data.data.products,
-							isLoading: false,
-						});
-					} catch (error) {
-						set({
-							error: error instanceof Error ? error.message : 'Failed to load products',
-							isLoading: false,
-						});
-					}
-				},
-
 				fetchProduct: async (id) => {
 					set({ isLoading: true, error: null });
 					try {
@@ -66,6 +53,24 @@ export const usePublicProductStore = create<PublicProductStore>()(
 		{ name: 'PublicProductStore' },
 	),
 );
+
+export const publicProductActions: PublicProductActions = {
+	fetchProducts: async (params = {}) => {
+		usePublicProductStore.setState({ isLoading: true, error: null });
+		try {
+			const response = await productAPI.getProductsPublic(params);
+			usePublicProductStore.setState({
+				products: response.data.data.products,
+				isLoading: false,
+			});
+		} catch (error) {
+			usePublicProductStore.setState({
+				error: error instanceof Error ? error.message : 'Failed to load products',
+				isLoading: false,
+			});
+		}
+	},
+};
 
 export const usePublicProducts = () => usePublicProductStore((state) => state.products);
 export const usePublicProduct = () => usePublicProductStore((state) => state.currentProduct);

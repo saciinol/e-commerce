@@ -14,7 +14,7 @@ export class ProductRepository {
 				comparePrice: true,
 				shortDescription: true,
 				isFeatured: true,
-        images: true,
+				images: true,
 				averageRating: true,
 				category: {
 					select: {
@@ -38,7 +38,7 @@ export class ProductRepository {
 				comparePrice: true,
 				shortDescription: true,
 				isFeatured: true,
-        images: true,
+				images: true,
 				averageRating: true,
 				category: {
 					select: {
@@ -71,7 +71,7 @@ export class ProductRepository {
 
 				isActive: true,
 				isFeatured: true,
-        images: true,
+				images: true,
 
 				metaTitle: true,
 				metaDescription: true,
@@ -113,7 +113,7 @@ export class ProductRepository {
 
 				isActive: true,
 				isFeatured: true,
-        images: true,
+				images: true,
 
 				metaTitle: true,
 				metaDescription: true,
@@ -155,7 +155,7 @@ export class ProductRepository {
 
 				isActive: true,
 				isFeatured: true,
-        images: true,
+				images: true,
 
 				metaTitle: true,
 				metaDescription: true,
@@ -198,7 +198,7 @@ export class ProductRepository {
 
 				isActive: true,
 				isFeatured: true,
-        images: true,
+				images: true,
 
 				metaTitle: true,
 				metaDescription: true,
@@ -218,6 +218,25 @@ export class ProductRepository {
 				createdAt: true,
 				updatedAt: true,
 			},
+		});
+	};
+
+	static uploadImage = (productId: number, fileName: string, isDefault: boolean) => {
+		return prisma.$transaction(async (tx) => {
+			if (isDefault) {
+				await tx.productImage.updateMany({
+					where: { productId },
+					data: { isDefault: false },
+				});
+			}
+
+			return tx.productImage.create({
+				data: {
+					productId,
+					url: `/uploads/products/${fileName}`,
+					isDefault,
+				},
+			});
 		});
 	};
 

@@ -7,6 +7,9 @@ import {
 	UpdateProductSchema,
 } from '../validators/product.validator.js';
 import { ProductService } from '../services/product.service.js';
+import { productImageService } from '../services/product.image.service.js';
+import { ValidationError } from '../utils/errors.js';
+import fs from 'fs';
 
 export class ProductController {
 	static getProductsPublic = asyncHandler(async (req: Request, res: Response): Promise<void> => {
@@ -74,6 +77,28 @@ export class ProductController {
 			success: true,
 			data: product,
 		});
+	});
+
+	static uploadImage = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+		const { id } = (req.validated as GetProductIdSchema).params;
+		const file = req.file;
+		const isDefault: boolean = req.body.isDefault;
+
+		if (!file) {
+			throw new ValidationError('No image uploaded');
+		}
+
+		try {
+			const image = await productImageService.upload(id, file.filename, isDefault);
+
+			res.status(201).json({
+				success: true,
+				data: image,
+			});
+		} catch (error) {
+			fs.unlinkSync(file.path);
+			throw error;
+		}
 	});
 
 	static deleteProduct = asyncHandler(async (req: Request, res: Response): Promise<void> => {

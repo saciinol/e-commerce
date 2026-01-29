@@ -1,3 +1,11 @@
+interface ProductImage {
+	id: number;
+	url: string;
+	altText?: string | null;
+	displayOrder: number;
+	isDefault: boolean;
+}
+
 interface ProductBase {
 	id: number;
 	name: string;
@@ -6,6 +14,7 @@ interface ProductBase {
 	comparePrice: number | null;
 	shortDescription: string | null;
 	isFeatured: boolean;
+	images: ProductImage[];
 	averageRating: number | null;
 	category: {
 		id: number;

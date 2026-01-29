@@ -32,22 +32,22 @@ model User {
 }
 
 model Address {
-  id           Int      @id @default(autoincrement())
-  userId       Int
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id              Int          @id @default(autoincrement())
+  userId          Int
+  user            User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  fullName     String
-  phone        String
-  addressLine1 String
-  addressLine2 String?
-  city         String
-  province     String
-  postalCode   String
-  country      String   @default("Philippines")
-  isDefault    Boolean  @default(false)
+  fullName        String
+  phone           String
+  addressLine1    String
+  addressLine2    String?
+  city            String
+  province        String
+  postalCode      String
+  country         String       @default("Philippines")
+  isDefault       Boolean      @default(false)
 
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
 
   @@index([userId])
 }
@@ -93,6 +93,8 @@ model Product {
   isActive         Boolean  @default(true)
   isFeatured       Boolean  @default(false)
 
+  images           ProductImage[]
+
   metaTitle        String?
   metaDescription  String?
 
@@ -109,6 +111,20 @@ model Product {
   @@index([slug])
   @@index([categoryId])
   @@index([sku])
+}
+
+model ProductImage {
+  id                Int              @id @default(autoincrement())
+  productId         Int
+  product           Product          @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url               String
+  altText           String?
+  displayOrder      Int              @default(0)
+  isDefault         Boolean          @default(false)
+
+  createdAt         DateTime         @default(now())
+
+  @@index([productId])
 }
 
 model RefreshToken {

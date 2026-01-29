@@ -10,6 +10,7 @@ import ProductCard from './ProductCard';
 const ProductList = () => {
 	const products = usePublicProducts();
 	const isLoading = usePublicProductsLoading();
+
 	const [page, setPage] = useState(1);
 	const [limit, setLimit] = useState(5);
 

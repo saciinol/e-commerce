@@ -14,6 +14,7 @@ export class ProductRepository {
 				comparePrice: true,
 				shortDescription: true,
 				isFeatured: true,
+        images: true,
 				averageRating: true,
 				category: {
 					select: {
@@ -37,6 +38,7 @@ export class ProductRepository {
 				comparePrice: true,
 				shortDescription: true,
 				isFeatured: true,
+        images: true,
 				averageRating: true,
 				category: {
 					select: {
@@ -69,6 +71,7 @@ export class ProductRepository {
 
 				isActive: true,
 				isFeatured: true,
+        images: true,
 
 				metaTitle: true,
 				metaDescription: true,
@@ -110,6 +113,7 @@ export class ProductRepository {
 
 				isActive: true,
 				isFeatured: true,
+        images: true,
 
 				metaTitle: true,
 				metaDescription: true,
@@ -151,6 +155,7 @@ export class ProductRepository {
 
 				isActive: true,
 				isFeatured: true,
+        images: true,
 
 				metaTitle: true,
 				metaDescription: true,
@@ -193,6 +198,7 @@ export class ProductRepository {
 
 				isActive: true,
 				isFeatured: true,
+        images: true,
 
 				metaTitle: true,
 				metaDescription: true,

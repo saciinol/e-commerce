@@ -13,7 +13,7 @@ import { validate } from '../middleware/validation.middleware.js';
 const router = Router();
 
 router.get(
-	'/products',
+	'/',
 	authenticate,
 	authorize([Role.ADMIN, Role.SUPER_ADMIN]),
 	validate(getProductsSchema),
@@ -21,7 +21,7 @@ router.get(
 );
 
 router.get(
-	'/products/:id',
+	'/:id',
 	authenticate,
 	authorize([Role.ADMIN, Role.SUPER_ADMIN]),
 	validate(getProductIdSchema),
@@ -29,7 +29,7 @@ router.get(
 );
 
 router.post(
-	'/products',
+	'/',
 	authenticate,
 	authorize([Role.ADMIN, Role.SUPER_ADMIN]),
 	validate(createProductSchema),
@@ -37,7 +37,7 @@ router.post(
 );
 
 router.put(
-	'/products/:id',
+	'/:id',
 	authenticate,
 	authorize([Role.ADMIN, Role.SUPER_ADMIN]),
 	validate(updateProductSchema),
@@ -45,7 +45,7 @@ router.put(
 );
 
 router.delete(
-	'/products/:id',
+	'/:id',
 	authenticate,
 	authorize([Role.ADMIN, Role.SUPER_ADMIN]),
 	validate(getProductIdSchema),

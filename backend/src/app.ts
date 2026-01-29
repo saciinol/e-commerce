@@ -10,7 +10,11 @@ import routes from './routes/index.js';
 
 const app: Application = express();
 
-app.use(helmet());
+app.use(
+	helmet({
+		crossOriginResourcePolicy: { policy: 'cross-origin' },
+	}),
+);
 app.use(
 	cors({
 		origin: process.env.ALLOWED_ORIGINS?.split(','),
@@ -34,6 +38,7 @@ app.get('/health', (req, res) => {
 	});
 });
 
+app.use('/uploads', express.static('uploads'));
 app.use('/api', routes);
 
 app.use(errorLogger);

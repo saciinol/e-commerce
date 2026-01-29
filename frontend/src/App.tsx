@@ -7,6 +7,7 @@ import { Toast } from './components/ui/Toast';
 import { useApplyTheme } from './hooks/useApplyTheme';
 import AdminRegister from './pages/AdminRegister';
 import Layout from './components/ui/Layout';
+import ImageUploadTest from './components/product/ImageUploadTest';
 
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
@@ -78,6 +79,13 @@ const App = () => {
 			<Toast />
 
 			<Routes>
+        <Route
+          path="/upload"
+          element={
+            <ImageUploadTest />
+          }
+        />
+
 				<Route
 					path="/login"
 					element={

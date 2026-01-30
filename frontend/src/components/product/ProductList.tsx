@@ -1,9 +1,5 @@
 import { useEffect, useState } from 'react';
-import {
-	publicProductActions,
-	usePublicProducts,
-	usePublicProductsLoading,
-} from '../../store/product.store';
+import { publicProductActions, usePublicProducts, usePublicProductsLoading } from '../../store/product.store';
 import { LoadingSpinner } from '../ui/LoadingSpinner';
 import ProductCard from './ProductCard';
 
@@ -28,9 +24,17 @@ const ProductList = () => {
 				Limit {limit}
 			</button>
 
-			<div className="grid grid-cols-2 gap-4">
-				{isLoading ? <LoadingSpinner /> : products.map((product) => <ProductCard key={product.id} product={product} />)}
-			</div>
+			{isLoading! ? (
+				<div className="py-20 flex justify-center items-center">
+					<LoadingSpinner />
+				</div>
+			) : (
+				<div className="grid grid-cols-2 gap-4">
+					{products.map((product) => (
+						<ProductCard key={product.id} product={product} />
+					))}
+				</div>
+			)}
 		</div>
 	);
 };

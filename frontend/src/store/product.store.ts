@@ -9,46 +9,22 @@ interface PublicProductStore {
 	currentProduct: ProductPublic | null;
 	isLoading: boolean;
 	error: string | null;
-
-	actions: {
-		fetchProduct: (id: number) => Promise<void>;
-		clearError: () => void;
-		reset: () => void;
-	};
 }
 
 interface PublicProductActions {
 	fetchProducts: (params?: { page?: number; limit?: number; categoryId?: number }) => Promise<void>;
+	fetchProduct: (id: number) => Promise<void>;
+	clearError: () => void;
+	reset: () => void;
 }
 
 export const usePublicProductStore = create<PublicProductStore>()(
 	devtools(
-		(set) => ({
+		() => ({
 			products: [],
 			currentProduct: null,
 			isLoading: false,
 			error: null,
-
-			actions: {
-				fetchProduct: async (id) => {
-					set({ isLoading: true, error: null });
-					try {
-						const response = await productAPI.getProductPublic(id);
-						set({
-							currentProduct: response.data.data,
-							isLoading: false,
-						});
-					} catch (error) {
-						set({
-							error: error instanceof Error ? error.message : 'Failed to load product',
-							isLoading: false,
-						});
-					}
-				},
-
-				clearError: () => set({ error: null }),
-				reset: () => set({ products: [], currentProduct: null, error: null }),
-			},
 		}),
 		{ name: 'PublicProductStore' },
 	),
@@ -70,13 +46,30 @@ export const publicProductActions: PublicProductActions = {
 			});
 		}
 	},
+	fetchProduct: async (id) => {
+		usePublicProductStore.setState({ isLoading: true, error: null });
+		try {
+			const response = await productAPI.getProductPublic(id);
+			usePublicProductStore.setState({
+				currentProduct: response.data.data,
+				isLoading: false,
+			});
+		} catch (error) {
+			usePublicProductStore.setState({
+				error: error instanceof Error ? error.message : 'Failed to load product',
+				isLoading: false,
+			});
+		}
+	},
+
+	clearError: () => usePublicProductStore.setState({ error: null }),
+	reset: () => usePublicProductStore.setState({ products: [], currentProduct: null, error: null }),
 };
 
 export const usePublicProducts = () => usePublicProductStore((state) => state.products);
 export const usePublicProduct = () => usePublicProductStore((state) => state.currentProduct);
 export const usePublicProductsLoading = () => usePublicProductStore((state) => state.isLoading);
 export const usePublicProductsError = () => usePublicProductStore((state) => state.error);
-export const usePublicProductsActions = () => usePublicProductStore((state) => state.actions);
 
 interface AdminProductStore {
 	products: ProductAdmin[];

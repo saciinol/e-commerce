@@ -12,6 +12,8 @@ import ImageUploadTest from './components/product/ImageUploadTest';
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
 const Home = lazy(() => import('./pages/Home'));
+const Product = lazy(() => import('./pages/Product'));
+const Dashboard = lazy(() => import('./pages/Dashboard'));
 
 interface ProviderProps {
 	children: React.ReactNode;
@@ -50,6 +52,10 @@ const SuperAdminRoute = ({ children }: ProviderProps) => {
 		return <Navigate to="/login" replace />;
 	}
 
+  if (user?.role === 'ADMIN') {
+    return <Navigate to="/admin" replace />;
+  }
+
 	if (user?.role !== 'SUPER_ADMIN') {
 		return <Navigate to="/" replace />;
 	}
@@ -79,12 +85,7 @@ const App = () => {
 			<Toast />
 
 			<Routes>
-        <Route
-          path="/upload"
-          element={
-            <ImageUploadTest />
-          }
-        />
+				<Route path="/upload" element={<ImageUploadTest />} />
 
 				<Route
 					path="/login"
@@ -121,6 +122,24 @@ const App = () => {
 						</Layout>
 					}
 				/>
+
+				<Route
+					path="/products/:id"
+					element={
+						<Layout isProduct={true}>
+							<Product />
+						</Layout>
+					}
+				/>
+
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute>
+              <Dashboard />
+            </AdminRoute>
+          }
+        />
 
 				<Route path="*" element={<Navigate to="/" replace />} />
 			</Routes>

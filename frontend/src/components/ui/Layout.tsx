@@ -1,11 +1,16 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthActions, useAuthAuthenticated, useAuthUser } from '../../store/auth.store';
 import { useToastStore } from '../../store/toast.store';
-import { ChevronDown, LogIn, LogOut, ShoppingCart, UserStar } from 'lucide-react';
+import { ArrowLeft, ChevronDown, LogIn, LogOut, ShoppingCart, UserStar } from 'lucide-react';
 import Dropdown, { DropdownItem } from './Dropdown';
 import ThemeToggle from './ThemeToggle';
 
-const Layout = ({ children }: { children: React.ReactNode }) => {
+interface LayoutProps {
+	children: React.ReactNode;
+	isProduct?: boolean;
+}
+
+const Layout = ({ children, isProduct }: LayoutProps) => {
 	const navigate = useNavigate();
 	const { logout } = useAuthActions();
 	const user = useAuthUser();
@@ -28,11 +33,16 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 			<div className="bg-bg-secondary shadow-sm dark:border-b border-zinc-900">
 				<header className="max-w-7xl mx-auto px-4">
 					<nav className="flex justify-between items-center h-16">
-						<Link to="/" className="flex gap-2">
-							<ShoppingCart className="size-6 text-blue-600" />
-							<p className="text-text-primary">E-Commerce</p>
-						</Link>
-
+						{isProduct ? (
+							<div>
+								<ArrowLeft className="text-text-primary cursor-pointer" onClick={() => navigate(-1)} />
+							</div>
+						) : (
+							<Link to="/" className="flex gap-2">
+								<ShoppingCart className="size-6 text-blue-600" />
+								<p className="text-text-primary">E-Commerce</p>
+							</Link>
+						)}
 						<div className="flex gap-2">
 							<ThemeToggle />
 

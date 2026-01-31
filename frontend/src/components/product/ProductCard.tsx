@@ -6,7 +6,7 @@ interface ProductCardProps {
 	disableClick?: boolean;
 }
 
-const ProductCard = ({ product, disableClick }: ProductCardProps) => {
+const ProductCard = ({ product }: ProductCardProps) => {
 	const navigate = useNavigate();
 
 	if (!product) {
@@ -16,13 +16,12 @@ const ProductCard = ({ product, disableClick }: ProductCardProps) => {
 	const image = product.images.find((img) => img.isDefault) ?? product.images[0];
 
 	const handleProductClick = () => {
-		if (disableClick) return null;
 		navigate(`/products/${product.id}`);
 	};
 
 	return (
-		<div onClick={handleProductClick}>
-			{image?.url && <img src={`http://localhost:3000${image.url}`} />}
+		<div onClick={handleProductClick} className='border'>
+			{image?.url && <img src={`http://localhost:3000${image.url}`} className='size-44' />}
 			<p>{product.name}</p>
 			<p>{product.price}</p>
 		</div>

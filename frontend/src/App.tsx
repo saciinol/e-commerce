@@ -21,6 +21,11 @@ interface ProviderProps {
 
 const PublicRoute = ({ children }: ProviderProps) => {
 	const isAuthenticated = useAuthAuthenticated();
+	const user = useAuthUser();
+
+	if (user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN') {
+		return <Navigate to="/admin" replace />;
+	}
 
 	if (isAuthenticated) {
 		return <Navigate to="/" replace />;
@@ -52,9 +57,9 @@ const SuperAdminRoute = ({ children }: ProviderProps) => {
 		return <Navigate to="/login" replace />;
 	}
 
-  if (user?.role === 'ADMIN') {
-    return <Navigate to="/admin" replace />;
-  }
+	if (user?.role === 'ADMIN') {
+		return <Navigate to="/admin" replace />;
+	}
 
 	if (user?.role !== 'SUPER_ADMIN') {
 		return <Navigate to="/" replace />;
@@ -132,14 +137,14 @@ const App = () => {
 					}
 				/>
 
-        <Route
-          path="/admin"
-          element={
-            <AdminRoute>
-              <Dashboard />
-            </AdminRoute>
-          }
-        />
+				<Route
+					path="/admin"
+					element={
+						<AdminRoute>
+							<Dashboard />
+						</AdminRoute>
+					}
+				/>
 
 				<Route path="*" element={<Navigate to="/" replace />} />
 			</Routes>

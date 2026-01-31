@@ -1,6 +1,5 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useNavigate } from 'react-router-dom';
 import { useAuthActions } from '../../store/auth.store';
 import { useToastStore } from '../../store/toast.store';
 import { loginSchema, type LoginInput } from '../../schemas/auth.schema';
@@ -10,7 +9,6 @@ import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 
 const LoginForm = () => {
-	const navigate = useNavigate();
 	const { login } = useAuthActions();
 	const { showSuccess, showError } = useToastStore();
 	const [showPW, setShowPW] = useState(false);
@@ -28,7 +26,6 @@ const LoginForm = () => {
 		try {
 			await login(data);
 			showSuccess('Login successful!');
-			navigate('/');
 		} catch (error) {
 			const validationErrors = getValidationErrors(error);
 

@@ -1,58 +1,48 @@
-export interface ProductPublicDto {
+export interface ProductImage {
 	id: number;
-	name: string;
-	slug: string;
-	price: number;
-	comparePrice?: number;
-	shortDescription?: string;
-	averageRating: number;
-	isFeatured: boolean;
-  category: {
-    id: number;
-    name: string;
-    slug: string;
-  }
+	url: string;
+	altText?: string | null;
+	displayOrder: number;
+	isDefault: boolean;
 }
 
-export interface ProductAdminDto {
+interface ProductBase {
 	id: number;
-
-	// basic info
 	name: string;
 	slug: string;
-	sku: string;
-
-	// pricing
 	price: number;
-	comparePrice?: number | null;
-	cost?: number | null;
-
-	// inventory
-	stock: number;
-	lowStockThreshold: number;
-	trackInventory: boolean;
-
-	// status
-	isActive: boolean;
+	comparePrice: number | null;
+	shortDescription: string | null;
 	isFeatured: boolean;
-
-	// seo
-	metaTitle?: string | null;
-	metaDescription?: string | null;
-
-	// stats
-	viewCount: number;
-	salesCount: number;
-	averageRating: number;
-
-	// relations
+	images: ProductImage[];
+	averageRating: number | null;
 	category: {
 		id: number;
 		name: string;
 		slug: string;
 	};
+}
 
-	// timestamps
-	createdAt: string;
-	updatedAt: string;
-};
+export type ProductPublic = ProductBase;
+
+export interface ProductAdmin extends ProductBase {
+	sku: string;
+	cost: number | null;
+	stock: number;
+	lowStockThreshold: number;
+	trackInventory: boolean;
+	isActive: boolean;
+	metaTitle: string | null;
+	metaDescription: string | null;
+	viewCount: number;
+	salesCount: number;
+	createdAt: Date;
+	updatedAt: Date;
+}
+
+export interface Pagination {
+	page: number;
+	limit: number;
+	total: number;
+	totalPages: number;
+}

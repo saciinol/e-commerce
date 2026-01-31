@@ -2,9 +2,15 @@ import { ProductRepository } from '../repositories/product.repository.js';
 import { CreateProductDto, GetProductsQuery, UpdateProductDto } from '../validators/product.validator.js';
 import { createUniqueSlug } from '../utils/slugify.js';
 import { NotFoundError, ValidationError } from '../utils/errors.js';
+import { Pagination, ProductAdmin, ProductPublic } from '../types/product.types.js';
 
 export class ProductService {
-	static getProductsPublic = async (params: GetProductsQuery) => {
+	static getProductsPublic = async (
+		params: GetProductsQuery,
+	): Promise<{
+		products: ProductPublic[];
+		pagination: Pagination;
+	}> => {
 		const { page, limit } = params;
 		const skip = (page - 1) * limit;
 
@@ -24,17 +30,22 @@ export class ProductService {
 		};
 	};
 
-	static getProductByIdPublic = async (id: number) => {
+	static getProductByIdPublic = async (id: number): Promise<ProductPublic> => {
 		const product = await ProductRepository.findProductByIdPublic(id);
 
 		if (!product) {
-			throw new NotFoundError(`User with id ${id} not found`);
+			throw new NotFoundError(`Product with id ${id} not found`);
 		}
 
 		return product;
 	};
 
-	static getProductsAdmin = async (params: GetProductsQuery) => {
+	static getProductsAdmin = async (
+		params: GetProductsQuery,
+	): Promise<{
+		products: ProductAdmin[];
+		pagination: Pagination;
+	}> => {
 		const { page, limit } = params;
 		const skip = (page - 1) * limit;
 
@@ -54,44 +65,36 @@ export class ProductService {
 		};
 	};
 
-	static getProductByIdAdmin = async (id: number) => {
+	static getProductByIdAdmin = async (id: number): Promise<ProductAdmin> => {
 		const product = await ProductRepository.findProductByIdAdmin(id);
 
 		if (!product) {
-			throw new NotFoundError(`User with id ${id} not found`);
+			throw new NotFoundError(`Product with id ${id} not found`);
 		}
 
 		return product;
 	};
 
-	static createProduct = async (productData: CreateProductDto) => {
+	static createProduct = async (productData: CreateProductDto): Promise<ProductAdmin> => {
 		return createUniqueSlug(productData.name, (slug) => ProductRepository.createProduct(productData, slug), {
 			fallback: 'product',
 			maxAttempts: 10,
 		});
 	};
 
-	static updateProduct = async (productData: UpdateProductDto, id: number) => {
+	static updateProduct = async (productData: UpdateProductDto, id: number): Promise<Partial<ProductAdmin>> => {
 		if (!productData) {
 			throw new ValidationError('No product data');
 		}
 
-		const product = await this.getProductByIdAdmin(id);
-
-		if (!product) {
-			throw new NotFoundError(`User with id ${id} not found`);
-		}
+		await this.getProductByIdAdmin(id);
 
 		return ProductRepository.updateProduct(productData, id);
 	};
 
-	static deleteProduct = async (id: number) => {
-		const product = await this.getProductByIdAdmin(id);
+	static deleteProduct = async (id: number): Promise<void> => {
+		await this.getProductByIdAdmin(id);
 
-		if (!product) {
-			throw new NotFoundError(`User with id ${id} not found`);
-		}
-
-		await ProductRepository.deleteProduct(id);
+		ProductRepository.deleteProduct(id);
 	};
 }

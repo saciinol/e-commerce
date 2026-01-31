@@ -1,9 +1,12 @@
 import { prisma } from '../prisma.js';
+import { ProductAdmin, ProductImage, ProductPublic } from '../types/product.types.js';
+import { mapPrismaProductToAdmin } from '../utils/mapPrismaProductToAdmin.js';
+import { mapPrismaProductToPublic } from '../utils/mapPrismaProductToPublic.js';
 import { CreateProductDto, UpdateProductDto } from '../validators/product.validator.js';
 
 export class ProductRepository {
-	static findManyPublic = (options: { skip: number; take: number }) => {
-		return prisma.product.findMany({
+	static findManyPublic = async (options: { skip: number; take: number }): Promise<ProductPublic[]> => {
+		const products = await prisma.product.findMany({
 			skip: options.skip,
 			take: options.take,
 			select: {
@@ -25,10 +28,12 @@ export class ProductRepository {
 				},
 			},
 		});
+
+		return products.map((p) => mapPrismaProductToPublic(p));
 	};
 
-	static findProductByIdPublic = (id: number) => {
-		return prisma.product.findUnique({
+	static findProductByIdPublic = async (id: number): Promise<ProductPublic | null> => {
+		const product = await prisma.product.findUnique({
 			where: { id },
 			select: {
 				id: true,
@@ -49,10 +54,12 @@ export class ProductRepository {
 				},
 			},
 		});
+
+		return mapPrismaProductToPublic(product);
 	};
 
-	static findManyAdmin = (options: { skip: number; take: number }) => {
-		return prisma.product.findMany({
+	static findManyAdmin = async (options: { skip: number; take: number }): Promise<ProductAdmin[]> => {
+		const products = await prisma.product.findMany({
 			skip: options.skip,
 			take: options.take,
 			select: {
@@ -64,6 +71,8 @@ export class ProductRepository {
 				price: true,
 				comparePrice: true,
 				cost: true,
+
+				shortDescription: true,
 
 				stock: true,
 				lowStockThreshold: true,
@@ -92,10 +101,12 @@ export class ProductRepository {
 				updatedAt: true,
 			},
 		});
+
+		return products.map((p) => mapPrismaProductToAdmin(p));
 	};
 
-	static findProductByIdAdmin = (id: number) => {
-		return prisma.product.findUnique({
+	static findProductByIdAdmin = async (id: number): Promise<ProductAdmin> => {
+		const product = await prisma.product.findUnique({
 			where: { id },
 			select: {
 				id: true,
@@ -106,6 +117,8 @@ export class ProductRepository {
 				price: true,
 				comparePrice: true,
 				cost: true,
+
+				shortDescription: true,
 
 				stock: true,
 				lowStockThreshold: true,
@@ -134,10 +147,12 @@ export class ProductRepository {
 				updatedAt: true,
 			},
 		});
+
+		return mapPrismaProductToAdmin(product);
 	};
 
-	static createProduct = (data: CreateProductDto, slug: string) => {
-		return prisma.product.create({
+	static createProduct = async (data: CreateProductDto, slug: string): Promise<ProductAdmin> => {
+		const product = await prisma.product.create({
 			data: { ...data, slug },
 			select: {
 				id: true,
@@ -149,6 +164,8 @@ export class ProductRepository {
 				comparePrice: true,
 				cost: true,
 
+				shortDescription: true,
+
 				stock: true,
 				lowStockThreshold: true,
 				trackInventory: true,
@@ -176,10 +193,12 @@ export class ProductRepository {
 				updatedAt: true,
 			},
 		});
+
+		return mapPrismaProductToAdmin(product);
 	};
 
-	static updateProduct = (data: UpdateProductDto, id: number) => {
-		return prisma.product.update({
+	static updateProduct = async (data: UpdateProductDto, id: number): Promise<Partial<ProductAdmin>> => {
+		const product = await prisma.product.update({
 			where: { id },
 			data,
 			select: {
@@ -192,6 +211,8 @@ export class ProductRepository {
 				comparePrice: true,
 				cost: true,
 
+				shortDescription: true,
+
 				stock: true,
 				lowStockThreshold: true,
 				trackInventory: true,
@@ -219,10 +240,12 @@ export class ProductRepository {
 				updatedAt: true,
 			},
 		});
+
+		return mapPrismaProductToAdmin(product);
 	};
 
-	static uploadImage = (productId: number, fileName: string, isDefault: boolean) => {
-		return prisma.$transaction(async (tx) => {
+	static uploadImage = async (productId: number, fileName: string, isDefault: boolean): Promise<ProductImage> => {
+		const image = prisma.$transaction(async (tx) => {
 			if (isDefault) {
 				await tx.productImage.updateMany({
 					where: { productId },
@@ -236,17 +259,27 @@ export class ProductRepository {
 					url: `/uploads/products/${fileName}`,
 					isDefault,
 				},
+				select: {
+					id: true,
+					url: true,
+					altText: true,
+					displayOrder: true,
+					isDefault: true,
+				},
 			});
 		});
+
+		return image;
 	};
 
 	static deleteProduct = (id: number) => {
-		return prisma.product.delete({
+		prisma.product.delete({
 			where: { id },
 		});
 	};
 
-	static count = () => {
-		return prisma.product.count();
+	static count = async (): Promise<number> => {
+		const count = await prisma.product.count();
+    return count;
 	};
 }

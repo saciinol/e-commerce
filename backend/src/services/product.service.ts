@@ -2,15 +2,15 @@ import { ProductRepository } from '../repositories/product.repository.js';
 import { CreateProductDto, GetProductsQuery, UpdateProductDto } from '../validators/product.validator.js';
 import { createUniqueSlug } from '../utils/slugify.js';
 import { NotFoundError, ValidationError } from '../utils/errors.js';
-import { Pagination, ProductAdmin, ProductPublic } from '../types/product.types.js';
+import {
+	ProductAdmin,
+	ProductPublic,
+	ProductsAdminPaginated,
+	ProductsPublicPaginated,
+} from '../types/product.types.js';
 
 export class ProductService {
-	static getProductsPublic = async (
-		params: GetProductsQuery,
-	): Promise<{
-		products: ProductPublic[];
-		pagination: Pagination;
-	}> => {
+	static getProductsPublic = async (params: GetProductsQuery): Promise<ProductsPublicPaginated> => {
 		const { page, limit } = params;
 		const skip = (page - 1) * limit;
 
@@ -40,12 +40,7 @@ export class ProductService {
 		return product;
 	};
 
-	static getProductsAdmin = async (
-		params: GetProductsQuery,
-	): Promise<{
-		products: ProductAdmin[];
-		pagination: Pagination;
-	}> => {
+	static getProductsAdmin = async (params: GetProductsQuery): Promise<ProductsAdminPaginated> => {
 		const { page, limit } = params;
 		const skip = (page - 1) * limit;
 

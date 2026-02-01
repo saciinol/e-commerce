@@ -18,6 +18,19 @@ export class ProductRepository {
 				shortDescription: true,
 				isFeatured: true,
 				images: true,
+				attributes: true,
+				variants: {
+					select: {
+						id: true,
+						productId: true,
+						name: true,
+						sku: true,
+						price: true,
+						stock: true,
+						isActive: true,
+						options: true,
+					},
+				},
 				averageRating: true,
 				category: {
 					select: {
@@ -44,6 +57,19 @@ export class ProductRepository {
 				shortDescription: true,
 				isFeatured: true,
 				images: true,
+				attributes: true,
+				variants: {
+					select: {
+						id: true,
+						productId: true,
+						name: true,
+						sku: true,
+						price: true,
+						stock: true,
+						isActive: true,
+						options: true,
+					},
+				},
 				averageRating: true,
 				category: {
 					select: {
@@ -80,8 +106,21 @@ export class ProductRepository {
 
 				isActive: true,
 				isFeatured: true,
-				images: true,
 
+				images: true,
+				attributes: true,
+				variants: {
+					select: {
+						id: true,
+						productId: true,
+						name: true,
+						sku: true,
+						price: true,
+						stock: true,
+						isActive: true,
+						options: true,
+					},
+				},
 				metaTitle: true,
 				metaDescription: true,
 
@@ -126,7 +165,21 @@ export class ProductRepository {
 
 				isActive: true,
 				isFeatured: true,
+
 				images: true,
+				attributes: true,
+				variants: {
+					select: {
+						id: true,
+						productId: true,
+						name: true,
+						sku: true,
+						price: true,
+						stock: true,
+						isActive: true,
+						options: true,
+					},
+				},
 
 				metaTitle: true,
 				metaDescription: true,
@@ -172,8 +225,21 @@ export class ProductRepository {
 
 				isActive: true,
 				isFeatured: true,
-				images: true,
 
+				images: true,
+				attributes: true,
+				variants: {
+					select: {
+						id: true,
+						productId: true,
+						name: true,
+						sku: true,
+						price: true,
+						stock: true,
+						isActive: true,
+						options: true,
+					},
+				},
 				metaTitle: true,
 				metaDescription: true,
 
@@ -219,8 +285,21 @@ export class ProductRepository {
 
 				isActive: true,
 				isFeatured: true,
-				images: true,
 
+				images: true,
+				attributes: true,
+				variants: {
+					select: {
+						id: true,
+						productId: true,
+						name: true,
+						sku: true,
+						price: true,
+						stock: true,
+						isActive: true,
+						options: true,
+					},
+				},
 				metaTitle: true,
 				metaDescription: true,
 
@@ -265,6 +344,7 @@ export class ProductRepository {
 					altText: true,
 					displayOrder: true,
 					isDefault: true,
+					createdAt: true,
 				},
 			});
 		});
@@ -272,7 +352,7 @@ export class ProductRepository {
 		return image;
 	};
 
-	static deleteProduct = (id: number) => {
+	static deleteProduct = (id: number): void => {
 		prisma.product.delete({
 			where: { id },
 		});
@@ -280,6 +360,6 @@ export class ProductRepository {
 
 	static count = async (): Promise<number> => {
 		const count = await prisma.product.count();
-    return count;
+		return count;
 	};
 }

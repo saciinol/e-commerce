@@ -1,4 +1,4 @@
-import { ProductAdmin } from '../types/product.types.js';
+import { ProductAdmin, VariantOption } from '../types/product.types.js';
 import { Decimal } from '@prisma/client/runtime/library';
 import { NotFoundError } from './errors.js';
 import { MapProductToPublicProp } from './mapPrismaProductToPublic.js';
@@ -10,6 +10,15 @@ interface MapProductToAdminProp extends MapProductToPublicProp {
 	lowStockThreshold: number;
 	trackInventory: boolean;
 	isActive: boolean;
+	variants: {
+		id: number;
+		sku: string;
+		name: string;
+		price: Decimal | null;
+		stock: number;
+		isActive: boolean;
+		options: VariantOption[];
+	}[];
 	metaTitle: string | null;
 	metaDescription: string | null;
 	viewCount: number;
@@ -38,6 +47,25 @@ export function mapPrismaProductToAdmin(p: MapProductToAdminProp | null): Produc
 			altText: img.altText ?? null,
 			displayOrder: img.displayOrder,
 			isDefault: img.isDefault,
+			createdAt: img.createdAt,
+		})),
+		attributes: (p.attributes ?? []).map((attr) => ({
+			id: attr.id,
+			name: attr.name,
+			value: attr.value,
+		})),
+		variants: (p.variants ?? []).map((variant) => ({
+			id: variant.id,
+			sku: variant.sku,
+			name: variant.name,
+			price: variant.price?.toNumber() ?? null,
+			stock: variant.stock,
+			isActive: variant.isActive,
+			options: (variant.options ?? []).map((opt) => ({
+				id: opt.id,
+				name: opt.name,
+				value: opt.value,
+			})),
 		})),
 		category: {
 			id: p.category.id,

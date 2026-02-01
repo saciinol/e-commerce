@@ -37,6 +37,14 @@ router.post(
 	ProductController.createProduct,
 );
 
+router.post(
+	'/:id/attributes',
+	authenticate,
+	authorize([Role.ADMIN, Role.SUPER_ADMIN]),
+	// validate(),
+	// ProductController.,
+);
+
 router.put(
 	'/:id',
 	authenticate,

@@ -1,4 +1,4 @@
-import { ProductImage, ProductPublic } from '../types/product.types.js';
+import { ProductAttribute, ProductImage, ProductPublic, VariantOption } from '../types/product.types.js';
 import { Decimal } from '@prisma/client/runtime/library';
 import { NotFoundError } from './errors.js';
 
@@ -12,6 +12,14 @@ export interface MapProductToPublicProp {
 	isFeatured: boolean;
 	averageRating: Decimal;
 	images: ProductImage[];
+	attributes: ProductAttribute[];
+	variants: {
+		id: number;
+		name: string;
+		price: Decimal | null;
+		isActive: boolean;
+		options: VariantOption[];
+	}[];
 	category: {
 		id: number;
 		name: string;
@@ -39,6 +47,23 @@ export function mapPrismaProductToPublic(p: MapProductToPublicProp | null): Prod
 			altText: img.altText ?? null,
 			displayOrder: img.displayOrder,
 			isDefault: img.isDefault,
+			createdAt: img.createdAt,
+		})),
+		attributes: (p.attributes ?? []).map((attr) => ({
+			id: attr.id,
+			name: attr.name,
+			value: attr.value,
+		})),
+		variants: (p.variants ?? []).map((variant) => ({
+			id: variant.id,
+			name: variant.name,
+			price: variant.price?.toNumber() ?? null,
+			isActive: variant.isActive,
+			options: (variant.options ?? []).map((opt) => ({
+				id: opt.id,
+				name: opt.name,
+				value: opt.value,
+			})),
 		})),
 		category: {
 			id: p.category.id,

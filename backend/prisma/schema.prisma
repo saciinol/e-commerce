@@ -93,17 +93,20 @@ model Product {
   isActive         Boolean  @default(true)
   isFeatured       Boolean  @default(false)
 
-  images           ProductImage[]
-
   metaTitle        String?
   metaDescription  String?
+
+  images           ProductImage[]
+
+  categoryId       Int
+  category         Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+
+  attributes       ProductAttribute[]
+  variants         ProductVariant[]
 
   viewCount        Int      @default(0)
   salesCount       Int      @default(0)
   averageRating    Decimal  @db.Decimal(3, 2) @default(0.00)
-
-  categoryId       Int
-  category         Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
 
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
@@ -125,6 +128,44 @@ model ProductImage {
   createdAt         DateTime         @default(now())
 
   @@index([productId])
+}
+
+model ProductAttribute {
+  id                Int              @id @default(autoincrement())
+  productId         Int
+  product           Product          @relation(fields: [productId], references: [id], onDelete: Cascade)
+  name              String           // e.g., "Material", "Brand", "Weight"
+  value             String           // e.g., "Cotton", "Nike", "500g"
+
+  @@index([productId])
+}
+
+model ProductVariant {
+  id                Int              @id @default(autoincrement())
+  productId         Int
+  product           Product          @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  name              String           // e.g., "Red / Large"
+  sku               String           @unique
+  price             Decimal?         @db.Decimal(10, 2) // Override product price
+  stock             Int              @default(0)
+  isActive          Boolean          @default(true)
+
+  // Variant options
+  options           VariantOption[]
+
+  @@index([productId])
+  @@index([sku])
+}
+
+model VariantOption {
+  id                Int              @id @default(autoincrement())
+  variantId         Int
+  variant           ProductVariant   @relation(fields: [variantId], references: [id], onDelete: Cascade)
+  name              String           // e.g., "Color", "Size"
+  value             String           // e.g., "Red", "Large"
+
+  @@index([variantId])
 }
 
 model RefreshToken {

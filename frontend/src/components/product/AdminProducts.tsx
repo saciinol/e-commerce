@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { adminProductActions, useAdminProducts, useAdminProductsLoading } from '../../store/product.store';
 import { LoadingSpinner } from '../ui/LoadingSpinner';
 import AdminProductsTable, { TableItem } from './AdminProductsTable';

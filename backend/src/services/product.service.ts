@@ -1,9 +1,16 @@
 import { ProductRepository } from '../repositories/product.repository.js';
-import { CreateProductDto, GetProductsQuery, UpdateProductDto } from '../validators/product.validator.js';
+import {
+	CreateProductAttributesDto,
+	CreateProductDto,
+	CreateProductVariantsDto,
+	GetProductsQuery,
+	UpdateProductDto,
+} from '../validators/product.validator.js';
 import { createUniqueSlug } from '../utils/slugify.js';
 import { NotFoundError, ValidationError } from '../utils/errors.js';
 import {
 	ProductAdmin,
+	ProductAttribute,
 	ProductPublic,
 	ProductsAdminPaginated,
 	ProductsPublicPaginated,
@@ -71,10 +78,36 @@ export class ProductService {
 	};
 
 	static createProduct = async (productData: CreateProductDto): Promise<ProductAdmin> => {
+		if (!productData) {
+			throw new ValidationError('No product data');
+		}
+
 		return createUniqueSlug(productData.name, (slug) => ProductRepository.createProduct(productData, slug), {
 			fallback: 'product',
 			maxAttempts: 10,
 		});
+	};
+
+	static createProductAttributes = async (id: number, productAttributesData: CreateProductAttributesDto): Promise<ProductAttribute> => {
+		if (!productAttributesData) {
+			throw new ValidationError('No product data');
+		}
+
+		await this.getProductByIdAdmin(id);
+
+		const productAttributes = ProductRepository.createProductAttributes(id, productAttributesData);
+
+    return productAttributes;
+	};
+
+	static createProductVariants = async (id: number, productVariantsData: CreateProductVariantsDto): Promise<void> => {
+		if (!productVariantsData) {
+			throw new ValidationError('No product data');
+		}
+
+		await this.getProductByIdAdmin(id);
+
+		const productAttributes = ProductRepository.createProductVariants(id, productVariantsData);
 	};
 
 	static updateProduct = async (productData: UpdateProductDto, id: number): Promise<Partial<ProductAdmin>> => {

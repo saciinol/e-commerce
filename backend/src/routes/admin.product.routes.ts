@@ -1,7 +1,9 @@
 import { Router } from 'express';
 import { authenticate, authorize } from '../middleware/auth.middleware.js';
 import {
+  createProductAttributesSchema,
 	createProductSchema,
+	createProductVariantsSchema,
 	getProductIdSchema,
 	getProductsSchema,
 	updateProductSchema,
@@ -41,7 +43,15 @@ router.post(
 	'/:id/attributes',
 	authenticate,
 	authorize([Role.ADMIN, Role.SUPER_ADMIN]),
-	// validate(),
+	validate(createProductAttributesSchema),
+	// ProductController.,
+);
+
+router.post(
+	'/:id/variants',
+	authenticate,
+	authorize([Role.ADMIN, Role.SUPER_ADMIN]),
+	validate(createProductVariantsSchema),
 	// ProductController.,
 );
 

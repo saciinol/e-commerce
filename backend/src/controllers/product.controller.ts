@@ -1,7 +1,9 @@
 import { Request, Response } from 'express';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import {
+	CreateProductAttributesSchema,
 	CreateProductSchema,
+	CreateProductVariantsSchema,
 	GetProductIdSchema,
 	GetProductsSchema,
 	UpdateProductSchema,
@@ -64,6 +66,30 @@ export class ProductController {
 		res.status(201).json({
 			success: true,
 			data: product,
+		});
+	});
+
+	static createProductAttributes = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+		const productAttributesData = (req.validated as CreateProductAttributesSchema).body;
+		const productId = (req.validated as CreateProductAttributesSchema).params.id;
+
+		const productAttributes = await ProductService.createProductAttributes(productId, productAttributesData);
+
+		res.status(201).json({
+			success: true,
+			data: productAttributes,
+		});
+	});
+
+	static createProductVariantss = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+		const productVariantsData = (req.validated as CreateProductVariantsSchema).body;
+		const productId = (req.validated as CreateProductVariantsSchema).params.id;
+
+		const productVariants = await ProductService.createProductVariants(productId, productVariantsData);
+
+		res.status(201).json({
+			success: true,
+			data: productVariants,
 		});
 	});
 

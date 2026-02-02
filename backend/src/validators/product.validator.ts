@@ -47,6 +47,48 @@ export const updateProductSchema = z.object({
 	}),
 });
 
+export const productAttributeSchema = z.object({
+	name: z.string().trim().min(1).max(100),
+	value: z.string().trim().min(1).max(255),
+});
+
+
+export const createProductAttributesSchema = z.object({
+	body: z
+		.array(productAttributeSchema)
+		.min(1, 'At least one attribute is required'),
+	params: z.object({
+		id: z.coerce.number().int().positive('Invalid Product ID'),
+	}),
+});
+
+export const variantOptionSchema = z.object({
+	name: z.string().trim().min(1).max(50),
+	value: z.string().trim().min(1).max(50),
+});
+
+export const productVariantSchema = z.object({
+	name: z.string().trim().min(1).max(100),
+	sku: z.string().trim().min(1).max(100),
+
+	price: z.coerce.number().positive().optional(),
+	stock: z.coerce.number().int().min(0).optional().default(0),
+	isActive: z.coerce.boolean().optional().default(true),
+
+	options: z
+		.array(variantOptionSchema)
+		.min(1, 'Variant must have at least one option'),
+});
+
+export const createProductVariantsSchema = z.object({
+	body: z
+		.array(productVariantSchema)
+		.min(1, 'At least one variant is required'),
+	params: z.object({
+		id: z.coerce.number().int().positive('Invalid Product ID'),
+	}),
+});
+
 export const getProductIdSchema = z.object({
 	params: z.object({
 		id: z.coerce.number().int().positive('Invalid Product ID'),
@@ -64,8 +106,12 @@ export type CreateProductDto = z.infer<typeof createProductSchema>['body'];
 export type UpdateProductDto = z.infer<typeof updateProductSchema>['body'];
 export type GetProductIdParams = z.infer<typeof getProductIdSchema>['params'];
 export type GetProductsQuery = z.infer<typeof getProductsSchema>['query'];
+export type CreateProductAttributesDto = z.infer<typeof createProductAttributesSchema>['body'];
+export type CreateProductVariantsDto = z.infer<typeof createProductVariantsSchema>['body'];
 
 export type CreateProductSchema = z.infer<typeof createProductSchema>;
 export type UpdateProductSchema = z.infer<typeof updateProductSchema>;
 export type GetProductIdSchema = z.infer<typeof getProductIdSchema>;
 export type GetProductsSchema = z.infer<typeof getProductsSchema>;
+export type CreateProductAttributesSchema = z.infer<typeof createProductAttributesSchema>;
+export type CreateProductVariantsSchema = z.infer<typeof createProductVariantsSchema>;

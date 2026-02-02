@@ -1,8 +1,14 @@
 import { prisma } from '../prisma.js';
-import { ProductAdmin, ProductImage, ProductPublic } from '../types/product.types.js';
+import { ProductAdmin, ProductAttribute, ProductImage, ProductPublic, ProductVariant } from '../types/product.types.js';
+import { mapPrismaProductVariants } from '../utils/mapPrismaProductAttributes.js';
 import { mapPrismaProductToAdmin } from '../utils/mapPrismaProductToAdmin.js';
 import { mapPrismaProductToPublic } from '../utils/mapPrismaProductToPublic.js';
-import { CreateProductDto, UpdateProductDto } from '../validators/product.validator.js';
+import {
+	CreateProductAttributesDto,
+	CreateProductDto,
+	CreateProductVariantsDto,
+	UpdateProductDto,
+} from '../validators/product.validator.js';
 
 export class ProductRepository {
 	static findManyPublic = async (options: { skip: number; take: number }): Promise<ProductPublic[]> => {
@@ -261,6 +267,39 @@ export class ProductRepository {
 		});
 
 		return mapPrismaProductToAdmin(product);
+	};
+
+	static createProductAttributes = async (id: number, data: CreateProductAttributesDto): Promise<ProductAttribute> => {
+		const productAttributes = await prisma.productAttribute.createMany({
+			data: { ...data, productId: id },
+		});
+
+		return productAttributes;
+	};
+
+	static createProductVariants = async (id: number, data: CreateProductVariantsDto): Promise<void> => {
+		const { options_name, options_value, ...attrData } = data;
+
+		const productVariantsAndOptions = prisma.$transaction(async (tx) => {
+			const productVariants = await tx.productVariant.create({
+				data: { ...attrData, productId: id },
+			});
+
+			const productVariantOptions = await tx.variantOption.create({
+				data: { name: options_name, value: options_value, variantId: productVariants.id },
+			});
+
+			return { productVariants, productVariantOptions };
+		});
+
+		// const productVariants = await prisma.productVariant.create({
+		// 	data: {
+		// 		...attrData,
+		// 		productId: id,
+		// 	},
+		// });
+
+		// return mapPrismaProductVariants();
 	};
 
 	static updateProduct = async (data: UpdateProductDto, id: number): Promise<Partial<ProductAdmin>> => {

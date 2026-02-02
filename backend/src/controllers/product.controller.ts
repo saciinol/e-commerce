@@ -81,7 +81,7 @@ export class ProductController {
 		});
 	});
 
-	static createProductVariantss = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+	static createProductVariants = asyncHandler(async (req: Request, res: Response): Promise<void> => {
 		const productVariantsData = (req.validated as CreateProductVariantsSchema).body;
 		const productId = (req.validated as CreateProductVariantsSchema).params.id;
 

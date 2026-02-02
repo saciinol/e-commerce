@@ -14,6 +14,7 @@ import {
 	ProductPublic,
 	ProductsAdminPaginated,
 	ProductsPublicPaginated,
+	ProductVariant,
 } from '../types/product.types.js';
 
 export class ProductService {
@@ -88,7 +89,10 @@ export class ProductService {
 		});
 	};
 
-	static createProductAttributes = async (id: number, productAttributesData: CreateProductAttributesDto): Promise<ProductAttribute> => {
+	static createProductAttributes = async (
+		id: number,
+		productAttributesData: CreateProductAttributesDto,
+	): Promise<ProductAttribute[]> => {
 		if (!productAttributesData) {
 			throw new ValidationError('No product data');
 		}
@@ -97,10 +101,13 @@ export class ProductService {
 
 		const productAttributes = ProductRepository.createProductAttributes(id, productAttributesData);
 
-    return productAttributes;
+		return productAttributes;
 	};
 
-	static createProductVariants = async (id: number, productVariantsData: CreateProductVariantsDto): Promise<void> => {
+	static createProductVariants = async (
+		id: number,
+		productVariantsData: CreateProductVariantsDto,
+	): Promise<ProductVariant[]> => {
 		if (!productVariantsData) {
 			throw new ValidationError('No product data');
 		}
@@ -108,6 +115,8 @@ export class ProductService {
 		await this.getProductByIdAdmin(id);
 
 		const productAttributes = ProductRepository.createProductVariants(id, productVariantsData);
+
+		return productAttributes;
 	};
 
 	static updateProduct = async (productData: UpdateProductDto, id: number): Promise<Partial<ProductAdmin>> => {

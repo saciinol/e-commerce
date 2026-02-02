@@ -269,37 +269,50 @@ export class ProductRepository {
 		return mapPrismaProductToAdmin(product);
 	};
 
-	static createProductAttributes = async (id: number, data: CreateProductAttributesDto): Promise<ProductAttribute> => {
-		const productAttributes = await prisma.productAttribute.createMany({
-			data: { ...data, productId: id },
+	static createProductAttributes = async (
+		productId: number,
+		data: CreateProductAttributesDto,
+	): Promise<ProductAttribute[]> => {
+		const productAttributes = await prisma.productAttribute.createManyAndReturn({
+			data: data.map((a) => ({ productId, ...a })),
 		});
 
 		return productAttributes;
 	};
 
-	static createProductVariants = async (id: number, data: CreateProductVariantsDto): Promise<void> => {
-		const { options_name, options_value, ...attrData } = data;
+	static createProductVariants = async (
+		productId: number,
+		variants: CreateProductVariantsDto,
+	): Promise<ProductVariant[]> => {
+		const productVariantsAndOptions = await prisma.$transaction(
+			variants.map((variant) =>
+				prisma.productVariant.create({
+					data: {
+						productId,
+						name: variant.name,
+						sku: variant.sku,
+						price: variant.price,
+						stock: variant.stock,
+						isActive: variant.isActive,
+						options: {
+							create: variant.options,
+						},
+					},
+					select: {
+						id: true,
+						productId: true,
+						name: true,
+						sku: true,
+						price: true,
+						stock: true,
+						isActive: true,
+						options: true,
+					},
+				}),
+			),
+		);
 
-		const productVariantsAndOptions = prisma.$transaction(async (tx) => {
-			const productVariants = await tx.productVariant.create({
-				data: { ...attrData, productId: id },
-			});
-
-			const productVariantOptions = await tx.variantOption.create({
-				data: { name: options_name, value: options_value, variantId: productVariants.id },
-			});
-
-			return { productVariants, productVariantOptions };
-		});
-
-		// const productVariants = await prisma.productVariant.create({
-		// 	data: {
-		// 		...attrData,
-		// 		productId: id,
-		// 	},
-		// });
-
-		// return mapPrismaProductVariants();
+		return mapPrismaProductVariants(productVariantsAndOptions);
 	};
 
 	static updateProduct = async (data: UpdateProductDto, id: number): Promise<Partial<ProductAdmin>> => {

@@ -12,22 +12,24 @@ interface mapPrismaProductVariantsProps {
 	options: VariantOption[];
 }
 
-export function mapPrismaProductVariants(p: mapPrismaProductVariantsProps): ProductVariant {
+export function mapPrismaProductVariants(p: mapPrismaProductVariantsProps[]): ProductVariant[] {
 	if (!p) {
 		throw new NotFoundError(`Product not found`);
 	}
 
-	return {
-		id: p.id,
-		productId: p.productId,
-		name: p.name,
-		price: p.price?.toNumber() ?? null,
-		isActive: p.isActive,
-		options: (p.options ?? null).map((opt) => ({
-			id: opt.id,
-			variantId: opt.variantId,
-			name: opt.name,
-			value: opt.value,
-		})),
-	};
+	return p.map((variant) => {
+		return {
+			id: variant.id,
+			productId: variant.productId,
+			name: variant.name,
+			price: variant.price?.toNumber() ?? null,
+			isActive: variant.isActive,
+			options: (variant.options ?? null).map((opt) => ({
+				id: opt.id,
+				variantId: opt.variantId,
+				name: opt.name,
+				value: opt.value,
+			})),
+		};
+	});
 }

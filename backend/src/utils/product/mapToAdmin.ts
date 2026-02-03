@@ -1,9 +1,9 @@
-import { ProductAdmin, VariantOption } from '../types/product.types.js';
+import { ProductAdmin, VariantOption } from '../../types/product.types.js';
 import { Decimal } from '@prisma/client/runtime/library';
-import { NotFoundError } from './errors.js';
-import { MapProductToPublicProp } from './mapPrismaProductToPublic.js';
+import { NotFoundError } from '../errors.js';
+import { MapToPublicProps } from './mapToPublic.js';
 
-interface MapProductToAdminProp extends MapProductToPublicProp {
+interface MapToAdminProps extends MapToPublicProps {
 	sku: string;
 	cost: Decimal | null;
 	stock: number;
@@ -27,7 +27,7 @@ interface MapProductToAdminProp extends MapProductToPublicProp {
 	updatedAt: Date;
 }
 
-export function mapPrismaProductToAdmin(p: MapProductToAdminProp | null): ProductAdmin {
+export function mapToAdmin(p: MapToAdminProps | null): ProductAdmin {
 	if (!p) {
 		throw new NotFoundError(`Product not found`);
 	}

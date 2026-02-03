@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { authenticate, authorize } from '../middleware/auth.middleware.js';
+import { authenticate, authorize } from '../../middleware/auth.middleware.js';
 import {
 	createProductAttributesSchema,
 	createProductSchema,
@@ -7,11 +7,11 @@ import {
 	getProductIdSchema,
 	getProductsSchema,
 	updateProductSchema,
-} from '../validators/product.validator.js';
-import { ProductController } from '../controllers/product.controller.js';
+} from '../../validators/product.validator.js';
+import { ProductController } from '../../controllers/product.controller.js';
 import { Role } from '@prisma/client';
-import { validate } from '../middleware/validation.middleware.js';
-import { upload } from '../config/multer.js';
+import { validate } from '../../middleware/validation.middleware.js';
+import { upload } from '../../middleware/upload.middleware.js';
 
 const router = Router();
 

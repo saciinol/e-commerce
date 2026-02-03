@@ -1,8 +1,8 @@
 import { prisma } from '../prisma.js';
 import { ProductAdmin, ProductAttribute, ProductImage, ProductPublic, ProductVariant } from '../types/product.types.js';
-import { mapPrismaProductVariants } from '../utils/mapPrismaProductAttributes.js';
-import { mapPrismaProductToAdmin } from '../utils/mapPrismaProductToAdmin.js';
-import { mapPrismaProductToPublic } from '../utils/mapPrismaProductToPublic.js';
+import { mapVariants } from '../utils/product/mapVariants.js';
+import { mapToAdmin } from '../utils/product/mapToAdmin.js';
+import { mapToPublic } from '../utils/product/mapToPublic.js';
 import {
 	CreateProductAttributesDto,
 	CreateProductDto,
@@ -48,7 +48,7 @@ export class ProductRepository {
 			},
 		});
 
-		return products.map((p) => mapPrismaProductToPublic(p));
+		return products.map((p) => mapToPublic(p));
 	};
 
 	static findProductByIdPublic = async (id: number): Promise<ProductPublic | null> => {
@@ -87,7 +87,7 @@ export class ProductRepository {
 			},
 		});
 
-		return mapPrismaProductToPublic(product);
+		return mapToPublic(product);
 	};
 
 	static findManyAdmin = async (options: { skip: number; take: number }): Promise<ProductAdmin[]> => {
@@ -147,7 +147,7 @@ export class ProductRepository {
 			},
 		});
 
-		return products.map((p) => mapPrismaProductToAdmin(p));
+		return products.map((p) => mapToAdmin(p));
 	};
 
 	static findProductByIdAdmin = async (id: number): Promise<ProductAdmin> => {
@@ -207,7 +207,7 @@ export class ProductRepository {
 			},
 		});
 
-		return mapPrismaProductToAdmin(product);
+		return mapToAdmin(product);
 	};
 
 	static createProduct = async (data: CreateProductDto, slug: string): Promise<ProductAdmin> => {
@@ -266,7 +266,7 @@ export class ProductRepository {
 			},
 		});
 
-		return mapPrismaProductToAdmin(product);
+		return mapToAdmin(product);
 	};
 
 	static createProductAttributes = async (
@@ -312,7 +312,7 @@ export class ProductRepository {
 			),
 		);
 
-		return mapPrismaProductVariants(productVariantsAndOptions);
+		return mapVariants(productVariantsAndOptions);
 	};
 
 	static updateProduct = async (data: UpdateProductDto, id: number): Promise<Partial<ProductAdmin>> => {
@@ -372,7 +372,7 @@ export class ProductRepository {
 			},
 		});
 
-		return mapPrismaProductToAdmin(product);
+		return mapToAdmin(product);
 	};
 
 	static uploadImage = async (productId: number, fileName: string, isDefault: boolean): Promise<ProductImage> => {

@@ -1,9 +1,9 @@
 import { VariantOption } from '@prisma/client';
-import { ProductVariant } from '../types/product.types.js';
+import { ProductVariant } from '../../types/product.types.js';
 import { Decimal } from '@prisma/client/runtime/library';
-import { NotFoundError } from './errors.js';
+import { NotFoundError } from '../errors.js';
 
-interface mapPrismaProductVariantsProps {
+interface MapVariantsProps {
 	id: number;
 	productId?: number;
 	name: string;
@@ -12,7 +12,7 @@ interface mapPrismaProductVariantsProps {
 	options: VariantOption[];
 }
 
-export function mapPrismaProductVariants(p: mapPrismaProductVariantsProps[]): ProductVariant[] {
+export function mapVariants(p: MapVariantsProps[]): ProductVariant[] {
 	if (!p) {
 		throw new NotFoundError(`Product not found`);
 	}

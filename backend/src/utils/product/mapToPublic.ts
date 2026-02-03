@@ -1,8 +1,8 @@
-import { ProductAttribute, ProductImage, ProductPublic, VariantOption } from '../types/product.types.js';
+import { ProductAttribute, ProductImage, ProductPublic, VariantOption } from '../../types/product.types.js';
 import { Decimal } from '@prisma/client/runtime/library';
-import { NotFoundError } from './errors.js';
+import { NotFoundError } from '../errors.js';
 
-export interface MapProductToPublicProp {
+export interface MapToPublicProps {
 	id: number;
 	name: string;
 	slug: string;
@@ -27,7 +27,7 @@ export interface MapProductToPublicProp {
 	};
 }
 
-export function mapPrismaProductToPublic(p: MapProductToPublicProp | null): ProductPublic {
+export function mapToPublic(p: MapToPublicProps | null): ProductPublic {
 	if (!p) {
 		throw new NotFoundError(`Product not found`);
 	}

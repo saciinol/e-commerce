@@ -54,22 +54,22 @@ model Address {
 }
 
 model Category {
-  id           Int        @id @default(autoincrement())
-  name         String     @unique
-  slug         String     @unique
-  description  String?
-  image        String?
-  parentId     Int?
-  parent       Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id], onDelete: SetNull)
-  children     Category[] @relation("CategoryHierarchy")
-  isActive     Boolean    @default(true)
-  displayOrder Int        @default(0)
+  id               Int             @id @default(autoincrement())
+  name             String          @unique
+  slug             String          @unique
+  description      String?
+  image            String?
+  parentId         Int?
+  parent           Category?       @relation("CategoryHierarchy", fields: [parentId], references: [id], onDelete: SetNull)
+  children         Category[]      @relation("CategoryHierarchy")
+  isActive         Boolean         @default(true)
+  displayOrder     Int             @default(0)
 
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
 
   // relations
-  products     Product[]
+  products         Product[]
 
   @@index([slug])
   @@index([parentId])

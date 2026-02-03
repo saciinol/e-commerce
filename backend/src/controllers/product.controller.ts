@@ -9,7 +9,7 @@ import {
 	UpdateProductSchema,
 } from '../validators/product.validator.js';
 import { ProductService } from '../services/product.service.js';
-import { productImageService } from '../services/product.image.service.js';
+import { productImageService } from '../services/productImage.service.js';
 import { ValidationError } from '../utils/errors.js';
 import fs from 'fs';
 

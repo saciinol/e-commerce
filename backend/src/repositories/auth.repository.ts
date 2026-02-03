@@ -7,6 +7,9 @@ export class AuthRepository {
 			data: {
 				...data,
 				role: 'ADMIN',
+				cart: {
+					create: {},
+				},
 			},
 			select: {
 				id: true,
@@ -20,7 +23,12 @@ export class AuthRepository {
 
 	static register = (data: RegisterDto) => {
 		return prisma.user.create({
-			data,
+			data: {
+				...data,
+				cart: {
+					create: {},
+				},
+			},
 			select: {
 				id: true,
 				email: true,

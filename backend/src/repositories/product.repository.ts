@@ -51,7 +51,7 @@ export class ProductRepository {
 		return products.map((p) => mapToPublic(p));
 	};
 
-	static findProductByIdPublic = async (id: number): Promise<ProductPublic | null> => {
+	static findProductByIdPublic = async (id: number): Promise<ProductPublic> => {
 		const product = await prisma.product.findUnique({
 			where: { id },
 			select: {

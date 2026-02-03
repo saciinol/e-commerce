@@ -36,7 +36,7 @@ export interface ProductVariantAdmin extends ProductVariant {
 	stock: number;
 }
 
-interface CategorySummary {
+export interface CategorySummary {
 	id: number;
 	name: string;
 	slug: string;

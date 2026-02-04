@@ -14,6 +14,15 @@ interface MapCartProps {
 		price: Decimal;
 		createdAt: Date;
 		updatedAt: Date;
+		product: {
+			id: number;
+			name: string;
+			price: Decimal;
+		};
+		variant?: {
+			id: number;
+			name: string;
+		} | null;
 	}[];
 }
 
@@ -34,6 +43,15 @@ export function mapCart(c: MapCartProps | null): Cart {
 			price: item.price.toNumber(),
 			createdAt: item.createdAt,
 			updatedAt: item.updatedAt,
+			product: {
+				id: item.product.id,
+				name: item.product.name,
+				price: item.product.price.toNumber(),
+			},
+			variant: {
+				id: item.variant?.id ?? null,
+				name: item.variant?.name ?? null,
+			},
 		})),
 	};
 }

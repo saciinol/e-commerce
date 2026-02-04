@@ -7,6 +7,15 @@ export interface CartItem {
 	price: number;
 	createdAt: Date;
 	updatedAt: Date;
+	product: {
+		id: number;
+		name: string;
+		price: number;
+	};
+	variant?: {
+		id?: number | null;
+		name?: string | null;
+	} | null;
 }
 
 export interface Cart {

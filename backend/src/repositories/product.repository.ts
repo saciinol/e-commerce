@@ -404,8 +404,8 @@ export class ProductRepository {
 		return image;
 	};
 
-	static deleteProduct = (id: number): void => {
-		prisma.product.delete({
+	static deleteProduct = async (id: number): Promise<void> => {
+		await prisma.product.delete({
 			where: { id },
 		});
 	};

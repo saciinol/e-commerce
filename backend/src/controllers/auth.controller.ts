@@ -1,11 +1,6 @@
 import { Request, Response } from 'express';
 import { asyncHandler } from '../utils/asyncHandler.js';
-import {
-	LoginDto,
-	LoginSchema,
-	RegisterDto,
-	RegisterSchema,
-} from '../validators/auth.validator.js';
+import { LoginDto, LoginSchema, RegisterDto, RegisterSchema } from '../validators/auth.validator.js';
 import { AuthService } from '../services/auth.service.js';
 import { config } from '../config/environment.js';
 import { UnauthorizedError } from '../utils/errors.js';
@@ -128,11 +123,9 @@ export class AuthController {
 	});
 
 	static logoutAll = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-		if (!req.user) {
-			throw new UnauthorizedError('Authentication required');
-		}
+		const id = req.user!.id;
 
-		await TokenService.revokeAllUserTokens(req.user.id);
+		await TokenService.revokeAllUserTokens(id);
 		res.clearCookie('refreshToken');
 
 		res.json({
@@ -142,11 +135,9 @@ export class AuthController {
 	});
 
 	static getSessions = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-		if (!req.user) {
-			throw new UnauthorizedError('Authentication required');
-		}
+		const id = req.user!.id;
 
-		const sessions = await TokenService.getUserSessions(req.user.id);
+		const sessions = await TokenService.getUserSessions(id);
 
 		res.json({
 			success: true,

@@ -1,46 +1,49 @@
 import { Request, Response } from 'express';
-import { asyncHandler } from "../utils/asyncHandler.js";
-import { UnauthorizedError } from '../utils/errors.js';
+import { asyncHandler } from '../utils/asyncHandler.js';
 import { CartService } from '../services/cart.service.js';
-import { CreateCartItemSchema } from '../validators/cart.validator.js';
+import { CreateCartItemSchema, DeleteCartItemSchema, UpdateCartItemSchema } from '../validators/cart.validator.js';
 
 export class CartController {
-  static getCart = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-    if (!req.user) {
-      throw new UnauthorizedError('Authentication required');
-    }
+	static getCart = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+		const id = req.user!.id;
 
-    const id = req.user.id;
+		const cart = await CartService.getCart(id);
 
-    const cart = await CartService.getCart(id);
+		res.status(200).json({
+			success: true,
+			data: cart,
+		});
+	});
 
-    res.status(200).json({
-      success: true,
-      data: cart,
-    })
-  })
+	static addToCart = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+		const cartItemData = (req.validated as CreateCartItemSchema).body;
+		const userId = req.user!.id;
 
-  static addToCart = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-    if (!req.user) {
-      throw new UnauthorizedError('Authentication required');
-    }
+		const cartItem = await CartService.addToCart(userId, cartItemData);
 
-    const cartItemData = (req.validated as CreateCartItemSchema).body;
-    const userId = req.user.id;
+		res.status(201).json({
+			success: true,
+			data: cartItem,
+		});
+	});
 
-    const cartItem = await CartService.addToCart(userId, cartItemData);
+	static updateCartItem = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+		const { id } = (req.validated as UpdateCartItemSchema).params;
+		const updateData = (req.validated as UpdateCartItemSchema).body;
 
-    res.status(200).json({
-      success: true,
-      data: cartItem,
-    })
-  })
+		const cartItem = await CartService.updateCartItem(id, updateData);
 
-  static updateCartItem = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+		res.status(200).json({
+			success: true,
+			data: cartItem,
+		});
+	});
 
-  })
+	static deleteCartItem = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+		const { id } = (req.validated as DeleteCartItemSchema).params;
 
-  static deleteCartItem = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+		await CartService.deleteCartItem(id);
 
-  })
+		res.status(204).send();
+	});
 }

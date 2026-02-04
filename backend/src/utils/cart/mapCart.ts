@@ -1,6 +1,6 @@
-import { Cart } from '../types/cart.types.js';
+import { Cart } from '../../types/cart.types.js';
 import { Decimal } from '@prisma/client/runtime/library';
-import { NotFoundError } from './errors.js';
+import { NotFoundError } from '../errors.js';
 
 interface MapCartProps {
 	id: number;

@@ -6,7 +6,7 @@ import { AddressController } from '../controllers/address.controller.js';
 
 const router = Router();
 
-router.get('/', authenticate, AddressController.getAllAddress);
+router.get('/', authenticate, AddressController.getAll);
 router.post('/', authenticate, validate(createAddressSchema), AddressController.create);
 router.put('/:id', authenticate, validate(updateAddressSchema), AddressController.update);
 router.delete('/:id', authenticate, validate(deleteAddressSchema), AddressController.delete);

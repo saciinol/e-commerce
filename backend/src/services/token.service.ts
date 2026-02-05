@@ -3,7 +3,7 @@ import crypto from 'crypto';
 import { prisma } from '../prisma.js';
 import { logger } from '../utils/logger.js';
 import { config } from '../config/environment.js';
-import { refreshPayload, RefreshTokenData, TokenPair, TokenPayload } from '../types/token.types.js';
+import { RefreshTokenData, TokenPair, TokenPayload } from '../types/token.types.js';
 
 const ACCESS_TOKEN_EXPIRY = '15m';
 const MAX_REFRESH_TOKENS_PER_USER = 5;
@@ -14,7 +14,8 @@ export class TokenService {
 	}
 
 	static generateRefreshToken(): string {
-		return crypto.randomBytes(64).toString('hex');
+		const token = crypto.randomBytes(64).toString('hex');
+    return crypto.createHash('sha256').update(token).digest('hex');
 	}
 
 	// create and store refresh token in database
@@ -72,7 +73,7 @@ export class TokenService {
 		oldToken: string,
 		deviceInfo?: string,
 		ipAddress?: string,
-	): Promise<(TokenPair & refreshPayload) | null> {
+	): Promise<(TokenPair & TokenPayload) | null> {
 		const storedToken = await prisma.refreshToken.findUnique({
 			where: { token: oldToken },
 			include: { user: true },
@@ -118,7 +119,6 @@ export class TokenService {
 		const newTokenPair = await this.generateTokenPair(
 			{
 				userId: storedToken.user.id,
-				email: storedToken.user.email,
 				role: storedToken.user.role,
 			},
 			deviceInfo,
@@ -137,9 +137,6 @@ export class TokenService {
 		return {
 			...newTokenPair,
 			userId: storedToken.user.id,
-			email: storedToken.user.email,
-			firstName: storedToken.user.firstName,
-			lastName: storedToken.user.lastName,
 			role: storedToken.user.role,
 		};
 	}

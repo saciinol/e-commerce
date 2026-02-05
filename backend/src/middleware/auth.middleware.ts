@@ -23,9 +23,6 @@ export const authenticate = asyncHandler(async (req: Request, res: Response, nex
 			where: { id: decoded.userId },
 			select: {
 				id: true,
-				email: true,
-				firstName: true,
-				lastName: true,
 				role: true,
 			},
 		});
@@ -35,8 +32,7 @@ export const authenticate = asyncHandler(async (req: Request, res: Response, nex
 		}
 
 		req.user = {
-			id: user.id,
-			email: user.email,
+			id: decoded.userId,
 			role: decoded.role,
 		};
 
@@ -69,16 +65,12 @@ export const optionalAuth = asyncHandler(async (req: Request, res: Response, nex
 			where: { id: decoded.userId },
 			select: {
 				id: true,
-				email: true,
-				firstName: true,
-				lastName: true,
 			},
 		});
 
 		if (user) {
 			req.user = {
-				id: user.id,
-				email: user.email,
+				id: decoded.userId,
 				role: decoded.role,
 			};
 		}

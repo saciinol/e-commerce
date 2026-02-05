@@ -34,7 +34,6 @@ export class AuthService {
 		const tokens = await TokenService.generateTokenPair(
 			{
 				userId: user.id,
-				email: user.email,
 				role: user.role,
 			},
 			deviceInfo,
@@ -45,9 +44,6 @@ export class AuthService {
 			tokens,
 			user: {
 				id: user.id,
-				email: user.email,
-				firstName: user.firstName,
-				lastName: user.lastName,
 				role: user.role,
 			},
 		};
@@ -68,7 +64,6 @@ export class AuthService {
 		const tokens = await TokenService.generateTokenPair(
 			{
 				userId: user.id,
-				email: user.email,
 				role: user.role,
 			},
 			deviceInfo,
@@ -79,9 +74,6 @@ export class AuthService {
 			tokens,
 			user: {
 				id: user.id,
-				email: user.email,
-				firstName: user.firstName,
-				lastName: user.lastName,
 				role: user.role,
 			},
 		};

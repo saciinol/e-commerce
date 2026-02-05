@@ -12,17 +12,20 @@ npx prisma migrate dev --name init
 async function main() {
 	const hashed = await hash('123123123', 12);
 
-	const superadmin = await prisma.user.create({
+	await prisma.user.create({
 		data: {
 			email: 'superadmin@email.com',
 			password: hashed,
 			firstName: 'Super',
 			lastName: 'Admin',
 			role: Role.SUPER_ADMIN,
+      cart: {
+					create: {},
+				},
 		},
 	});
 
-	const admin = await prisma.user.create({
+	await prisma.user.create({
 		data: {
 			email: 'admin@email.com',
 			password: hashed,
@@ -30,6 +33,9 @@ async function main() {
 			lastName: 'User',
 			role: Role.ADMIN,
 			emailVerified: true,
+      cart: {
+					create: {},
+				},
 		},
 	});
 
@@ -39,6 +45,9 @@ async function main() {
 			password: hashed,
 			firstName: 'John',
 			lastName: 'Doe',
+      cart: {
+					create: {},
+				},
 		},
 	});
 

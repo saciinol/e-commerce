@@ -99,9 +99,6 @@ export class AuthController {
 				accessToken: tokens.accessToken,
 				user: {
 					id: tokens.userId,
-					email: tokens.email,
-					firstName: tokens.firstName,
-					lastName: tokens.lastName,
 					role: tokens.role,
 				},
 			},

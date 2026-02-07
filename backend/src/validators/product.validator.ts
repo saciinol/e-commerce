@@ -19,6 +19,7 @@ const productBodySchema = z.object({
 	lowStockThreshold: z.coerce.number().int().min(0).optional().default(10),
 	trackInventory: z.coerce.boolean().optional().default(true),
 
+
 	// status
 	isActive: z.coerce.boolean().optional().default(true),
 	isFeatured: z.coerce.boolean().optional().default(false),

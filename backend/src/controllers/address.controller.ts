@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
-import { asyncHandler } from "../utils/asyncHandler.js";
+import { asyncHandler } from '../utils/asyncHandler.js';
 import { AddressService } from '../services/address.service.js';
 import { CreateAddressSchema, DeleteAddressSchema, UpdateAddressSchema } from '../validators/address.validator.js';
 import { AddressRepository } from '../repositories/address.repository.js';
 
 export class AddressController {
-  	static getAll = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+	static getAll = asyncHandler(async (req: Request, res: Response): Promise<void> => {
 		const id = req.user!.id;
 
 		const address = await AddressService.getAll(id);
@@ -29,7 +29,7 @@ export class AddressController {
 	});
 
 	static update = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-    const { id } = (req.validated as UpdateAddressSchema).params;
+		const { id } = (req.validated as UpdateAddressSchema).params;
 		const updateData = (req.validated as UpdateAddressSchema).body;
 
 		const address = await AddressService.update(id, updateData);

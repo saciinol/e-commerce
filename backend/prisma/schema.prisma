@@ -162,6 +162,7 @@ model ProductVariant {
   // Variant options
   options           VariantOption[]
   cartItems         CartItem[]
+  orderItems        OrderItem[]
 
   @@index([productId])
   @@index([sku])

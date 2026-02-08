@@ -4,7 +4,7 @@ import { mapOrder } from '../utils/mapOrder.js';
 import { CreateOrderDto } from '../validators/order.validator.js';
 
 export class OrderRepository {
-	static createOrder = async (userId: number, data: CreateOrderDto): Promise<Order> => {
+	static createOrder = async (userId: number, data: CreateOrderDto & { orderNumber: string }): Promise<Order> => {
 		const { items, ...orderData } = data;
 
 		const order = await prisma.$transaction(async (tx) => {
@@ -12,7 +12,6 @@ export class OrderRepository {
 				data: {
 					...orderData,
 					userId,
-					orderNumber: 'ORD-2026-0003', // create function for generating orderNumber
 					items: {
 						create: items,
 					},

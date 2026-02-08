@@ -20,7 +20,7 @@ export interface OrderItem {
 
 export interface Order {
 	id: number;
-	orderNumber: number;
+	orderNumber: string;
 	userId: number;
 
 	// Pricing

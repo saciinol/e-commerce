@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { FulfillmentStatus, OrderStatus, PaymentStatus } from '@prisma/client';
 
-export const orderItemBodySchema = z.object({
+const orderItemBodySchema = z.object({
 	productId: z.coerce.number().int().positive('Invalid Product ID'),
 	variantId: z.coerce.number().int().positive('Invalid Variant ID').optional(),
 
@@ -19,7 +19,7 @@ export const createOrderSchema = z.object({
 		subtotal: z.coerce.number().positive('Subtotal must be greater than 0'),
 		tax: z.coerce.number().positive('Tax must be greater than 0'),
 		shippingCost: z.coerce.number().positive('Shipping Cost must be greater than 0'),
-		discount: z.coerce.number().positive().optional().default(0),
+		discount: z.coerce.number().min(0).positive().optional().default(0),
 		total: z.coerce.number().positive('Total must be greater than 0'),
 
 		// Status
@@ -65,4 +65,3 @@ export const createOrderSchema = z.object({
 
 export type CreateOrderDto = z.infer<typeof createOrderSchema>['body'];
 export type CreateOrderSchema = z.infer<typeof createOrderSchema>;
-export type OrderItemSchema = z.infer<typeof orderItemBodySchema>;

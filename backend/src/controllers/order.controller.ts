@@ -8,7 +8,7 @@ export class OrderController {
 		const userId = req.user!.id;
 		const orderData = (req.validated as CreateOrderSchema).body;
 
-		const order = OrderService.create(userId, orderData);
+		const order = await OrderService.create(userId, orderData);
 
 		res.status(201).json({
 			success: true,

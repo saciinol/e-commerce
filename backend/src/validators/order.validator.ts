@@ -15,26 +15,28 @@ const orderItemBodySchema = z.object({
 
 export const createOrderSchema = z.object({
 	body: z.object({
+		cartId: z.coerce.number().int().positive('Invalid Cart ID'),
+
 		// Pricing
-		subtotal: z.coerce.number().positive('Subtotal must be greater than 0'),
-		tax: z.coerce.number().positive('Tax must be greater than 0'),
-		shippingCost: z.coerce.number().positive('Shipping Cost must be greater than 0'),
-		discount: z.coerce.number().min(0).positive().optional().default(0),
-		total: z.coerce.number().positive('Total must be greater than 0'),
+		// subtotal: z.coerce.number().positive('Subtotal must be greater than 0'),
+		// tax: z.coerce.number().positive('Tax must be greater than 0'),
+		// shippingCost: z.coerce.number().positive('Shipping Cost must be greater than 0'),
+		// discount: z.coerce.number().min(0).positive().optional().default(0),
+		// total: z.coerce.number().positive('Total must be greater than 0'),
 
 		// Status
-		status: z
-			.enum(Object.values(OrderStatus) as [OrderStatus, ...OrderStatus[]])
-			.optional()
-			.default(OrderStatus.PENDING),
-		paymentStatus: z
-			.enum(Object.values(PaymentStatus) as [PaymentStatus, ...PaymentStatus[]])
-			.optional()
-			.default(PaymentStatus.PENDING),
-		fulfillmentStatus: z
-			.enum(Object.values(FulfillmentStatus) as [FulfillmentStatus, ...FulfillmentStatus[]])
-			.optional()
-			.default(FulfillmentStatus.UNFULFILLED),
+		// status: z
+		// 	.enum(Object.values(OrderStatus) as [OrderStatus, ...OrderStatus[]])
+		// 	.optional()
+		// 	.default(OrderStatus.PENDING),
+		// paymentStatus: z
+		// 	.enum(Object.values(PaymentStatus) as [PaymentStatus, ...PaymentStatus[]])
+		// 	.optional()
+		// 	.default(PaymentStatus.PENDING),
+		// fulfillmentStatus: z
+		// 	.enum(Object.values(FulfillmentStatus) as [FulfillmentStatus, ...FulfillmentStatus[]])
+		// 	.optional()
+		// 	.default(FulfillmentStatus.UNFULFILLED),
 
 		// Payment
 		paymentMethod: z.string().trim().min(1).max(255),
@@ -43,23 +45,23 @@ export const createOrderSchema = z.object({
 		// // Shipping
 		shippingAddressId: z.coerce.number().int().positive('Invalid Shipping Address ID'),
 		billingAddressId: z.coerce.number().int().positive('Invalid Billing Address ID'),
-		trackingNumber: z.string().trim().min(1).max(255).optional(),
+		// trackingNumber: z.string().trim().min(1).max(255).optional(),
 
 		// // Coupon
 		couponCode: z.string().trim().min(1).max(255).optional(),
 
 		// // Notes
 		customerNote: z.string().trim().min(1).max(255).optional(),
-		adminNote: z.string().trim().min(1).max(255).optional(),
+		// adminNote: z.string().trim().min(1).max(255).optional(),
 
 		// // Timestamps
-		paidAt: z.iso.datetime().optional(),
-		shippedAt: z.iso.datetime().optional(),
-		deliveredAt: z.iso.datetime().optional(),
-		cancelledAt: z.iso.datetime().optional(),
+		// paidAt: z.iso.datetime().optional(),
+		// shippedAt: z.iso.datetime().optional(),
+		// deliveredAt: z.iso.datetime().optional(),
+		// cancelledAt: z.iso.datetime().optional(),
 
 		// // Relations
-		items: z.array(orderItemBodySchema).min(1, 'At least one product is required'),
+		// items: z.array(orderItemBodySchema).min(1, 'At least one product is required'),
 	}),
 });
 

@@ -5,35 +5,38 @@ import { mapCartItem } from '../utils/cart/mapCartItem.js';
 import { CreateCartItemDto, UpdateCartItemDto } from '../validators/cart.validator.js';
 
 export class CartRepository {
-	static findByCartItemId = async (id: number): Promise<CartItem> => {
-		const cartItem = await prisma.cartItem.findUnique({
+	static findByCartId = async (id: number): Promise<Cart> => {
+		const cart = await prisma.cart.findUnique({
 			where: { id },
 			include: {
-				product: {
-					select: {
-						id: true,
-						name: true,
-						price: true,
-					},
-				},
-				variant: {
-					select: {
-						id: true,
-						name: true,
+				items: {
+					include: {
+						product: {
+							select: {
+								id: true,
+								name: true,
+								price: true,
+                sku: true,
+							},
+						},
+						variant: {
+							select: {
+								id: true,
+								name: true,
+							},
+						},
 					},
 				},
 			},
 		});
 
-		return mapCartItem(cartItem);
+		return mapCart(cart);
 	};
 
 	static findByUserId = async (id: number): Promise<Cart> => {
 		const cart = await prisma.cart.findUnique({
 			where: { userId: id },
-			select: {
-				id: true,
-				userId: true,
+			include: {
 				items: {
 					include: {
 						product: {
@@ -55,6 +58,29 @@ export class CartRepository {
 		});
 
 		return mapCart(cart);
+	};
+
+	static findByCartItemId = async (id: number): Promise<CartItem> => {
+		const cartItem = await prisma.cartItem.findUnique({
+			where: { id },
+			include: {
+				product: {
+					select: {
+						id: true,
+						name: true,
+						price: true,
+					},
+				},
+				variant: {
+					select: {
+						id: true,
+						name: true,
+					},
+				},
+			},
+		});
+
+		return mapCartItem(cartItem);
 	};
 
 	static addToCart = async (data: CreateCartItemDto, cartId: number): Promise<CartItem> => {

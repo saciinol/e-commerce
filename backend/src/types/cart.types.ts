@@ -11,6 +11,8 @@ export interface CartItem {
 		id: number;
 		name: string;
 		price: number;
+    url: string;
+    sku: string;
 	};
 	variant?: {
 		id?: number | null;
@@ -22,4 +24,6 @@ export interface Cart {
 	id: number;
 	userId: number;
 	items: CartItem[];
+  createdAt: Date;
+	updatedAt: Date;
 }

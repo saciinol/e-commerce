@@ -1,5 +1,6 @@
-import { FulfillmentStatus, Order, OrderStatus, PaymentStatus } from '../types/order.types.js';
-import { NotFoundError } from './errors.js';
+import { FulfillmentStatus, OrderStatus, PaymentStatus } from '@prisma/client';
+import { Order } from '../../types/order.types.js';
+import { NotFoundError } from '../errors.js';
 import { Decimal } from '@prisma/client/runtime/library';
 
 interface MapOrderProps {

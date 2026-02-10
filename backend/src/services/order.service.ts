@@ -8,6 +8,26 @@ import { createOrderNumber } from '../utils/orderNumber.js';
 import { CreateOrderDto } from '../validators/order.validator.js';
 
 export class OrderService {
+	static getAll = async (userId: number): Promise<Order[]> => {
+		const orders = await OrderRepository.findOrdersByUserId(userId);
+
+		if (!orders) {
+			throw new NotFoundError('No order found');
+		}
+
+		return orders;
+	};
+
+	static get = async (id: number): Promise<Order> => {
+		const order = await OrderRepository.findByOrderId(id);
+
+		if (!order) {
+			throw new NotFoundError('No order found');
+		}
+
+		return order;
+	};
+
 	static create = async (userId: number, orderData: CreateOrderDto): Promise<Order> => {
 		const { cartId, ...newOrderData } = orderData;
 		const cart = await CartRepository.findByCartId(cartId);

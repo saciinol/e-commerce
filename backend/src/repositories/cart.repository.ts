@@ -70,6 +70,7 @@ export class CartRepository {
 						id: true,
 						name: true,
 						price: true,
+            sku: true,
 					},
 				},
 				variant: {
@@ -93,6 +94,7 @@ export class CartRepository {
 						id: true,
 						name: true,
 						price: true,
+            sku: true,
 					},
 				},
 				variant: {
@@ -117,6 +119,7 @@ export class CartRepository {
 						id: true,
 						name: true,
 						price: true,
+            sku: true,
 					},
 				},
 				variant: {

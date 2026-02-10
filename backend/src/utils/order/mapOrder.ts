@@ -61,7 +61,7 @@ interface MapOrderProps {
 
 export function mapOrder(o: MapOrderProps | null): Order {
 	if (!o) {
-		throw new NotFoundError(`Cart not found`);
+		throw new NotFoundError(`Order not found`);
 	}
 
 	return {
@@ -101,7 +101,7 @@ export function mapOrder(o: MapOrderProps | null): Order {
 		paidAt: o.paidAt ?? null,
 		shippedAt: o.shippedAt ?? null,
 		deliveredAt: o.deliveredAt ?? null,
-		cancelledAt: o.createdAt ?? null,
+		cancelledAt: o.cancelledAt ?? null,
 
 		createdAt: o.createdAt,
 		updatedAt: o.updatedAt,

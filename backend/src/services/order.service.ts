@@ -11,10 +11,6 @@ export class OrderService {
 	static getAll = async (userId: number): Promise<Order[]> => {
 		const orders = await OrderRepository.findOrdersByUserId(userId);
 
-		if (!orders) {
-			throw new NotFoundError('No order found');
-		}
-
 		return orders;
 	};
 
@@ -52,7 +48,7 @@ export class OrderService {
 		});
 
 		// pricing
-		const subtotal = oldItems.map((item) => item.price).reduce((acc, curr) => acc + curr);
+		const subtotal = oldItems.map((item) => item.price).reduce((acc, curr) => acc + curr, 0);
 		const tax = 83.0;
 		const shippingCost = 150.0;
 		const discount = 0.0;
@@ -65,13 +61,13 @@ export class OrderService {
 
 		const trackingNumber = `TRN-${crypto.randomBytes(6).toString('hex').toUpperCase()}`;
 
-		const paidAt = new Date();
-		const shippedAt = new Date();
-		const deliveredAt = new Date();
-		const cancelledAt = new Date();
+		// const paidAt = null
+		// const shippedAt = null
+		// const deliveredAt = null
+		// const cancelledAt = null
 
 		const order = await createOrderNumber((orderNumber) =>
-			OrderRepository.createOrder(userId, {
+			OrderRepository.createOrder(cartId, userId, {
 				...newOrderData,
 				orderNumber,
 				subtotal,
@@ -83,10 +79,6 @@ export class OrderService {
 				paymentStatus,
 				fulfillmentStatus,
 				trackingNumber,
-				paidAt,
-				shippedAt,
-				deliveredAt,
-				cancelledAt,
 				items,
 			}),
 		);

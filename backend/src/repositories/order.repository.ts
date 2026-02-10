@@ -4,6 +4,7 @@ import { Order } from '../types/order.types.js';
 import { mapOrder } from '../utils/order/mapOrder.js';
 import { CreateOrderDto } from '../validators/order.validator.js';
 import { mapAllOrders } from '../utils/order/mapAllOrders.js';
+import { ProductRepository } from './product.repository.js';
 
 type Data = Omit<CreateOrderDto, 'cartId'> & {
 	orderNumber: string;
@@ -61,11 +62,29 @@ export class OrderRepository {
 		return mapOrder(order);
 	};
 
-	static createOrder = async (userId: number, data: Data): Promise<Order> => {
+	static createOrder = async (cartId: number, userId: number, data: Data): Promise<Order> => {
 		const { items, ...orderData } = data;
 
+		items.forEach(async (item) => {
+			const { stock } = await ProductRepository.findProductByIdAdmin(item.productId);
+
+			if (item.quantity > stock) {
+
+			}
+
+			if (item.variantId) {
+				const variant = await prisma.productVariant.findUnique({
+					where: { id: item.variantId },
+				});
+
+        if (variant && item.quantity > variant.stock) {
+          
+        }
+			}
+		});
+
 		const order = await prisma.$transaction(async (tx) => {
-			return await tx.order.create({
+			const o = await tx.order.create({
 				data: {
 					...orderData,
 					userId,
@@ -77,6 +96,34 @@ export class OrderRepository {
 					items: true,
 				},
 			});
+
+			items.forEach(async (item) => {
+				await tx.product.update({
+					where: { id: item.productId },
+					data: {
+						stock: {
+							decrement: item.quantity,
+						},
+					},
+				});
+
+				if (item.variantId) {
+					await tx.productVariant.update({
+						where: { id: item.variantId },
+						data: {
+							stock: {
+								decrement: item.quantity,
+							},
+						},
+					});
+				}
+			});
+
+			await tx.cartItem.deleteMany({
+				where: { cartId },
+			});
+
+			return o;
 		});
 
 		return mapOrder(order);

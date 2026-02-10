@@ -16,7 +16,7 @@ export class OrderService {
 			throw new NotFoundError('No cart found');
 		}
 
-		const { items: oldItems, ...cartData } = cart;
+		const { items: oldItems } = cart;
 		const items = oldItems.map((item) => {
 			return {
 				productId: item.productId,
@@ -43,7 +43,7 @@ export class OrderService {
 		const paymentStatus = PaymentStatus.PENDING;
 		const fulfillmentStatus = FulfillmentStatus.UNFULFILLED;
 
-		const trackingNumber = `#${crypto.randomBytes(6).toString('hex').toUpperCase()}`;
+		const trackingNumber = `TRN-${crypto.randomBytes(6).toString('hex').toUpperCase()}`;
 
 		const paidAt = new Date();
 		const shippedAt = new Date();
@@ -52,7 +52,7 @@ export class OrderService {
 
 		const order = await createOrderNumber((orderNumber) =>
 			OrderRepository.createOrder(userId, {
-				...orderData,
+				...newOrderData,
 				orderNumber,
 				subtotal,
 				tax,

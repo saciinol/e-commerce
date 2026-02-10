@@ -4,7 +4,7 @@ import { Order } from '../types/order.types.js';
 import { mapOrder } from '../utils/mapOrder.js';
 import { CreateOrderDto } from '../validators/order.validator.js';
 
-type Data = CreateOrderDto & {
+type Data = Omit<CreateOrderDto, 'cartId'> & {
 	orderNumber: string;
 
 	subtotal: number;

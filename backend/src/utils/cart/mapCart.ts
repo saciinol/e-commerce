@@ -18,12 +18,15 @@ interface MapCartProps {
 			id: number;
 			name: string;
 			price: Decimal;
+			sku: string;
 		};
 		variant?: {
 			id: number;
 			name: string;
 		} | null;
 	}[];
+	createdAt: Date;
+	updatedAt: Date;
 }
 
 export function mapCart(c: MapCartProps | null): Cart {
@@ -47,11 +50,14 @@ export function mapCart(c: MapCartProps | null): Cart {
 				id: item.product.id,
 				name: item.product.name,
 				price: item.product.price.toNumber(),
+				sku: item.product.sku,
 			},
 			variant: {
 				id: item.variant?.id ?? null,
 				name: item.variant?.name ?? null,
 			},
 		})),
+		createdAt: c.createdAt,
+		updatedAt: c.updatedAt,
 	};
 }

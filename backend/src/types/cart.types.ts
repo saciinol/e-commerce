@@ -11,7 +11,6 @@ export interface CartItem {
 		id: number;
 		name: string;
 		price: number;
-    url: string;
     sku: string;
 	};
 	variant?: {

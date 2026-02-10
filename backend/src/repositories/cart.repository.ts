@@ -16,7 +16,7 @@ export class CartRepository {
 								id: true,
 								name: true,
 								price: true,
-                sku: true,
+								sku: true,
 							},
 						},
 						variant: {
@@ -33,9 +33,9 @@ export class CartRepository {
 		return mapCart(cart);
 	};
 
-	static findByUserId = async (id: number): Promise<Cart> => {
+	static findByUserId = async (userId: number): Promise<Cart> => {
 		const cart = await prisma.cart.findUnique({
-			where: { userId: id },
+			where: { userId },
 			include: {
 				items: {
 					include: {
@@ -44,6 +44,7 @@ export class CartRepository {
 								id: true,
 								name: true,
 								price: true,
+                sku: true,
 							},
 						},
 						variant: {

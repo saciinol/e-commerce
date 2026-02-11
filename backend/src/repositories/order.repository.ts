@@ -4,7 +4,7 @@ import { Order } from '../types/order.types.js';
 import { mapOrder } from '../utils/order/mapOrder.js';
 import { CreateOrderDto } from '../validators/order.validator.js';
 import { mapAllOrders } from '../utils/order/mapAllOrders.js';
-import { ProductRepository } from './product.repository.js';
+import { AppError } from '../utils/errors.js';
 
 type Data = Omit<CreateOrderDto, 'cartId'> & {
 	orderNumber: string;
@@ -19,7 +19,7 @@ type Data = Omit<CreateOrderDto, 'cartId'> & {
 	paymentStatus: PaymentStatus;
 	fulfillmentStatus: FulfillmentStatus;
 
-	trackingNumber: string;
+	trackingNumber?: string | null;
 
 	paidAt?: Date | null;
 	shippedAt?: Date | null;
@@ -65,26 +65,44 @@ export class OrderRepository {
 	static createOrder = async (cartId: number, userId: number, data: Data): Promise<Order> => {
 		const { items, ...orderData } = data;
 
-		items.forEach(async (item) => {
-			const { stock } = await ProductRepository.findProductByIdAdmin(item.productId);
-
-			if (item.quantity > stock) {
-
-			}
-
-			if (item.variantId) {
-				const variant = await prisma.productVariant.findUnique({
-					where: { id: item.variantId },
-				});
-
-        if (variant && item.quantity > variant.stock) {
-          
-        }
-			}
-		});
+		if (!items || items.length === 0) {
+			throw new AppError(400, 'No items provided');
+		}
 
 		const order = await prisma.$transaction(async (tx) => {
-			const o = await tx.order.create({
+			for (const item of items) {
+				if (item.variantId) {
+					const res = await tx.productVariant.updateMany({
+						where: {
+							id: item.variantId,
+							stock: { gte: item.quantity },
+						},
+						data: {
+							stock: { decrement: item.quantity },
+						},
+					});
+
+					if (res.count === 0) {
+						throw new AppError(400, `Not enough stock for variant ${item.variantId}`);
+					}
+				} else {
+					const res = await tx.product.updateMany({
+						where: {
+							id: item.productId,
+							stock: { gte: item.quantity },
+						},
+						data: {
+							stock: { decrement: item.quantity },
+						},
+					});
+
+					if (res.count === 0) {
+						throw new AppError(400, `Not enough stock for product ${item.productId}`);
+					}
+				}
+			}
+
+			const created = await tx.order.create({
 				data: {
 					...orderData,
 					userId,
@@ -92,38 +110,14 @@ export class OrderRepository {
 						create: items,
 					},
 				},
-				include: {
-					items: true,
-				},
+				include: { items: true },
 			});
 
-			items.forEach(async (item) => {
-				await tx.product.update({
-					where: { id: item.productId },
-					data: {
-						stock: {
-							decrement: item.quantity,
-						},
-					},
-				});
+			if (cartId) {
+				await tx.cartItem.deleteMany({ where: { cartId } });
+			}
 
-				if (item.variantId) {
-					await tx.productVariant.update({
-						where: { id: item.variantId },
-						data: {
-							stock: {
-								decrement: item.quantity,
-							},
-						},
-					});
-				}
-			});
-
-			await tx.cartItem.deleteMany({
-				where: { cartId },
-			});
-
-			return o;
+			return created;
 		});
 
 		return mapOrder(order);

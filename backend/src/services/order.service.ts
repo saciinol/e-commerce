@@ -1,9 +1,8 @@
 import { FulfillmentStatus, OrderStatus, PaymentStatus } from '@prisma/client';
-import crypto from 'crypto';
 import { CartRepository } from '../repositories/cart.repository.js';
 import { OrderRepository } from '../repositories/order.repository.js';
 import { Order } from '../types/order.types.js';
-import { NotFoundError } from '../utils/errors.js';
+import { ForbiddenError, NotFoundError } from '../utils/errors.js';
 import { createOrderNumber } from '../utils/orderNumber.js';
 import { CreateOrderDto } from '../validators/order.validator.js';
 
@@ -32,20 +31,23 @@ export class OrderService {
 			throw new NotFoundError('No cart found');
 		}
 
-		const { items: oldItems } = cart;
-		const items = oldItems.map((item) => {
-			return {
-				productId: item.productId,
-				variantId: item.variantId ?? null,
-				quantity: item.quantity,
-				price: item.price,
+		if (cart.userId !== userId) {
+			throw new ForbiddenError('Cart not owned by user');
+		}
 
-				// Snapshot of product details at time of order
-				productName: item.product.name,
-				// productImageUrl: item.product.url ?? null,
-				productSku: item.product.sku,
-			};
-		});
+		const { items: oldItems } = cart;
+
+		const items = oldItems.map((item) => ({
+			productId: item.productId,
+			variantId: item.variantId ?? null,
+			quantity: item.quantity,
+			price: item.price,
+
+			// Snapshot of product details at time of order
+			productName: item.product.name,
+			// productImageUrl: item.product.url ?? null,
+			productSku: item.product.sku,
+		}));
 
 		// pricing
 		const subtotal = oldItems.map((item) => item.price).reduce((acc, curr) => acc + curr, 0);
@@ -59,12 +61,13 @@ export class OrderService {
 		const paymentStatus = PaymentStatus.PENDING;
 		const fulfillmentStatus = FulfillmentStatus.UNFULFILLED;
 
-		const trackingNumber = `TRN-${crypto.randomBytes(6).toString('hex').toUpperCase()}`;
+		const trackingNumber = null; // only set when shipping created
+    // `TRN-${crypto.randomBytes(6).toString('hex').toUpperCase()}`
 
-		// const paidAt = null
-		// const shippedAt = null
-		// const deliveredAt = null
-		// const cancelledAt = null
+		const paidAt = null
+		const shippedAt = null
+		const deliveredAt = null
+		const cancelledAt = null
 
 		const order = await createOrderNumber((orderNumber) =>
 			OrderRepository.createOrder(cartId, userId, {
@@ -80,6 +83,10 @@ export class OrderService {
 				fulfillmentStatus,
 				trackingNumber,
 				items,
+        paidAt,
+        shippedAt,
+        deliveredAt,
+        cancelledAt
 			}),
 		);
 

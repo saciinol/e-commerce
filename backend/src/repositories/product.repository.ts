@@ -9,6 +9,7 @@ import {
 	CreateProductVariantsDto,
 	UpdateProductDto,
 } from '../validators/product.validator.js';
+import { mapVariant } from '../utils/product/mapVariant.js';
 
 export class ProductRepository {
 	static findManyPublic = async (options: { skip: number; take: number }): Promise<ProductPublic[]> => {
@@ -313,6 +314,24 @@ export class ProductRepository {
 		);
 
 		return mapVariants(productVariantsAndOptions);
+	};
+
+	static findProductVariantById = async (id: number): Promise<ProductVariant> => {
+		const variant = await prisma.productVariant.findUnique({
+			where: { id },
+			select: {
+				id: true,
+				productId: true,
+				name: true,
+				sku: true,
+				price: true,
+				stock: true,
+				isActive: true,
+				options: true,
+			},
+		});
+
+		return mapVariant(variant);
 	};
 
 	static updateProduct = async (data: UpdateProductDto, id: number): Promise<Partial<ProductAdmin>> => {

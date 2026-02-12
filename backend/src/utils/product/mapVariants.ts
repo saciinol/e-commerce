@@ -7,7 +7,9 @@ interface MapVariantsProps {
 	id: number;
 	productId?: number;
 	name: string;
+  sku: string;
 	price?: Decimal | null;
+  stock: number;
 	isActive: boolean;
 	options: VariantOption[];
 }
@@ -22,7 +24,9 @@ export function mapVariants(p: MapVariantsProps[]): ProductVariant[] {
 			id: variant.id,
 			productId: variant.productId,
 			name: variant.name,
+      sku: variant.sku,
 			price: variant.price?.toNumber() ?? null,
+      stock: variant.stock,
 			isActive: variant.isActive,
 			options: (variant.options ?? null).map((opt) => ({
 				id: opt.id,

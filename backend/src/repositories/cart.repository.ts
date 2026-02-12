@@ -85,7 +85,7 @@ export class CartRepository {
 		return mapCartItem(cartItem);
 	};
 
-	static addToCart = async (data: CreateCartItemDto, cartId: number): Promise<CartItem> => {
+	static addToCart = async (data: CreateCartItemDto & { price: number }, cartId: number): Promise<CartItem> => {
 		const cartItem = await prisma.cartItem.create({
 			data: { ...data, cartId },
 			include: {

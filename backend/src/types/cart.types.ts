@@ -16,6 +16,8 @@ export interface CartItem {
 	variant?: {
 		id?: number | null;
 		name?: string | null;
+    price?: number | null;
+    sku?: string | null;
 	} | null;
 }
 

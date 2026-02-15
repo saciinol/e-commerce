@@ -3,7 +3,6 @@ import { prisma } from '../prisma.js';
 import { Order } from '../types/order.types.js';
 import { mapOrder } from '../utils/order/mapOrder.js';
 import { CreateOrderDto } from '../validators/order.validator.js';
-import { mapAllOrders } from '../utils/order/mapAllOrders.js';
 import { AppError } from '../utils/errors.js';
 
 type Data = Omit<CreateOrderDto, 'cartId'> & {
@@ -41,14 +40,14 @@ type Data = Omit<CreateOrderDto, 'cartId'> & {
 
 export class OrderRepository {
 	static findOrdersByUserId = async (userId: number): Promise<Order[]> => {
-		const order = await prisma.order.findMany({
+		const orders = await prisma.order.findMany({
 			where: { userId },
 			include: {
 				items: true,
 			},
 		});
 
-		return mapAllOrders(order);
+		return orders.map((o) => mapOrder(o));
 	};
 
 	static findByOrderId = async (id: number): Promise<Order> => {

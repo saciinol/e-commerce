@@ -1,31 +1,84 @@
-import { ProductAdmin, VariantOption } from '../../types/product.types.js';
-import { Decimal } from '@prisma/client/runtime/library';
+import { ProductAdmin } from '../../types/product.types.js';
 import { NotFoundError } from '../errors.js';
-import { MapToPublicProps } from './mapToPublic.js';
+import { Prisma } from '@prisma/client';
 
-interface MapToAdminProps extends MapToPublicProps {
-	sku: string;
-	cost: Decimal | null;
-	stock: number;
-	lowStockThreshold: number;
-	trackInventory: boolean;
-	isActive: boolean;
-	variants: {
-		id: number;
-		sku: string;
-		name: string;
-		price: Decimal | null;
-		stock: number;
-		isActive: boolean;
-		options: VariantOption[];
-	}[];
-	metaTitle: string | null;
-	metaDescription: string | null;
-	viewCount: number;
-	salesCount: number;
-	createdAt: Date;
-	updatedAt: Date;
-}
+type MapToAdminProps = Prisma.ProductGetPayload<{
+	select: {
+		id: true;
+		name: true;
+		slug: true;
+		sku: true;
+
+		price: true;
+		comparePrice: true;
+		cost: true;
+
+		shortDescription: true;
+
+		stock: true;
+		lowStockThreshold: true;
+		trackInventory: true;
+
+		isActive: true;
+		isFeatured: true;
+
+		images: true;
+		attributes: true;
+		variants: {
+			select: {
+				id: true;
+				productId: true;
+				name: true;
+				sku: true;
+				price: true;
+				stock: true;
+				isActive: true;
+				options: true;
+			};
+		};
+		metaTitle: true;
+		metaDescription: true;
+
+		viewCount: true;
+		salesCount: true;
+		averageRating: true;
+
+		category: {
+			select: {
+				id: true;
+				name: true;
+				slug: true;
+			};
+		};
+
+		createdAt: true;
+		updatedAt: true;
+	};
+}>;
+
+// interface MapToAdminProps extends MapToPublicProps {
+// 	sku: string;
+// 	cost: Decimal | null;
+// 	stock: number;
+// 	lowStockThreshold: number;
+// 	trackInventory: boolean;
+// 	isActive: boolean;
+// 	variants: {
+// 		id: number;
+// 		sku: string;
+// 		name: string;
+// 		price: Decimal | null;
+// 		stock: number;
+// 		isActive: boolean;
+// 		options: VariantOption[];
+// 	}[];
+// 	metaTitle: string | null;
+// 	metaDescription: string | null;
+// 	viewCount: number;
+// 	salesCount: number;
+// 	createdAt: Date;
+// 	updatedAt: Date;
+// }
 
 export function mapToAdmin(p: MapToAdminProps | null): ProductAdmin {
 	if (!p) {

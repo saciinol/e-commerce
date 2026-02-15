@@ -1,63 +1,10 @@
-import { FulfillmentStatus, OrderStatus, PaymentStatus } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { Order } from '../../types/order.types.js';
 import { NotFoundError } from '../errors.js';
-import { Decimal } from '@prisma/client/runtime/library';
 
-interface MapOrderProps {
-	id: number;
-	orderNumber: string;
-	userId: number;
-
-	// Pricing
-	subtotal: Decimal;
-	tax: Decimal;
-	shippingCost: Decimal;
-	discount: Decimal;
-	total: Decimal;
-
-	// Status
-	status: OrderStatus;
-	paymentStatus: PaymentStatus;
-	fulfillmentStatus: FulfillmentStatus;
-
-	// Payment
-	paymentMethod: string;
-	paymentIntentId?: string | null;
-
-	// Shipping
-	shippingAddressId: number;
-	billingAddressId: number;
-	trackingNumber?: string | null;
-
-	// Coupon
-	couponCode?: string | null;
-
-	// Notes
-	customerNote?: string | null;
-	adminNote?: string | null;
-
-	// Timestamps
-	paidAt?: Date | null;
-	shippedAt?: Date | null;
-	deliveredAt?: Date | null;
-	cancelledAt?: Date | null;
-
-	createdAt: Date;
-	updatedAt: Date;
-
-	items: {
-		id: number;
-		orderId: number;
-		productId: number;
-		variantId?: number | null;
-		quantity: number;
-		price: Decimal;
-
-		productName: string;
-		productImageUrl?: string | null;
-		productSku: string;
-	}[];
-}
+type MapOrderProps = Prisma.OrderGetPayload<{
+  include: { items: true }
+}>
 
 export function mapOrder(o: MapOrderProps | null): Order {
 	if (!o) {

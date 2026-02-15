@@ -23,6 +23,8 @@ export class CartRepository {
 							select: {
 								id: true,
 								name: true,
+								price: true,
+								sku: true,
 							},
 						},
 					},
@@ -51,6 +53,8 @@ export class CartRepository {
 							select: {
 								id: true,
 								name: true,
+								price: true,
+								sku: true,
 							},
 						},
 					},
@@ -77,6 +81,8 @@ export class CartRepository {
 					select: {
 						id: true,
 						name: true,
+						price: true,
+						sku: true,
 					},
 				},
 			},
@@ -101,6 +107,8 @@ export class CartRepository {
 					select: {
 						id: true,
 						name: true,
+						price: true,
+						sku: true,
 					},
 				},
 			},
@@ -126,6 +134,8 @@ export class CartRepository {
 					select: {
 						id: true,
 						name: true,
+						price: true,
+						sku: true,
 					},
 				},
 			},

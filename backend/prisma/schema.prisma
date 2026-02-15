@@ -311,7 +311,6 @@ model OrderItem {
   @@index([productId])
 }
 
-
 model RefreshToken {
   id         Int      @id @default(autoincrement())
   token      String   @unique

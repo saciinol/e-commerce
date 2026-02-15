@@ -26,9 +26,7 @@ export interface ProductVariant {
 	id: number;
 	productId?: number;
 	name: string;
-  sku: string;
 	price?: number | null;
-  stock: number;
 	isActive: boolean;
 	options: VariantOption[];
 }

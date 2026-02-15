@@ -1,15 +1,14 @@
 import { prisma } from '../prisma.js';
 import { ProductAdmin, ProductAttribute, ProductImage, ProductPublic, ProductVariant } from '../types/product.types.js';
-import { mapVariants } from '../utils/product/mapVariants.js';
 import { mapToAdmin } from '../utils/product/mapToAdmin.js';
 import { mapToPublic } from '../utils/product/mapToPublic.js';
+import { mapVariant } from '../utils/product/mapVariant.js';
 import {
 	CreateProductAttributesDto,
 	CreateProductDto,
 	CreateProductVariantsDto,
 	UpdateProductDto,
 } from '../validators/product.validator.js';
-import { mapVariant } from '../utils/product/mapVariant.js';
 
 export class ProductRepository {
 	static findManyPublic = async (options: { skip: number; take: number }): Promise<ProductPublic[]> => {
@@ -313,7 +312,7 @@ export class ProductRepository {
 			),
 		);
 
-		return mapVariants(productVariantsAndOptions);
+		return productVariantsAndOptions.map((v) => mapVariant(v));
 	};
 
 	static findProductVariantById = async (id: number): Promise<ProductVariant> => {

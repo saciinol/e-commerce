@@ -1,33 +1,31 @@
 import { Cart } from '../../types/cart.types.js';
-import { Decimal } from '@prisma/client/runtime/library';
 import { NotFoundError } from '../errors.js';
+import { Prisma } from '@prisma/client';
 
-interface MapCartProps {
-	id: number;
-	userId: number;
-	items: {
-		id: number;
-		cartId: number;
-		productId: number;
-		variantId?: number | null;
-		quantity: number;
-		price: Decimal;
-		createdAt: Date;
-		updatedAt: Date;
-		product: {
-			id: number;
-			name: string;
-			price: Decimal;
-			sku: string;
+type MapCartProps = Prisma.CartGetPayload<{
+	include: {
+		items: {
+			include: {
+				product: {
+					select: {
+						id: true;
+						name: true;
+						price: true;
+						sku: true;
+					};
+				};
+				variant: {
+					select: {
+						id: true;
+						name: true;
+						price: true;
+						sku: true;
+					};
+				};
+			};
 		};
-		variant?: {
-			id: number;
-			name: string;
-		} | null;
-	}[];
-	createdAt: Date;
-	updatedAt: Date;
-}
+	};
+}>;
 
 export function mapCart(c: MapCartProps | null): Cart {
 	if (!c) {
@@ -55,6 +53,8 @@ export function mapCart(c: MapCartProps | null): Cart {
 			variant: {
 				id: item.variant?.id ?? null,
 				name: item.variant?.name ?? null,
+				price: item.variant?.price?.toNumber() ?? null,
+				sku: item.variant?.sku,
 			},
 		})),
 		createdAt: c.createdAt,

@@ -1,20 +1,21 @@
-import { VariantOption } from '@prisma/client';
-import { ProductVariant } from '../../types/product.types.js';
-import { Decimal } from '@prisma/client/runtime/library';
+import { Prisma } from '@prisma/client';
+import { ProductVariantAdmin } from '../../types/product.types.js';
 import { NotFoundError } from '../errors.js';
 
-interface MapVariantProps {
-	id: number;
-	productId?: number;
-	name: string;
-	sku: string;
-	price?: Decimal | null;
-	stock: number;
-	isActive: boolean;
-	options: VariantOption[];
-}
+type MapVariantProps = Prisma.ProductVariantGetPayload<{
+	select: {
+		id: true;
+		productId: true;
+		name: true;
+		sku: true;
+		price: true;
+		stock: true;
+		isActive: true;
+		options: true;
+	};
+}>;
 
-export function mapVariant(p: MapVariantProps | null): ProductVariant {
+export function mapVariant(p: MapVariantProps | null): ProductVariantAdmin {
 	if (!p) {
 		throw new NotFoundError(`Product not found`);
 	}

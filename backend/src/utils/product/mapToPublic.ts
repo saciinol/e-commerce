@@ -1,31 +1,40 @@
-import { ProductAttribute, ProductImage, ProductPublic, VariantOption } from '../../types/product.types.js';
-import { Decimal } from '@prisma/client/runtime/library';
+import { ProductPublic } from '../../types/product.types.js';
 import { NotFoundError } from '../errors.js';
+import { Prisma } from '@prisma/client';
 
-export interface MapToPublicProps {
-	id: number;
-	name: string;
-	slug: string;
-	price: Decimal;
-	comparePrice: Decimal | null;
-	shortDescription: string | null;
-	isFeatured: boolean;
-	averageRating: Decimal;
-	images: ProductImage[];
-	attributes: ProductAttribute[];
-	variants: {
-		id: number;
-		name: string;
-		price: Decimal | null;
-		isActive: boolean;
-		options: VariantOption[];
-	}[];
-	category: {
-		id: number;
-		name: string;
-		slug: string;
+type MapToPublicProps = Prisma.ProductGetPayload<{
+	select: {
+		id: true;
+		name: true;
+		slug: true;
+		price: true;
+		comparePrice: true;
+		shortDescription: true;
+		isFeatured: true;
+		images: true;
+		attributes: true;
+		variants: {
+			select: {
+				id: true;
+				productId: true;
+				name: true;
+				sku: true;
+				price: true;
+				stock: true;
+				isActive: true;
+				options: true;
+			};
+		};
+		averageRating: true;
+		category: {
+			select: {
+				id: true;
+				name: true;
+				slug: true;
+			};
+		};
 	};
-}
+}>;
 
 export function mapToPublic(p: MapToPublicProps | null): ProductPublic {
 	if (!p) {

@@ -14,23 +14,25 @@ enum Role {
 }
 
 model User {
-  id            Int            @id @default(autoincrement())
-  email         String         @unique
-  password      String
-  firstName     String?
-  lastName      String?
-  phone         String?
-  isActive      Boolean        @default(true)
-  role          Role           @default(CUSTOMER)
-  emailVerified Boolean        @default(false)
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+  id               Int            @id @default(autoincrement())
+  email            String         @unique
+  password         String
+  firstName        String?
+  lastName         String?
+  phone            String?
+  isActive         Boolean        @default(true)
+  role             Role           @default(CUSTOMER)
+  emailVerified    Boolean        @default(false)
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
 
   // relations
-  addresses     Address[]
-  cart          Cart?
-  orders        Order[]
-  refreshTokens RefreshToken[]
+  addresses        Address[]
+  cart             Cart?
+  orders           Order[]
+  reviews          Review[]
+  // wishlist         Wishlist?
+  refreshTokens    RefreshToken[]
 }
 
 model Address {
@@ -58,66 +60,68 @@ model Address {
 }
 
 model Category {
-  id               Int             @id @default(autoincrement())
-  name             String          @unique
-  slug             String          @unique
-  description      String?
-  image            String?
-  parentId         Int?
-  parent           Category?       @relation("CategoryHierarchy", fields: [parentId], references: [id], onDelete: SetNull)
-  children         Category[]      @relation("CategoryHierarchy")
-  isActive         Boolean         @default(true)
-  displayOrder     Int             @default(0)
+  id                  Int             @id @default(autoincrement())
+  name                String          @unique
+  slug                String          @unique
+  description         String?
+  image               String?
+  parentId            Int?
+  parent              Category?       @relation("CategoryHierarchy", fields: [parentId], references: [id], onDelete: SetNull)
+  children            Category[]      @relation("CategoryHierarchy")
+  isActive            Boolean         @default(true)
+  displayOrder        Int             @default(0)
 
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @updatedAt
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
 
   // relations
-  products         Product[]
+  products            Product[]
 
   @@index([slug])
   @@index([parentId])
 }
 
 model Product {
-  id               Int      @id @default(autoincrement())
-  name             String
-  slug             String   @unique
-  description      String?
-  shortDescription String?
-  sku              String   @unique
+  id                    Int                  @id @default(autoincrement())
+  name                  String
+  slug                  String               @unique
+  description           String?
+  shortDescription      String?
+  sku                   String               @unique
 
-  price            Decimal  @db.Decimal(10, 2)
-  comparePrice     Decimal? @db.Decimal(10, 2)
-  cost             Decimal? @db.Decimal(10, 2)
+  price                 Decimal              @db.Decimal(10, 2)
+  comparePrice          Decimal?             @db.Decimal(10, 2)
+  cost                  Decimal?             @db.Decimal(10, 2)
 
-  stock            Int      @default(0)
-  lowStockThreshold Int     @default(10)
-  trackInventory   Boolean  @default(true)
+  stock                 Int                  @default(0)
+  lowStockThreshold     Int                  @default(10)
+  trackInventory        Boolean              @default(true)
 
-  isActive         Boolean  @default(true)
-  isFeatured       Boolean  @default(false)
+  isActive              Boolean              @default(true)
+  isFeatured            Boolean              @default(false)
 
-  metaTitle        String?
-  metaDescription  String?
+  metaTitle             String?
+  metaDescription       String?
 
-  images           ProductImage[]
+  images                ProductImage[]
 
-  categoryId       Int
-  category         Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  categoryId            Int
+  category              Category             @relation(fields: [categoryId], references: [id], onDelete: Restrict)
 
-  attributes       ProductAttribute[]
-  variants         ProductVariant[]
+  attributes            ProductAttribute[]
+  variants              ProductVariant[]
 
-  viewCount        Int      @default(0)
-  salesCount       Int      @default(0)
-  averageRating    Decimal  @db.Decimal(3, 2) @default(0.00)
+  viewCount             Int                  @default(0)
+  salesCount            Int                  @default(0)
+  averageRating         Decimal              @db.Decimal(3, 2) @default(0.00)
 
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime             @updatedAt
 
-  cartItems        CartItem[]
-  orderItems       OrderItem[]
+  cartItems             CartItem[]
+  orderItems            OrderItem[]
+  reviews               Review[]
+  // wishlistItems         WishlistItem[]
 
   @@index([slug])
   @@index([categoryId])
@@ -310,6 +314,29 @@ model OrderItem {
   @@index([orderId])
   @@index([productId])
 }
+
+model Review {
+  id                    Int              @id @default(autoincrement())
+  userId                Int
+  user                  User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  productId             Int
+  product               Product          @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  rating                Int              // 1-5
+  title                 String?
+  comment               String?
+  isVerifiedPurchase    Boolean          @default(false)
+  isApproved            Boolean          @default(false)
+
+  createdAt             DateTime         @default(now())
+  updatedAt             DateTime         @updatedAt
+
+  @@unique([userId, productId]) // One review per user per product
+  @@index([productId])
+  @@index([userId])
+}
+
 
 model RefreshToken {
   id         Int      @id @default(autoincrement())

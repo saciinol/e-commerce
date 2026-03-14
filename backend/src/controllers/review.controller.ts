@@ -1,11 +1,18 @@
 import { Request, Response } from 'express';
 import { asyncHandler } from '../utils/asyncHandler.js';
-import { CreateReviewSchema, GetReviewSchema } from '../validators/review.validator.js';
+import { CreateReviewSchema, GetAllReviewsSchema, GetReviewSchema } from '../validators/review.validator.js';
 import { ReviewService } from '../services/review.service.js';
 
 export class ReviewController {
 	static getAll = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-    
+    const { page = 1, limit = 10 } = (req.validated as GetAllReviewsSchema).query;
+
+    const reviews = await ReviewService.getAll({ page, limit });
+
+    res.status(200).json({
+      success: true,
+      data: reviews,
+    });
   });
 
 	static getReview = asyncHandler(async (req: Request, res: Response): Promise<void> => {

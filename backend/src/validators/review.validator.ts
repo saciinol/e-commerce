@@ -17,9 +17,19 @@ export const getReviewSchema = z.object({
   })
 })
 
+export const getAllReviewsSchema = z.object({
+	query: z.object({
+		page: z.string().transform(Number).pipe(z.number().int().positive()).optional().default(1),
+		limit: z.string().transform(Number).pipe(z.number().int().positive().max(100)).optional().default(10),
+	}),
+});
+
 export type CreateReviewDto = z.infer<typeof createReviewSchema>['body'];
 export type CreateReviewSchema = z.infer<typeof createReviewSchema>;
 
 export type GetReviewSchema = z.infer<typeof getReviewSchema>;
+
+export type GetAllReviewsQuery = z.infer<typeof getAllReviewsSchema>['query'];
+export type GetAllReviewsSchema = z.infer<typeof getAllReviewsSchema>;
 
 

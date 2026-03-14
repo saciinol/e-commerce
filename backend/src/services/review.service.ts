@@ -1,9 +1,11 @@
 import { ReviewRepository } from "../repositories/review.repositories.js";
 import { Review } from "../types/review.types.js";
-import { CreateReviewDto } from "../validators/review.validator.js";
+import { CreateReviewDto, GetAllReviewsQuery } from "../validators/review.validator.js";
 
 export class ReviewService {
-	static getAll = async (): Promise<void> => {
+	static getAll = async (params: GetAllReviewsQuery): Promise<void> => {
+		const { page, limit } = params;
+		const skip = (page - 1) * limit;
 
   };
 
